@@ -1,5 +1,6 @@
 BmCm::Application.routes.draw do
   root :to => 'pages#home'
+  match '/get_started', :to => 'pages#get_started'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

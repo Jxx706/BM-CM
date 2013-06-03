@@ -1,0 +1,189 @@
+<div class="row">
+	<!-- Sidebar -->
+	<div class="span3 bs-docs-sidebar">
+		<ul class="nav nav-list bs-docs-sidenav affix" data-offset-top="200">
+			<li class>
+				<a href="#requirements">¿Qué necesitas?</b></a>
+			</li>
+			<li class="divider"></li>
+			<li class>
+				<a href="#how-it-works">
+					¿Cómo funciona?
+				</a>
+			</li>
+			<li class="divider"></li>
+			<li class>
+				<a href="#further-info">
+					Más información
+				</a>
+			</li>
+		</ul>
+	</div>
+
+	<!-- Body -->
+	<div class="span9">
+		<section id="requirements">
+			<div class="page-header">
+				<h1>1. ¿Qué necesitas?<small> Y cómo obtenerlo</small></h1>
+			</div>
+			<p class="lead">
+				Para poder hacer uso de las bondades ofrecidas por el sistema <strong>BM+CM</strong>, necesitas
+				instalar la versión más reciente de Puppet en cada uno de los nodos que componen el 
+				<i>envirorment</i> de tu aplicación.
+			</p>
+			<div class="row-fluid">
+				<div class="span6">
+					<h2>Descarga el instalador</h2>
+					<p class="text-center">La manera más rápida de instalar Puppet en todos tus nodos
+					   es personalizando un archivo que lo haga por ti.
+					</p>
+
+					<p class="text-center">
+						<a href="#" class="btn btn-large btn-primary" type="link">¡Personaliza instalador aquí!</a>
+					</p>
+				</div>
+				<div class="span6">
+					<h2>Instalación manual</h2>
+					<p class="text-center">
+						Sigue los pasos que se describen aquí:
+						<br>
+						<a href="#instructions" role="button" class="btn btn-primary btn-large" data-toggle="modal">
+							Ver instrucciones
+						</a>
+					</p>
+					<div id="instructions" class="modal hide fade" tabindex="-1" role"dialog" aria-labelledby="instructionsLabel" aria-hidden="true">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+								x
+							</button>
+							<h3>Instalación manual</h3>
+						</div>
+
+						<div class="modal-body">
+							<p>
+								La instalación varía ligeramente dependiendo de si se hace en el <a href="#" data-toggle="tooltip" title="Servidor">Master</a> o en algún <a href="#" data-toggle="tooltip" title="Cliente">Agent</a>.
+							</p>
+							<hr>
+							<h4>
+								Instalando el Puppet Master:
+							</h4>
+							<p>
+								Simplemente se ejecuta el siguiente comando (con privilegios de root):
+								<code>apt-get install puppetmaster</code>
+							</p>
+							<hr>
+							<h4>
+								Instalando el Puppet Agent:
+							</h4>
+							<p>
+								De manera análoga, se ejecuta el siguiente comando (con privilegios de root):
+								<code>apt-get install puppet</code>
+							</p>
+							<hr>
+							<h4>
+								Firmando los certificados:
+							</h4>
+							<p>
+								El Puppet Master debe firmar las solicitudes de certificados hechas por los nodos Agentes. Para ver la lista de peticiones, ejecuta <code>sudo puppet cert list</code>. Para firmar un certificado en especial, <code>sudo puppet cert sign &lt;NOMBRE&gt;</code>. Para firmar todos los certificados, <code>sudo puppet cert sign --all</code> 
+							</p>
+						</div>
+						<div class="modal-footer">
+							<p class="text-right">
+								<button class="btn btn-danger" data-dismiss="modal" aria-hidden="true">Cerrar</button>
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section id="how-it-works">
+			<div class="page-header">
+				<h1>2. ¿Cómo funciona?<small> Un vistazo al comportamiento de Puppet</small></h1>
+			</div>
+			<p class="lead">
+				<strong>BM+CM</strong> se apoya en Puppet, un software orientado a facilitar las tareas asociadas
+				con el proceso de gestión de la configuración. Esto incluye despliegue, mantenimiento, respaldo y actualización de servidores de aplicación, bases de datos, herramientas, entre otras cosas.
+			</p>
+
+			<!-- Carousel logic -->
+			<div id="carousel" class="carousel slide">
+				<ol class="carousel-indicators">
+					<li data-target="#carousel" data-slide-to="0" class="active"></li>
+					<li data-target="#carousel" data-slide-to="1"></li>
+					<li data-target="#carousel" data-slide-to="3"></li>
+				</ol>
+
+				<!-- Carousel items -->
+				<div class="carousel-inner">
+					<div class="active item">
+						<img src="/assets/PL_howpuppetworks_notitle.png" alt>
+						<div class="carousel-caption">
+							<h4><strong>Define, simula, fuerza y reporta.</strong></h4>
+							<p>
+								Los agentes utilizan un DDL propio para declarar estados deseados del sistema. Simula el estado final antes de forzar su consecución para, finalmente, reportar los resultados al Maestro.
+							</p>
+						</div>
+					</div>
+					<div class="item">
+						<img src="/assets/PL_multiode_notitle1.png" alt>
+						<div class="carousel-caption">
+							<h4><strong>Combina & reutiliza</strong></h4>
+							<p>
+								Se pueden crear paquetes específicos para configurar sistemas especiales o, también, utilizar aquellos definidos por terceros.
+							</p>
+						</div>
+					</div>
+					<div class="item">
+						<img src="/assets/PL_dataflow_notitle.png" alt>
+						<div class="carousel-caption">
+							<h4><strong>Flujo</strong></h4>
+							<p>
+								1. Nodo envía información sobre sí mismo al Maestro. <br>
+								2. Maestro envía catálogo con la configuración específica del nodo. <br>
+								3. Nodo envía reporte de cambios al Maestro. <br>
+								4. Maestro puede enviar resporte a terceros. <br>
+							</p>
+						</div>
+					</div>
+				</div>
+
+				<!-- Carousel controls -->
+				<a class="carousel-control left" href="#carousel" data-slide="prev">&lsaquo;</a>
+				<a class="carousel-control right" href="#carousel" data-slide="next">&rsaquo;</a>
+			</div>
+		</section>
+
+		<section id="further-info">
+			<div class="page-header">
+				<h1>3. Más información <small>Enlaces de interés</small></h1>
+			</div>
+
+			<div class="hero-unit">
+				<h3>¡Quiero saber más!</h3>
+				<p>
+					A continuación, algunos sitios de interés.
+				</p>
+				<div class="btn-group">
+					<a class="btn dropdown-toggle btn-primary btn-large" data-toggle="dropdown" href="#">
+						Enlaces
+						<span class="caret"></span>
+					</a>
+					<ul class="dropdown-menu">
+						<li>
+							<a href="http://www.puppetlabs.com">
+								Puppet <i class="icon-wrench"></i>
+							</a>
+						</li>
+						<li class="divider"></li>
+						<li>
+							<a href="http://www.synergy-gb.com">
+								Synergy Global Business <i class="icon-thumbs-up"></i>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</section>
+	</div>
+</div>
