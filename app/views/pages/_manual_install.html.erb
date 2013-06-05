@@ -1,0 +1,49 @@
+<div id="instructions" class="modal hide fade" tabindex="-1" role"dialog" aria-labelledby="instructionsLabel" aria-hidden="true">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+			x
+		</button>
+		<h3>Instalación manual</h3>
+	</div>
+
+	<div class="modal-body">
+		<p>
+			La instalación varía ligeramente dependiendo de si se hace en el <a href="#" data-toggle="tooltip" title="Servidor">Master</a> o en algún <a href="#" data-toggle="tooltip" title="Cliente">Agent</a>.
+		</p>
+		
+		<hr>
+		
+		<h4>
+			Instalando el Puppet Master:
+		</h4>
+		<p>
+			Simplemente se ejecuta el siguiente comando (con privilegios de root):
+			<code>apt-get install puppetmaster</code>
+		</p>
+		
+		<hr>
+		
+		<h4>
+			Instalando el Puppet Agent:
+		</h4>
+		<p>
+			De manera análoga, se ejecuta el siguiente comando (con privilegios de root):
+			<code>apt-get install puppet</code>
+		</p>
+		
+		<hr>
+
+		<h4>
+			Firmando los certificados:
+		</h4>
+			<p>
+				El Puppet Master debe firmar las solicitudes de certificados hechas por los nodos Agentes. Para ver la lista de peticiones, ejecuta <code>sudo puppet cert list</code>. Para firmar un certificado en especial, <code>sudo puppet cert sign &lt;NOMBRE&gt;</code>. Para firmar todos los certificados, <code>sudo puppet cert sign --all</code> 
+			</p>
+	</div>
+	
+	<div class="modal-footer">
+		<p class="text-right">
+			<button class="btn btn-danger" data-dismiss="modal" aria-hidden="true">Cerrar</button>
+		</p>
+	</div>
+</div>

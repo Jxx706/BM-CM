@@ -1,2 +1,0 @@
-class FlowsController < ApplicationController
-end
