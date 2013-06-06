@@ -1,4 +1,18 @@
 BmCm::Application.routes.draw do
+  get "flows/show"
+
+  get "flows/create"
+
+  get "flows/new"
+
+  get "flows/update"
+
+  get "flows/edit"
+
+  get "flows/index"
+
+  get "flows/destroy"
+
   root :to => 'pages#home'
   match '/get_started', :to => 'pages#get_started'
 
