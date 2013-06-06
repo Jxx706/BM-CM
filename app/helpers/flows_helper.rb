@@ -20,8 +20,8 @@ module FlowsHelper
 
 	def write_node(node_name, classes = [])
 		node = "node '#{node_name}' {"
-		classes.each do |class| 
-			node += "\n\tinclude #{class}"
+		classes.each do |c| 
+			node += "\n\tinclude #{c}"
 		end
 		node += "}"
 	end

@@ -1,5 +1,9 @@
 class FlowsController < ApplicationController
   
+  def home
+    @title = "Flujos"
+  end
+  
   #It shows all flows
   def index
   end
