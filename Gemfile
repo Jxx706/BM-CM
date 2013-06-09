@@ -22,6 +22,10 @@ group :assets do
   gem 'bootswatch-rails' #Because we don't have time to spend on designing stuff.
 end
 
+group :development do
+	gem 'annotate'
+end
+
 gem 'jquery-rails'
 
 # To use ActiveModel has_secure_password
