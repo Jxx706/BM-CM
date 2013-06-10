@@ -3,6 +3,7 @@ BmCm::Application.routes.draw do
 
   root :to => 'pages#home'
   match '/get_started', :to => 'pages#get_started'
+  match '/custom_installer', :to =>'pages#custom_installer'
   match '/flows', :to => 'flows#home'
   match 'flows/index', :to => 'flows#index'
 

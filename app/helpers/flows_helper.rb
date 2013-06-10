@@ -1,12 +1,9 @@
 module FlowsHelper
 
-	#Conjunto de funciones encargadas de traducir un grupo de parámetros de un tipo
-	#de recurso dado, en la sintaxis propia del DDL de Puppet.
-
-
-	#Dado el título y hash con los atributos de un recurso, 
-	#genera un recurso con la sintaxis del DSL de Puppet.
-	#Ejemplo:
+	#Given a hash filled with the attributes of the resource and 
+	#the resource name, it generates a well defined resource with 
+	#the proper syntax corresponding to the Puppet DDL.t.
+	#Example:
 	# package{ 'mysql':
 	#    ensure => installed,
 	# }
