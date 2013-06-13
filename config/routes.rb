@@ -1,11 +1,13 @@
 BmCm::Application.routes.draw do
-  resources :flows, :except => [:index, :home, :destroy] #I'm not sure about this line. CAUTION!
+  get "installer/new"
 
+  get "installer/create"
+
+  resources :flows, :except => [:index, :home, :destroy] #I'm not sure about this line. CAUTION!
   root :to => 'pages#home'
   match '/get_started', :to => 'pages#get_started'
-  match '/custom_installer', :to =>'pages#custom_installer'
   match '/flows', :to => 'flows#home'
-  match 'flows/index', :to => 'flows#index'
+  match '/flows/index', :to => 'flows#index'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

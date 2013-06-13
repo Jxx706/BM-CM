@@ -13,16 +13,20 @@ class PagesController < ApplicationController
   #
   def custom_installer
   	@title = "Personalizar instalador"
-  	@ip_addresses = [] #Contenedor de direcciones IP
-  	@shell = nil
+  	@ip_addresses = [] #IP addresses container.
+  	@shell = nil #User's shell type.
+  	@submitted = false #Used for dynamic content.
   end
 
   def generate_file
+  	@submitted = true 
   	if @shell.nil?
   		write_installer(@ip_addresses)
   	else
   		write_installer(@ip_addresses, @shell)
   	end
+
+  	#redirect_to ????
   end
 
 end
