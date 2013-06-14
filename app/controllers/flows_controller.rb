@@ -18,16 +18,19 @@ class FlowsController < ApplicationController
   end
 
   #New flow
-  def new
+  def new #Create
     @title = 'Nuevo flujo'
   end
 
+  def create #Post
+  end
+
   #It saves changes to one flow in the database
-  def update
+  def update #POST
   end
 
   #It edits the info of a flow
-  def edit
+  def edit #GET
     @flow = Flow.find(params[:id]) #Retrieves the info of the flow instance with id = :id
   end
 
