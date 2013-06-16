@@ -1,20 +1,6 @@
 BmCm::Application.routes.draw do
-  get "users/new"
-
-  get "users/create"
-
-  get "users/update"
-
-  get "users/edit"
-
-  get "users/show"
-
-  get "users/delete"
-
-  get "installer/new"
-
-  get "installer/create"
-
+  
+  resources :users
   resources :flows
   root :to => 'pages#home'
   match '/get_started', :to => 'pages#get_started'
