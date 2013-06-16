@@ -2,8 +2,7 @@
 #
 # Table name: tableless_models
 #
-#  ip_addresses :text
-#  shell        :string
+#  shell :string
 #
 
 class Installer < TablelessModel

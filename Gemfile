@@ -20,6 +20,7 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
   gem 'bootstrap-sass' #To use bootstrap 
   gem 'bootswatch-rails' #Because we don't have time to spend on designing stuff.
+  gem 'bcrypt-ruby' #Secure password
 end
 
 group :development do

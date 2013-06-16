@@ -1,3 +1,12 @@
+# == Schema Information
+#
+# Table name: tableless_models
+#
+#  ip_address     :string
+#  installer_type :string
+#  installer_id   :string
+#
+
 #This class is only useful when creating an installer.
 #I'm aware that it is not a good solution, but it makes a lot
 #easier to generate a dynamic form.

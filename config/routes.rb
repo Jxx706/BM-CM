@@ -1,4 +1,16 @@
 BmCm::Application.routes.draw do
+  get "users/new"
+
+  get "users/create"
+
+  get "users/update"
+
+  get "users/edit"
+
+  get "users/show"
+
+  get "users/delete"
+
   get "installer/new"
 
   get "installer/create"
