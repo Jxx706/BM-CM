@@ -15,38 +15,50 @@
 					<li>
 						<%= link_to "Antes de empezar...", get_started_path %>
 					</li>
-					<li class="divider-vertical"></li>
-					<li>
-						<%= link_to "Flujos", flows_home_path %>
-					</li>
-					<li class="divider-vertical"></li>
-					<li>
-						<%= link_to "Bitácoras", '#' %>
-					</li>
-					<li class="divider-vertical"></li>
-					<li>
-						<%= link_to "Estados previos", '#' %>
-					</li>
+
+					<% if signed_in? %>
+						<li class="divider-vertical"></li>
+						<li>
+							<%= link_to "Flujos", flows_home_path %>
+						</li>
+						<li class="divider-vertical"></li>
+						<li>
+							<%= link_to "Bitácoras", '#' %>
+						</li>
+						<li class="divider-vertical"></li>
+						<li>
+							<%= link_to "Estados previos", '#' %>
+						</li>
+					<% end %>
 				</ul>
 
 				<!-- User's options -->
 				<ul class="nav pull-right" id="main-menu-right">
 					<li>
-						<div class="btn-group">
-							<a class="btn btn-success" href="#">
-								<i class="icon-user icon-white"></i>
-								Usuario
-							</a>
-							<a class="btn btn-success dropdown-toggle" data-toggle="dropdown" href="#">
-								<span class="caret"></span>
-							</a>
-							<ul class="dropdown-menu">
-								<li>
-									<a href="#"><i class="icon-pencil"></i>Editar</a>
-								</li>
-								<li class="divider"></li>
-								<li><a href="#"><i class="icon-remove-sign"></i>Cerrar sesión</a></li>
-							</ul>
+						<% 
+							# Si la sesión está iniciada
+							if signed_in? 
+						%>
+							<div class="btn-group">
+								<a class="btn btn-success" href="#">
+									<i class="icon-user icon-white"></i>
+									<%= "#{current_user.name current_user.last_name}" %>
+								</a>
+								<a class="btn btn-success dropdown-toggle" data-toggle="dropdown" href="#">
+									<span class="caret"></span>
+								</a>
+								<ul class="dropdown-menu">
+									<li>
+										<a href="#"><i class="icon-pencil"></i>Editar</a>
+									</li>
+									<li class="divider"></li>
+									<li><%= link_to "Cerrar Sesión", signout_path, :method => :delete %></li>
+								</ul>
+
+							<% #Si no hay sesión iniciada
+								else 
+							%>
+								<%= link_to "INICIAR SESION", signin_path, :class => "btn btn-success" %> 
 						</div>
 					</li>
 				</ul>

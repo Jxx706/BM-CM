@@ -9,7 +9,8 @@
 #  super_admin?    :boolean
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
-#  password_digest :string(255)
+#  password_digest :string(255)      hashed password
+#  remember_token  :string(255)      for persistent sessions
 #
 
 
@@ -24,7 +25,9 @@ class User < ActiveRecord::Base
 
     #Downcase the email so we can check uniqueness without worrying 
     #about case sensitive validations
+    has_secure_password #Adds methods to set and authenticate against a BCrypt password. This mechanism requires you to have a password_digest attribute.
    	before_save { |user| user.email = email.downcase }
+   	before_save :create_remember_token
 
 	VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 
@@ -38,4 +41,10 @@ class User < ActiveRecord::Base
     validates :password_confirmation, :presence => true
 
   #has_many :flows, :dependent => :destroy #If the user is destroyed, all his flows are gone too.
+
+  	private
+
+  		def create_remember_token
+  			self.remember_token = SecureRandom.urlsafe_base64
+  		end
 end
