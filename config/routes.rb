@@ -1,9 +1,6 @@
 BmCm::Application.routes.draw do
   
-<<<<<<< HEAD
-=======
   resources :sessions, :only => [:new, :create, :destroy]
->>>>>>> origin/Sesiones
   resources :users
   resources :flows
   root :to => 'pages#home'
