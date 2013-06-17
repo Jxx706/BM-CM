@@ -26,11 +26,12 @@ class FlowsController < ApplicationController
     @flow = Flow.new(params[:flow])
 
     if @flow.save
-      flash[:success] = "¡Flujo creado!"
+      flash[:success] = "Flujo creado"
       redirect_to @flow
     else
       @title = "Nuevo flujo"
       render 'new'
+    end
   end
 
   #New flow
@@ -43,7 +44,7 @@ class FlowsController < ApplicationController
     @flow = Flow.find(params[:id])
 
     if @flow.update_attributes(params[:flow])
-      flash[:success] = "Flujo actualizado con éxito."
+      flash[:success] = "Flujo actualizado con exito."
       redirect_to @flow
     else
       @title = "Editar flujo."
@@ -62,15 +63,13 @@ class FlowsController < ApplicationController
   def destroy
     @flow = Flow.find(params[:id])
     @flow.destroy
-    flash[:success] = "Flujo destruido con éxito."
+    flash[:success] = "Flujo destruido con exito."
 
     redirect_to flows_path #Indexes all of the flows again.
   end
 
   #Download this file.
   def download_file
+    nil
   end
-
-  private
-  #private functions
 end

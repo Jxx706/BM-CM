@@ -5,7 +5,7 @@ BmCm::Application.routes.draw do
   resources :flows
   root :to => 'pages#home'
   match '/get_started', :to => 'pages#get_started'
-  match '/flows', :to => 'flows#home', :as => "flows_home_path"
+  match '/flows_home', :to => 'flows#home', :as => "flows_home"
   match '/signup', :to => 'users#new'
   match '/signin', :to => 'sessions#new'
   match '/signout', :to => 'sessions#destroy', :via => :delete #DELETE HTTP

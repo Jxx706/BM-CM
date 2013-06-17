@@ -19,7 +19,7 @@
 					<% if signed_in? %>
 						<li class="divider-vertical"></li>
 						<li>
-							<%= link_to "Flujos", flows_path %>
+							<%= link_to "Flujos", flows_home_path %>
 						</li>
 						<li class="divider-vertical"></li>
 						<li>
@@ -40,7 +40,7 @@
 							if signed_in? 
 						%>
 							<div class="btn-group">
-								<a class="btn btn-success" href="#">
+								<a class="btn btn-success" href="<%= user_path(current_user)%>">
 									<i class="icon-user icon-white"></i>
 									<%= "#{current_user.name} #{current_user.last_name}" %>
 								</a>
@@ -49,7 +49,7 @@
 								</a>
 								<ul class="dropdown-menu">
 									<li>
-										<a href="#"><i class="icon-pencil"></i>Editar</a>
+										<a href="<%= edit_user_path(current_user) %>"><i class="icon-pencil"></i>Editar</a>
 									</li>
 									<li class="divider"></li>
 									<li><%= link_to "Cerrar Sesión", signout_path, :method => :delete %></li>
