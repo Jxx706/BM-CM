@@ -1,11 +1,14 @@
 BmCm::Application.routes.draw do
   
-  resources :sessions, :only => [:new, :create, :delete]
+  resources :sessions, :only => [:new, :create, :destroy]
   resources :users
   resources :flows
   root :to => 'pages#home'
   match '/get_started', :to => 'pages#get_started'
   match '/flows', :to => 'flows#home', :as => "flows_home_path"
+  match '/signup', :to => 'users#new'
+  match '/signin', :to => 'sessions#new'
+  match '/signout', :to => 'sessions#destroy', :via => :delete #DELETE HTTP
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
