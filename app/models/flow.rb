@@ -11,7 +11,7 @@
 
 class Flow < ActiveRecord::Base
   attr_accessible :file_path, :name
-  belongs_to :user
+  #belongs_to :user
 
   #A path is ok when the file addressed by it exists.
   def path_ok?
