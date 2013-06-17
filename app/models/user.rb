@@ -6,11 +6,11 @@
 #  name            :string(255)
 #  last_name       :string(255)
 #  email           :string(255)
-#  super_admin?    :boolean
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
-#  password_digest :string(255)      hashed password
-#  remember_token  :string(255)      for persistent sessions
+#  password_digest :string(255)
+#  remember_token  :string(255)
+#  super_admin     :boolean
 #
 
 
@@ -29,7 +29,7 @@ class User < ActiveRecord::Base
    	before_save { |user| user.email = email.downcase }
    	before_save :create_remember_token
 
-	VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
+	 VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 
    	validates :name, :presence => true,
                      :length => { :maximum => 50 }
@@ -43,7 +43,6 @@ class User < ActiveRecord::Base
   #has_many :flows, :dependent => :destroy #If the user is destroyed, all his flows are gone too.
 
   	private
-
   		def create_remember_token
   			self.remember_token = SecureRandom.urlsafe_base64
   		end

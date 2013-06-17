@@ -19,7 +19,7 @@
 					<% if signed_in? %>
 						<li class="divider-vertical"></li>
 						<li>
-							<%= link_to "Flujos", flows_home_path %>
+							<%= link_to "Flujos", flows_path %>
 						</li>
 						<li class="divider-vertical"></li>
 						<li>
@@ -42,7 +42,7 @@
 							<div class="btn-group">
 								<a class="btn btn-success" href="#">
 									<i class="icon-user icon-white"></i>
-									<%= "#{current_user.name current_user.last_name}" %>
+									<%= "#{current_user.name} #{current_user.last_name}" %>
 								</a>
 								<a class="btn btn-success dropdown-toggle" data-toggle="dropdown" href="#">
 									<span class="caret"></span>
@@ -54,12 +54,13 @@
 									<li class="divider"></li>
 									<li><%= link_to "Cerrar Sesión", signout_path, :method => :delete %></li>
 								</ul>
+							</div>
+						<% #Si no hay sesión iniciada
+							else 
+						%>
+							<a href="/signin" class="btn btn-success btn-small"><i class="icon-user icon-white"></i>INICIAR SESIÓN</a>
 
-							<% #Si no hay sesión iniciada
-								else 
-							%>
-								<%= link_to "INICIAR SESION", signin_path, :class => "btn btn-success" %> 
-						</div>
+						<% end %>
 					</li>
 				</ul>
 

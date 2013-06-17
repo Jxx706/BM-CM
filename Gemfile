@@ -21,6 +21,7 @@ group :assets do
   gem 'bootstrap-sass' #To use bootstrap 
   gem 'bootswatch-rails' #Because we don't have time to spend on designing stuff.
   gem 'bcrypt-ruby' #Secure password
+  gem 'factory_girl_rails'
 end
 
 group :development do

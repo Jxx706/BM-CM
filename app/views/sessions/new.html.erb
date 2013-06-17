@@ -1,7 +1,20 @@
-<h1>Inicio de sesión</h1>
 
 <div class="row">
-	<div class="span6 offset3">
+	<div class="span3">
+		<div class="page-header">
+			<h2>¿No tienes cuenta?</h2>
+
+			<p class="lead">
+				Simple: Llena los campos requeridos y empieza a beneficiarte de las 
+				facilidades ofrecidas por <b>BM+CM</b>
+
+				<%= button_to "Nuevo Usuario", "signup
+				", :class => "btn btn-large btn-info" %>
+			</p>
+		</div>
+	</div>
+	<div class="span6">
+		<h1>Inicio de sesión</h1>
 		<%= form_for(:session, :url => sessions_path) do |f| %>
 			<%= f.label :email %>
 			<%= f.text_field :email %>
@@ -9,7 +22,10 @@
 			<%= f.label :password %>
 			<%= f.password_field :password %>
 
-			<%= f.submit "Iniciar sesión", :class => "btn btn-large btn-primary" %>
+			<p>
+				<%= f.submit "Iniciar sesión", :class => "btn btn-large btn-primary" %>
+			</p>
+			
 		<% end %>
 	</div>
 </div>

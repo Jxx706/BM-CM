@@ -25,7 +25,7 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
-    @title = "#{@user.name @user.last_name}"
+    @title = "#{@user.name} #{@user.last_name}"
   end
 
   def delete

@@ -2,7 +2,7 @@ module SessionsHelper
 	def sign_in(user)
 		#Cookie provided automagically by Rails
 		#It can be used as a hash as well
-		cookies.permament[:remember_token] = user.remember_token
+		cookies.permanent[:remember_token] = user.remember_token
 		self.current_user = user		
 	end
 
