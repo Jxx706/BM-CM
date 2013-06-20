@@ -35,7 +35,11 @@
 					</p>
 
 					<p class="text-center">
-						<%= link_to '¡Personaliza instalador aquí!', '#', :class => "btn btn-large btn-primary" %>
+						<% if signed_in? then %>
+							<%= link_to '¡Personaliza instalador aquí!', new_installer_path, :class => "btn btn-large btn-primary" %>
+						<% else %>
+							<%= link_to_function '¡Personaliza instalador aquí!', 'alert("Inicia sesión para poder crear el instalador")', :class => "btn btn-large btn-primary", :disabled => "disabled" %>
+						<% end %>
 					</p>
 				</div>
 				<div class="span6">

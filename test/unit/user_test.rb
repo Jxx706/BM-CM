@@ -11,6 +11,7 @@
 #  password_digest :string(255)
 #  remember_token  :string(255)
 #  super_admin     :boolean
+#  directory_path  :string(255)
 #
 
 require 'test_helper'

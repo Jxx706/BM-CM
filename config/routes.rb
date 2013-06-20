@@ -3,6 +3,7 @@ BmCm::Application.routes.draw do
   resources :sessions, :only => [:new, :create, :destroy]
   resources :users
   resources :flows
+  resources :installers, :only => [:new, :create]
   root :to => 'pages#home'
   match '/get_started', :to => 'pages#get_started'
   match '/flows_home', :to => 'flows#home', :as => "flows_home"
