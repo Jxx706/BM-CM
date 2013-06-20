@@ -17,7 +17,7 @@
 //
 
 function generateFields() {
-	$("select").prop("disabled", true);
+	disable("select");
 	var value = $("select option:selected").val();
 	var new_fields = "";
 	var submit_button = '<input type="submit" value="Crear instalador" class="btn btn-large btn-success" name="commit" />';
@@ -25,7 +25,11 @@ function generateFields() {
 		new_fields += "<label>IP del nodo " + i + ":\n";
 		new_fields += '<input type="text" name="installer[node' + i + ']" placeholder="Ejemplo: 191.76.31.217" value="" />';
 	}
-	$("select").after(new_fields);
+	$("select").after(new_fields); //Insert new fields
 
-	$("#button-gen").after(submit_button).remove();
+	$("#button-gen").after(submit_button).remove(); //Replace with "Submit" button.
+}
+
+function disable(selector) {
+	$(selector).prop("disabled", true);
 }
