@@ -14,7 +14,7 @@ class InstallersController < ApplicationController
   		end
   	end
 
-  	user = User.find_by_email("jaxex706@gmail.com")
+  	user = User.find_by_email(params[:user_email])
   	installer_name = user.directory_path << "\\installer.sh"
   	file = File.new(installer_name, "w+")
   	file.write(write_installer(ips, shell))
@@ -34,7 +34,7 @@ class InstallersController < ApplicationController
 	#it writes the shell script Puppet installer
 	#contents.
 	def write_installer(ip_addresses, shell = "bash")
-		file_content = "!/bin/#{shell}"#Shell type.
+		file_content = "!/bin/#{shell}" #Shell type.
 
 	
 
@@ -65,7 +65,7 @@ class InstallersController < ApplicationController
 
 		#INSTALLING THE PUPPET MASTER
 		file_content += nl + echo("Instalando el Puppet Master")
-		file_content += nl + "apt-get install puppetmaster" + comment("Instalar el Puppet Master") 
+		file_content += nl + "apt-get install puppetmaster " + comment("Instalar el Puppet Master") 
 		file_content += nl
 
 		#STABLISHING SSH CONNECTIONS WITH EVERY NODE AND ATTEMPTING TO INSTALL PUPPET ON THEM.		
