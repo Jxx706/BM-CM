@@ -21,7 +21,7 @@ class User < ActiveRecord::Base
 	attr_accessible :email, #For login purposes
    				        :last_name, :name, #Self explanatory 
    				        :password, :password_confirmation #Virtual
-   		     		    :super_admin? #True if he is; false otherwise.
+   		     		    :super_admin #True if he is; false otherwise.
                   :directory_path
 
     #Downcase the email so we can check uniqueness without worrying 
@@ -50,7 +50,8 @@ class User < ActiveRecord::Base
   		end
 
       def create_directory
-        self.directory_path = "C:\\Users\\jesus\\Desktop\\Pasantia\\Proyecto\\bancaplus-postventa\\BM-CM\\users_files\\#{self.email}"
+        self.directory_path = "C:\\Users\\Jxx706\\Documents\\GitHub\\BM-CM\\users_files\\#{self.email}"
+        #self.directory_path = "C:\\Users\\jesus\\Desktop\\Pasantia\\Proyecto\\bancaplus-postventa\\BM-CM\\users_files\\#{self.email}"
 
         #The user's directory is created if isn't existed before.
         unless Dir.exists?(self.directory_path) then

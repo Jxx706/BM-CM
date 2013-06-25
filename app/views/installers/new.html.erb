@@ -6,7 +6,8 @@
 			<fieldset>
 				<legend>Parámetros del instalador</legend>
 				<label>Shell</label>
-				<%= text_field :installer, :shell, :placeholder => "Ejemplo: bash", :onfocusout => "$(this).prop('disabled', true)" %>
+				<%= text_field :installer, :shell, :placeholder => "Ejemplo: bash", :readonly => false, :onfocusout => "$(this).prop('readonly', true)" %>
+				<%= hidden_field_tag "user_email", current_user.email %>
 				<label>Número de nodos</label>
 				<select>
 					<option>Escoge número de nodos</option>
