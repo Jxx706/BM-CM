@@ -7,7 +7,7 @@
 				<legend>Parámetros del instalador</legend>
 				<label>Shell</label>
 				<%= text_field :installer, :shell, :placeholder => "Ejemplo: bash", :readonly => false, :onfocusout => "$(this).prop('readonly', true)" %>
-				<%= hidden_field_tag "user_email", current_user.email %>
+				<%= hidden_field_tag "user_email", current_user.email #Used to retrieve current user in the controller %>
 				<label>Número de nodos</label>
 				<select>
 					<option>Escoge número de nodos</option>

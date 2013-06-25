@@ -10,11 +10,14 @@
 #
 
 class Flow < ActiveRecord::Base
-  attr_accessible :file_path, :name
-  #belongs_to :user
 
-  #A path is ok when the file addressed by it exists.
-  def path_ok?
-  	File.exists?(self.file_path)
-  end
+  	attr_accessible :file_path, :name
+  	belongs_to :user
+  	before_save :path_ok?
+  	
+  	#A path is ok when the file addressed by it exists.
+  	private
+  		def path_ok?
+  			File.exists?(self.file_path)
+  		end
 end
