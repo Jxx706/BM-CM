@@ -16,6 +16,8 @@
 //= require_tree .
 //
 
+
+/* Installer functions */
 function generateFields() {
 	disable("select");
 	var value = $("select option:selected").val();
@@ -32,4 +34,32 @@ function generateFields() {
 
 function disable(selector) {
 	$(selector).prop("disabled", true);
+}
+
+/* flows/new */
+function hideOrShow(self) {
+
+	switch(self.id) {
+		case "radio_option1":
+			$("#select_tool").show();
+			$("#select_maintenance").hide();
+			//$("select_???").hide();
+			break;
+		case "radio_option2":
+			$("#select_tool").hide();
+			$("#select_maintenance").show();
+			//$("select_???").hide();
+			break;
+		case "radio_option3":
+			$("#select_tool").hide();
+			$("#select_maintenance").hide();
+			//$("select_???").show();
+			break;
+	}
+}
+
+
+function nextStep(self, next_id) {
+	$(self).remove();
+	$("#" + next_id).fadeIn();
 }

@@ -28,6 +28,7 @@ group :development do
 	gem 'annotate'
 end
 
+gem 'wicked'
 gem 'jquery-rails'
 
 # To use ActiveModel has_secure_password

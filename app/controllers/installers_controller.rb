@@ -40,6 +40,7 @@ class InstallersController < ApplicationController
 
 		#STORING IP ADDRESSES IN DIFFERENT VARIABLES.
 		file_content += nl + "NODES=\""
+		
 		ip_addresses.each do |ip| 
 			file_content += "#{ip} "
 		end

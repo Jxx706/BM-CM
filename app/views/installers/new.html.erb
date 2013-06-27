@@ -24,57 +24,50 @@
 	<!-- Content. Displays instructions to create the installer, and when created, it shows
 	 	 the resulting file with a download button. -->
 	<div class="span9">
+		<h1>
+			<b>Instrucciones:</b>
+		</h1>
+		<dl>
+			<dt>
+				1. Número de nodos
+			</dt>
+			<dd>
+				Especifique el número de nodos que tiene su ambiente de producción.
+			</dd>
+			<dt>
+				2. Direccionamiento
+			</dt>
+			<dd>
+				Para cada nodo, proporciones la dirección IP correspondiente.
+			</dd>
+			<dt>
+				3. Generar
+			</dt>
+			<dd>
+				Presione el botón "Generar" (una vez haya suministrado los datos necesarios) para observar una Vista Previa del script.
+			</dd>
+			<dt>
+				4. Descargar
+			</dt>
+			<dd>
+				Si está satisfecho con el script, descárguelo en la locación de su preferencia.
+			</dd>
+		</dl>
 
-		<% if not @submitted then %>
-			<h1>
-				<b>Instrucciones:</b>
-			</h1>
+		<div class="alert alert-block">
+			<h4>¡ATENCIÓN!</h4>
+			<p>
+				Descargue el script de configuración en su nodo Maestro.
+			</p>
+		</div>
 
-			<dl>
-				<dt>
-					1. Número de nodos
-				</dt>
-				<dd>
-					Especifique el número de nodos que tiene su ambiente de producción.
-				</dd>
-				<dt>
-					2. Direccionamiento
-				</dt>
-				<dd>
-					Para cada nodo, proporciones la dirección IP correspondiente.
-				</dd>
-				<dt>
-					3. Generar
-				</dt>
-				<dd>
-					Presione el botón "Generar" (una vez haya suministrado los datos necesarios) para observar una Vista Previa del script.
-				</dd>
-				<dt>
-					4. Descargar
-				</dt>
-				<dd>
-					Si está satisfecho con el script, descárguelo en la locación de su preferencia.
-				</dd>
-			</dl>
-
-			<div class="alert alert-block">
-				<h4>¡ATENCIÓN!</h4>
-				<p>
-					Descargue el script de configuración en su nodo Maestro.
-				</p>
-			</div>
-
-			<div class="alert alert-block">
-				<h4>
-					¡ATENCIÓN!
-				</h4>
-				<p>
-					Ejecute el script con privilegios de root. Preferiblemente, desde un shell con tales permisos. Para ello, ejecute el siguiente comando: <code>sudo -s</code>
-				</p>
-			</div>
-		<% else %>
-
-		<% end %>
-
+		<div class="alert alert-block">
+			<h4>
+				¡ATENCIÓN!
+			</h4>
+			<p>
+				Ejecute el script con privilegios de root. Preferiblemente, desde un shell con tales permisos. Para ello, ejecute el siguiente comando: <code>sudo -s</code>
+			</p>
+		</div>
 	</div>
 </div>

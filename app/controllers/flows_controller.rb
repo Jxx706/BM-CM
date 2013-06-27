@@ -12,18 +12,30 @@ class FlowsController < ApplicationController
   #(flows -- GET /flows)
   def index
     @title = "Todos los flujos"
-    @flows = Flows.all#
+    @flows = current_user.flows#
   end
 
   #It shows just one flow (flow -- GET /flow/:id)
   def show
-    @flow = Flow.find(params[:id]) #Retrieves the info of the flow instance with id = :id
+    @flow = current_user.flows.find(params[:id]) #Retrieves the info of the flow instance with id = :id
   end
 
   #It creates a new flow and save it in the database
   #(POST /flows)
   def create
-    @flow = Flow.new(params[:flow])
+
+    case params[:radio_button][:type]
+    when "install"
+      #General idea:
+      #The params of the script will be in the hash params[:attr],
+      #so, it's only matter of passing it to any of the write_some
+      #helpers in order to build the content of the target file.
+      #handle install 
+    when "maintenance"
+      #handle maintenance. Analogue 
+    end
+
+    @flow = current_user.flows.build(params[:flow])
 
     if @flow.save
       flash[:success] = "Flujo creado"
@@ -41,7 +53,7 @@ class FlowsController < ApplicationController
 
   #It saves changes to one flow in the database
   def update #(PUT /flows/:id)
-    @flow = Flow.find(params[:id])
+    @flow = current_user.flows.find(params[:id])
 
     if @flow.update_attributes(params[:flow])
       flash[:success] = "Flujo actualizado con exito."
@@ -55,13 +67,13 @@ class FlowsController < ApplicationController
   #It edits the info of a flow
   def edit #(edit_flow -- GET /flows/:id/edit)
     @title = "Editar flujo"
-    @flow = Flow.find(params[:id]) #Retrieves the info of the flow instance with id = :id
+    @flow = current_user.flows.find(params[:id]) #Retrieves the info of the flow instance with id = :id
   end
 
   #It destroys one flow (i.e. removes it from the database)
   #(DELETE /flows/:id)
   def destroy
-    @flow = Flow.find(params[:id])
+    @flow = current_user.flows.find(params[:id])
     @flow.destroy
     flash[:success] = "Flujo destruido con exito."
 
@@ -72,4 +84,37 @@ class FlowsController < ApplicationController
   def download_file
     nil
   end
+
+  private
+    #Given a hash filled with the attributes of the resource and 
+    #the resource name, it generates a well defined resource with 
+    #the proper syntax corresponding to the Puppet DDL.
+    #Example:
+    # package{ 'mysql':
+    #    ensure => installed,
+    # }
+    def write_resource(resource_name, title, attributes = {})
+      resource = "#{resource_name} {'#{title}':" 
+      attributes.each do |key, value|
+        resource += "\n\t#{key} => #{value},"
+      end
+      resource += "}"
+    end
+
+    def write_node(node_name, classes = [])
+      node = "node '#{node_name}' {"
+      classes.each do |c| 
+        node += "\n\tinclude #{c}"
+      end
+      node += "}"
+    end
+
+    #Used to write custom clases provided by third party modules
+    def write_class(class_name, attributes = {})
+      class_resourse = "class {'#{class_name}:'"
+      attributes.each do |key, value|
+        class_resource += "\n\t#{key} => #{value},"
+      end
+      class_resouce += "}"
+    end
 end
