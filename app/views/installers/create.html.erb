@@ -1,5 +1,18 @@
-<h1>Installer#create</h1>
-<p>Find me in app/views/installer/create.html.erb</p>
-<p>
-	<%= @x %>
-</p>
+<div class="row">
+	<div class="span4">
+		<h2>¿Qué deseas hacer?</h2>
+
+		<%= link_to "Descargar", :action => "download", :class => "btn btn-primary" %>
+		<br>
+
+		<%= link_to "Descartar", :action => "destroy", :class => "btn btn-danger", :method => :delete %>
+	</div>
+	<div class="span8">
+		<div class="page-header">
+			<h1>Vista previa del instalador</h1>
+		</div>
+		<pre>
+			<%= @installer_content %>
+		</pre>
+	</div>
+</div>

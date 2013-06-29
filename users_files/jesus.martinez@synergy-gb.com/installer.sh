@@ -1,5 +1,5 @@
-!/bin/bash
-NODES="191.15.16.171 172.36.5.159 "
+!/bin/
+NODES="  "
 echo "Se probaran las direcciones IP proveidas. Espere..."
 sleep 2
 for i in $NODES

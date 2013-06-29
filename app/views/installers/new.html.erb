@@ -3,12 +3,11 @@
 	<!-- side-bar. Displays options to create the installer -->
 	<div class="span3">
 		<form accept-charset="UTF-8" action="<%= installers_path %>" method="post">
-			<fieldset>
-				<legend>Parámetros del instalador</legend>
-				<label>Shell</label>
+			<%= field_set_tag "Parametros del instalador" do %>
+				<%= label_tag "shell" %>
 				<%= text_field :installer, :shell, :placeholder => "Ejemplo: bash", :readonly => false, :onfocusout => "$(this).prop('readonly', true)" %>
-				<%= hidden_field_tag "user_email", current_user.email #Used to retrieve current user in the controller %>
-				<label>Número de nodos</label>
+				<%= hidden_field_tag "user_email", current_user.email %>
+				<%= label_tag "number_of_nodes", "Numero de nodos" %>
 				<select>
 					<option>Escoge número de nodos</option>
 					<% for i in 2..10 do %>
@@ -17,7 +16,7 @@
 				</select>
 
 				<%= button_to_function "Aceptar", "generateFields()", :class => "btn btn-success", :id => "button-gen" %>
-			</fieldset>
+			<% end %>
 		</form>
 	</div>
 

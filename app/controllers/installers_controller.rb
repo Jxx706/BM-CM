@@ -17,13 +17,19 @@ class InstallersController < ApplicationController
   	user = User.find_by_email(params[:user_email])
   	installer_name = user.directory_path << "\\installer.sh"
   	file = File.new(installer_name, "w+")
-  	file.write(write_installer(ips, shell))
+  	@installer_content = write_installer(ips, shell)
+  	file.write(@installer_content)
   	file.close
 
   end
 
   def download
   	#send_file(current_user.directory_path << "\\installer.sh")
+  end
+
+  def destroy
+  	File.delete(current_user.directory_path << "\\installer.sh")
+  	redirect_to root_path
   end
 
 
