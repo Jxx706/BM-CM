@@ -2,10 +2,10 @@
 	<div class="span4">
 		<h2>¿Qué deseas hacer?</h2>
 
-		<%= link_to "Descargar", :action => "download", :class => "btn btn-primary" %>
+		<%= button_to "Descargar", :action => "download", :class => "btn btn-large btn-primary" %>
 		<br>
 
-		<%= link_to "Descartar", :action => "destroy", :class => "btn btn-danger", :method => :delete %>
+		<%= button_to "Descartar", :action => "destroy",  :method => :delete, :class => "btn btn-danger" %>
 	</div>
 	<div class="span8">
 		<div class="page-header">

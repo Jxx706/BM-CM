@@ -63,3 +63,11 @@ function nextStep(self, next_id) {
 	$(self).remove();
 	$("#" + next_id).fadeIn();
 }
+
+function changeIfChecked(self) { 
+	if (document.getElementById(self.id).checked) { 
+		$(self).val("yes"); 
+	} else {
+		$(self).val("no"); 	
+	}
+}

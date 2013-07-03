@@ -1,5 +1,5 @@
 GEM
-  remote: https://rubygems.org/
+  remote: http://rubygems.org/
   specs:
     actionmailer (3.2.13)
       actionpack (= 3.2.13)
@@ -80,6 +80,8 @@ GEM
       activesupport (= 3.2.13)
       bundler (~> 1.0)
       railties (= 3.2.13)
+    rails-footnotes (3.7.9)
+      rails (>= 3.0.0)
     railties (3.2.13)
       actionpack (= 3.2.13)
       activesupport (= 3.2.13)
@@ -114,6 +116,7 @@ GEM
     wicked (0.6.1)
       activesupport (>= 3.0.7)
       rails (>= 3.0.7)
+    yard (0.8.6.2)
 
 PLATFORMS
   x86-mingw32
@@ -127,7 +130,9 @@ DEPENDENCIES
   factory_girl_rails
   jquery-rails
   rails (= 3.2.13)
+  rails-footnotes (>= 3.7.9)
   sass-rails (~> 3.2.3)
   sqlite3
   uglifier (>= 1.0.3)
   wicked
+  yard

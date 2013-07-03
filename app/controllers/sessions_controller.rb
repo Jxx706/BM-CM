@@ -24,4 +24,9 @@ class SessionsController < ApplicationController
 		sign_out
 		redirect_to root_path
 	end
+
+	protected 
+		def handle_unverified_request
+			true 
+		end
 end

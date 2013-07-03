@@ -1,5 +1,7 @@
 class InstallersController < ApplicationController
 
+  
+  skip_before_filter :verify_authenticity_token, :only => [:create]
   #Generates installer file.
   def create
   	ips = []
@@ -14,8 +16,7 @@ class InstallersController < ApplicationController
   		end
   	end
 
-  	user = User.find_by_email(params[:user_email])
-  	installer_name = user.directory_path << "\\installer.sh"
+  	installer_name = current_user.directory_path << "\\installer.sh"
   	file = File.new(installer_name, "w+")
   	@installer_content = write_installer(ips, shell)
   	file.write(@installer_content)

@@ -1,8 +1,6 @@
 class FlowsController < ApplicationController
-  
-  #NOTE TO SELF: current_user contains the User who owns the flows
-  #NOTE TO SELF: This is a preliminary version where the Flows are independent of the users. So, 
-  #it's very likely that most of this controllers change (maybe a lot!) anytime soon.
+
+  skip_before_filter :verify_authenticity_token, :only => [:create]
 
   def home #(flows_home_path)
     @title = "Flujos"
@@ -12,7 +10,7 @@ class FlowsController < ApplicationController
   #(flows -- GET /flows)
   def index
     @title = "Todos los flujos"
-    @flows = current_user.flows#
+    @flows = current_user.flows
   end
 
   #It shows just one flow (flow -- GET /flow/:id)
@@ -24,17 +22,37 @@ class FlowsController < ApplicationController
   #(POST /flows)
   def create
 
+    #params[:attr]
+
+    flow_name = current_user.directory_path << "\\#{params[:flow][:name]}.pp"
+    file = File.new(flow_name, "w+")
+
     case params[:radio_button][:type]
     when "install"
-      #General idea:
-      #The params of the script will be in the hash params[:attr],
-      #so, it's only matter of passing it to any of the write_some
-      #helpers in order to build the content of the target file.
-      #handle install 
+      case params[:select_tool]
+      when "mysql"
+        if params[:checkbox_mysql_client] == "yes" then
+            file.puts(write_class("mysql"))
+        end
+
+        attr_hash = {}
+        if (params[:attr].delete_if { |k, v| v.empty? || v.nil? }).include?("package_ensure") then
+          attr_hash["package_ensure"] = params[:attr][:package_ensure]
+          params[:attr].delete(:package_ensure)
+        end
+
+        attr_hash["config_hash"] = params[:attr]
+
+        file.reopen(flow_name, "a+")
+        file.puts(write_class("mysql::server", attr_hash))
+      when "tomcat"
+      when "couchbase"
+      end
     when "maintenance"
       #handle maintenance. Analogue 
     end
 
+    params[:flow][:file_path] = flow_name
     @flow = current_user.flows.build(params[:flow])
 
     if @flow.save
@@ -111,10 +129,10 @@ class FlowsController < ApplicationController
 
     #Used to write custom clases provided by third party modules
     def write_class(class_name, attributes = {})
-      class_resourse = "class {'#{class_name}:'"
+      class_resource = "class {'#{class_name}':"
       attributes.each do |key, value|
         class_resource += "\n\t#{key} => #{value},"
       end
-      class_resouce += "}"
+      class_resource += "}"
     end
 end

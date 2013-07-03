@@ -26,6 +26,8 @@ end
 
 group :development do
 	gem 'annotate'
+  gem 'rails-footnotes', '>= 3.7.9'
+  gem 'yard' #Yay! A Rails Documentation Tool (get it?)
 end
 
 gem 'wicked'
