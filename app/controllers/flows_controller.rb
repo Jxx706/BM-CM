@@ -21,35 +21,42 @@ class FlowsController < ApplicationController
   #It creates a new flow and save it in the database
   #(POST /flows)
   def create
-
-    #params[:attr]
-
     flow_name = current_user.directory_path << "\\#{params[:flow][:name]}.pp"
+
     file = File.new(flow_name, "w+")
 
     case params[:radio_button][:type]
-    when "install"
-      case params[:select_tool]
-      when "mysql"
-        if params[:checkbox_mysql_client] == "yes" then
-            file.puts(write_class("mysql"))
+      when "install"
+        params[:flow][:hash_attributes]["type"] = "install"
+        case params[:select_tool]
+          when "mysql"
+            params[:flow][:hash_attributes]["tool"] = "mysql"
+            if params[:checkbox_mysql_client] == "yes" then
+                file.puts(write_class("mysql"))
+                params[:flow][:hash_attributes]["client"] = true
+            end
+
+            attr_hash = {} #Hash used for writting the file
+
+
+            params[:attr].each do |k,v|
+              if v.empty? || v.nil? then
+                params[:attr][k] = Flow.defaults("mysql")[k]
+              end
+            end
+            params[:flow][:hash_attributes].merge(params[:attr]) #Hash used to save attributes in the model.
+            attr_hash["package_ensure"] = params[:attr][:package_ensure]
+            params[:attr].delete(:package_ensure)
+
+            attr_hash["config_hash"] = params[:attr]
+
+            file.reopen(flow_name, "a+")
+            file.puts(write_class("mysql::server", attr_hash))
+          when "tomcat"
+          when "couchbase"
         end
-
-        attr_hash = {}
-        if (params[:attr].delete_if { |k, v| v.empty? || v.nil? }).include?("package_ensure") then
-          attr_hash["package_ensure"] = params[:attr][:package_ensure]
-          params[:attr].delete(:package_ensure)
-        end
-
-        attr_hash["config_hash"] = params[:attr]
-
-        file.reopen(flow_name, "a+")
-        file.puts(write_class("mysql::server", attr_hash))
-      when "tomcat"
-      when "couchbase"
-      end
-    when "maintenance"
-      #handle maintenance. Analogue 
+      when "maintenance"
+        #handle maintenance. Analogue 
     end
 
     params[:flow][:file_path] = flow_name
@@ -92,6 +99,7 @@ class FlowsController < ApplicationController
   #(DELETE /flows/:id)
   def destroy
     @flow = current_user.flows.find(params[:id])
+    File.delete(@flow.file_path)
     @flow.destroy
     flash[:success] = "Flujo destruido con exito."
 
