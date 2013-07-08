@@ -1,2 +1,8 @@
-<h1>Flows#edit</h1>
-<p>Find me in app/views/flows/edit.html.erb</p>
+<div class="row">
+	<%= render 'flows/sidebar' %>
+	<div class="span9">
+		<%= form_tag edit_flow_path(@flow), :method => :put, :id => "flow_form_edit", :class => "form" do %>
+		
+		<% end %>
+	</div>
+</div>

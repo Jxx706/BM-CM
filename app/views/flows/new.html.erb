@@ -163,7 +163,7 @@
 								<br>
 
 								<%= label_tag "mysql_attr_root_group", "Grupo de usuario root" %>
-								<%= text_field_tag "attr[root_group]", nil, :id => "mysql_attr_root_group", :placeholder => Flow.defaults("mysql")["debian_family"]["root_group"] %>
+								<%= text_field_tag "attr[root_group]", nil, :id => "mysql_attr_root_group", :placeholder => Flow.defaults("mysql")["root_group"] %>
 								<a href="#this" id="help2" class="btn btn-small btn-info"><i class="icon-comment"></i>¿Ayuda?</a>
 								<%= javascript_tag do %>
 									$(function () {
@@ -233,7 +233,7 @@
 								<br>
 
 								<%= label_tag "mysql_basedir", "Directorio base" %>
-								<%= text_field_tag "attr[basedir]", nil, :id => "mysql_basedir", :placeholder => Flow.defaults("mysql")["debian_family"]["basedir"] %>
+								<%= text_field_tag "attr[basedir]", nil, :id => "mysql_basedir", :placeholder => Flow.defaults("mysql")["basedir"] %>
 								<a href="#this" id="help7" class="btn btn-small btn-info"><i class="icon-comment"></i>¿Ayuda?</a>
 								<%= javascript_tag do %>
 									$(function () {
@@ -247,7 +247,7 @@
 								<br>
 
 								<%= label_tag "mysql_datadir", "Directorio de datos" %>
-								<%= text_field_tag "attr[datadir]", nil, :id => "mysql_datadir", :placeholder => Flow.defaults("mysql")["debian_family"]["datadir"] %>
+								<%= text_field_tag "attr[datadir]", nil, :id => "mysql_datadir", :placeholder => Flow.defaults("mysql")["datadir"] %>
 								<a href="#this" id="help8" class="btn btn-small btn-info"><i class="icon-comment"></i>¿Ayuda?</a>
 								<%= javascript_tag do %>
 									$(function () {
@@ -261,7 +261,7 @@
 								<br>
 
 								<%= label_tag "mysql_tmpdir", "Directorio de archivos temporales" %>
-								<%= text_field_tag "attr[tmpdir]", nil, :id => "mysql_tmpdir", :placeholder => Flow.defaults("mysql")["debian_family"]["tmpdir"] %>
+								<%= text_field_tag "attr[tmpdir]", nil, :id => "mysql_tmpdir", :placeholder => Flow.defaults("mysql")["tmpdir"] %>
 								<a href="#this" id="help9" class="btn btn-small btn-info"><i class="icon-comment"></i>¿Ayuda?</a>
 								<%= javascript_tag do %>
 									$(function () {

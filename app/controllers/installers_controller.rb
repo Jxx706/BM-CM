@@ -25,7 +25,7 @@ class InstallersController < ApplicationController
   end
 
   def download
-  	#send_file(current_user.directory_path << "\\installer.sh")
+  	send_file(current_user.directory_path << "\\installer.sh")
   end
 
   def destroy

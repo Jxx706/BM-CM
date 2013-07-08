@@ -10,9 +10,9 @@ BmCm::Application.routes.draw do
   match '/signup', :to => 'users#new'
   match '/signin', :to => 'sessions#new'
   match '/signout', :to => 'sessions#destroy', :via => :delete #DELETE HTTP
-  match '/installers/download', :to => 'installers#download', :via => :post
-  match '/installers/destroy', :to =>  'installers#destroy'
-
+  match '/installers/download', :to => 'installers#download', :via => :get, :as => "download_installer"
+  match '/installers/destroy', :to =>  'installers#destroy', :as => "destroy_installer", :via => :delete
+  match '/flows/:id/download', :to => "flows#download", :via => :get, :as => "download_flow"
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

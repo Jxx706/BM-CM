@@ -2,10 +2,14 @@
 	<div class="span4">
 		<h2>¿Qué deseas hacer?</h2>
 
-		<%= button_to "Descargar", :action => "download", :class => "btn btn-large btn-primary" %>
+		<%= link_to download_installer_path, :method => :get, :class => "btn btn-success" do %>
+			<i class="icon-white icon-download"></i>Descargar
+		<% end %>
 		<br>
-
-		<%= button_to "Descartar", :action => "destroy",  :method => :delete, :class => "btn btn-danger" %>
+		<br>
+		<%= link_to destroy_installer_path,  :method => :delete, :class => "btn btn-danger" do %>
+			<i class="icon-white icon-remove-circle"></i>Descartar
+		<% end %>
 	</div>
 	<div class="span8">
 		<div class="page-header">

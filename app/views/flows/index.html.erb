@@ -1,2 +1,63 @@
-<h1>Flows#index</h1>
-<p>Find me in app/views/flows/index.html.erb</p>
+<div class="row">
+	<%= render 'flows/sidebar' %>
+
+	<div class="span9">
+		<% if @flows.empty? then %>
+			<div class="hero-unit">
+				<img src="/assets/sad.png" class="img-rounded">
+  				<h1>¡Aún no tienes ningún flujo!</h1>
+  				<p>¡No hay problema! Crea un nuevo flujo de configuración...</p>
+  				<p>
+    				<%= link_to new_flow_path, :class => "btn btn-primary btn-large" do %>
+    					¡Aquí!  <i class="icon-thumbs-up icon-white"></i>
+    				<% end %>
+  				</p>
+			</div>
+		<% else %>
+			<% counter = 1 %>
+			<% @flows.each do |flow| %>
+				<% if counter.even? %>
+					<blockquote class="pull-left span4">
+						<h3>Flujo <%= flow.name %></h2>
+						<p>
+							<b><em>Nodo: </em></b> <%= flow.node_name %> <br>
+							<b><em>Creado: </em></b> <%= flow.created_at %> <br>
+							<b><em>Última vez modificado: </em></b> <%= flow.updated_at %>
+						</p>
+
+						<br><br><br>
+						<%= link_to flow_path(flow), :class => "btn btn-success" do %>
+							<i class="icon-white icon-eye-open"></i> Ver
+						<% end %>
+						<%= link_to edit_flow_path(flow), :class => "btn btn-primary" do %>
+							<i class="icon-white icon-pencil"></i> Editar
+						<% end %>
+						<%= link_to flow_path(flow), :method => "delete", :class => "btn btn-danger" do %>
+							<i class="icon-white icon-remove-circle"></i> Eliminar
+						<% end %>
+					</blockquote>
+				<% else %>
+					<blockquote class="pull-right span4">
+						<h3>Flujo <%= flow.name %></h2>
+						<p>
+							<b><em>Nodo: </em></b> <%= flow.node_name %><br>
+							<b><em>Creado: </em></b> <%= flow.created_at %> <br>
+							<b><em>Última vez modificado: </em></b> <%= flow.updated_at %>
+						</p>
+						<br>
+						<%= link_to flow_path(flow), :class => "btn btn-success" do %>
+							<i class="icon-white icon-eye-open"></i> Ver
+						<% end %>
+						<%= link_to edit_flow_path(flow), :class => "btn btn-primary" do %>
+							<i class="icon-white icon-pencil"></i> Editar
+						<% end %>
+						<%= link_to flow_path(flow), :method => "delete", :class => "btn btn-danger" do %>
+							<i class="icon-white icon-remove-circle"></i> Eliminar
+						<% end %>
+					</blockquote>
+				<% end %>
+				<% counter += 1 %>
+			<% end %>
+		<% end %>
+	</div>
+</div>

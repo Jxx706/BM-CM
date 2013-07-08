@@ -1,2 +1,36 @@
-<h1>Flows#show</h1>
-<p><%= @flow.hash_attributes %></p>
+<div class="row">
+	<%= render 'flows/sidebar' %>
+
+	<div class="span9">
+		<h1>Síntesis del flujo:</h1>
+		<table class="table table-striped table-hover">
+			<caption><h2><b>Datos del flujo <em><%= @flow.name %></em>, perteneciente al nodo <em><%= @flow.node_name %></em>:</b></h2></caption>
+			<thead>
+				<tr>
+					<th>Atributo</th>
+					<th>Valor</th>
+				</tr>
+			</thead>
+			<tbody>
+				<% @flow.hash_attributes.each do |k, v| %>
+					<tr>
+						<td> <%= field_translation(k).capitalize %> </td>
+						<td> <%= v %> </td>
+					</tr>
+				<% end %>
+			</tbody>
+		</table>
+
+		<br>
+
+		<%= link_to download_flow_path(@flow), :class => "btn btn-success" do %>
+			<i class="icon-white icon-download"></i> Descargar
+		<% end %>
+		<%= link_to edit_flow_path(@flow), :class => "btn btn-primary" do %>
+			<i class="icon-white icon-pencil"></i> Editar
+		<% end %>
+		<%= link_to flow_path(@flow), :method => "delete", :class => "btn btn-danger" do %>
+			<i class="icon-white icon-remove-circle"></i> Descartar
+		<% end %>
+	</div>
+</div>

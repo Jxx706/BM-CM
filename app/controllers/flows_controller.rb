@@ -22,7 +22,7 @@ class FlowsController < ApplicationController
   #(POST /flows)
   def create
     flow_name = current_user.directory_path << "\\#{params[:flow][:name]}.pp"
-
+    params[:flow][:hash_attributes] = Hash.new
     file = File.new(flow_name, "w+")
 
     case params[:radio_button][:type]
@@ -41,10 +41,12 @@ class FlowsController < ApplicationController
 
             params[:attr].each do |k,v|
               if v.empty? || v.nil? then
-                params[:attr][k] = Flow.defaults("mysql")[k]
+                params[:flow][:hash_attributes][k] = Flow.defaults("mysql")[k]
+                params[:attr].delete(k)
               end
             end
-            params[:flow][:hash_attributes].merge(params[:attr]) #Hash used to save attributes in the model.
+
+            params[:flow][:hash_attributes] = params[:flow][:hash_attributes].merge(params[:attr]) #Hash used to save attributes in the model.
             attr_hash["package_ensure"] = params[:attr][:package_ensure]
             params[:attr].delete(:package_ensure)
 
@@ -107,8 +109,9 @@ class FlowsController < ApplicationController
   end
 
   #Download this file.
-  def download_file
-    nil
+  def download
+    @flow = current_user.flows.find(params[:id])
+    send_file(@flow.file_path)
   end
 
   private
