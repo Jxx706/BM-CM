@@ -17,12 +17,16 @@
 				});
 			<% end %>
 
-
 			<label>
-				<input type="checkbox" id="checkbox_mysql_client" name="checkbox_mysql_client" value="no" onchange='changeIfChecked(this)'>
+				<input type="checkbox" id="checkbox_mysql_client" name="checkbox_mysql_client" value="<%= @flow.hash_attributes["client"] %>" onchange='changeIfChecked(this)'>
 				¿Instalar cliente MySQL?
 			</label>
-			
+			<%= javascript_tag do %>
+				var selector = "#checkbox_mysql_client";
+				if ($(selector).val() == "yes") {
+					$(selector).prop("checked", true);
+				}
+			<% end %>
 			<hr>
 			<h3> Datos del servidor MySQL</h3>
 			<hr>
@@ -112,7 +116,7 @@
 			<br>
 
 			<%= label_tag "mysql_basedir", "Directorio base" %>
-			<%= text_field_tag "config_hash[basedir]", @flow.hash_attributes["bind_address"], :id => "mysql_basedir" %>
+			<%= text_field_tag "config_hash[basedir]", @flow.hash_attributes["basedir"], :id => "mysql_basedir" %>
 			<a href="#this" id="help7" class="btn btn-small btn-info"><i class="icon-comment"></i>¿Ayuda?</a>
 			<%= javascript_tag do %>
 				$(function () {

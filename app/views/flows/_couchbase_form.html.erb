@@ -1,0 +1,30 @@
+<%= content_for :couch_base do %>
+	<div class="accordion-group">
+		<div class="accordion-heading">
+			<a href="#collapse3" class="accordion-toggle btn btn-danger" data-toggle="collapse" data-parent="#accordion1">
+				<h2><strong>Paso III: </strong>Configuración avanzada</h2>
+			</a>
+		</div>	
+
+		<div id="collapse3" class="accordion-body collapse">
+			<div class="accordion-inner">
+				<p class="lead">
+					Los siguientes campos permiten configurar de manera personalizada el servidor de Couchbase. Esta información es opcional; de no ser suministrada, se tomarán los valores por defecto mostrados en cada campo.<br>
+
+					¿Deseas instalar el cliente de Couchbase?
+				</p>
+
+				<label>
+					<input type="checkbox" id="checkbox_couchbase_client" name="checkbox_couchbase_client" value="no" onchange='changeIfChecked(this)'>
+					Cliente Couchbase
+				</label>
+
+				<div id="couchbase-server">
+					<h3>Servidor Couchbase</h3>
+					<hr>
+					
+				</div>
+			</div>
+		</div>
+	</div>
+<% end %>
