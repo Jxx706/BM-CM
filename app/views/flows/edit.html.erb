@@ -1,8 +1,159 @@
 <div class="row">
 	<%= render 'flows/sidebar' %>
 	<div class="span9">
-		<%= form_tag edit_flow_path(@flow), :method => :put, :id => "flow_form_edit", :class => "form" do %>
-		
+		<h1>Edición de flujo <em><%= @flow.name %></em></h1>
+		<%= form_tag({:controller => :flows, :action => :update, :id => @flow.id}, :method => :put) do %>
+			
+			<%= label_tag "flow_node_name", "Nombre del nodo" %>
+			<%= text_field_tag "flow[node_name]", @flow.node_name, :id => "flow_node_name" %>
+			<a href="#this" id="help0" class="btn btn-small btn-info"><i class="icon-comment"></i>¿Ayuda?</a>
+			<%= javascript_tag do %>
+				$(function () {
+					$('#help0').popover({
+						title: 'Descripción del campo',
+			        	content: 'Nombre del nodo a ser configurado por este flujo.',
+			        	placement: 'right'
+			    	});
+				});
+			<% end %>
+
+
+			<label>
+				<input type="checkbox" id="checkbox_mysql_client" name="checkbox_mysql_client" value="no" onchange='changeIfChecked(this)'>
+				¿Instalar cliente MySQL?
+			</label>
+			
+			<hr>
+			<h3> Datos del servidor MySQL</h3>
+			<hr>
+
+			<%= label_tag "mysql_attr_port", "Puerto" %>
+			<%= text_field_tag "config_hash[port]", @flow.hash_attributes["port"], :id => "mysql_attr_port", :placeholder => Flow.defaults("mysql")["port"] %>
+			<a href="#this" id="help1" class="btn btn-small btn-info"><i class="icon-comment"></i>¿Ayuda?</a>
+			<%= javascript_tag do %>
+				$(function () {
+					$('#help1').popover({
+						title: 'Descripción del campo',
+						content: 'Puerto donde el servidor escuchará peticiones.',
+			   			placement: 'right'
+			    	});
+				});
+			<% end %>
+			<br>
+
+			<%= label_tag "mysql_attr_root_group", "Grupo de usuario root" %>
+			<%= text_field_tag "config_hash[root_group]", @flow.hash_attributes["root_group"], :id => "mysql_attr_root_group" %>
+			<a href="#this" id="help2" class="btn btn-small btn-info"><i class="icon-comment"></i>¿Ayuda?</a>
+			<%= javascript_tag do %>
+				$(function () {
+					$('#help2').popover({
+						title: 'Descripción del campo',
+						content: 'Grupo para los archivos pertenecientes al usuario root.',
+						placement: 'right'
+			    	});
+				});
+			<% end %>
+			<br>
+
+			<%= label_tag "mysql_attr_root_password", "Contraseña root" %>
+			<%= password_field_tag "config_hash[root_password]", @flow.hash_attributes["root_password"], :id => "mysql_attr_root_password" %>
+			<a href="#this" id="help3" class="btn btn-small btn-info"><i class="icon-comment"></i>¿Ayuda?</a>
+			<%= javascript_tag do %>
+				$(function () {
+			    	$('#help3').popover({
+			        	title: 'Descripción del campo',
+			        	content: 'Contraseña para el usuario root.',
+			        	placement: 'right'
+			    	});
+				});
+			<% end %>
+			<br>
+
+			<%= label_tag "mysql_attr_package_ensure", "Version" %>
+			<%= select_tag "package_ensure", options_for_select([["5.6", "5.6"], ["5.5", "5.5"], ["5.1", "5.1"], ["5.0", "5.0"]]) %>
+			<a href="#this" id="help4" class="btn btn-small btn-info"><i class="icon-comment"></i>¿Ayuda?</a>
+			<%= javascript_tag do %>
+				$(function () {
+					$('#help4').popover({
+						title: 'Descripción del campo',
+						content: 'Versión del paquete. Por defecto, se instala la más reciente.',
+			        	placement: 'right'
+			    	});
+				});
+			<% end %>
+			<br>
+
+			<%= label_tag "mysql_bind_address", "Direccion de asociacion" %>
+			<%= text_field_tag "config_hash[bind_address]", @flow.hash_attributes["bind_address"], :id => "mysql_bind_address" %>
+			<a href="#this" id="help5" class="btn btn-small btn-info"><i class="icon-comment"></i>¿Ayuda?</a>
+			<%= javascript_tag do %>
+				$(function () {
+					$('#help5').popover({
+			    		title: 'Descripción del campo',
+			        	content: 'Dirección IP asociada al servidor.',
+			        	placement: 'right'
+			    	});
+				});
+			<% end %>
+			<br>
+
+			<%= label_tag "mysql_max_allowed_packet", "Tamanio maximo de paquete" %>
+			<%= text_field_tag "config_hash[max_allowed_packet]", @flow.hash_attributes["max_allowed_packet"], :id => "mysql_max_allowed_packet" %>
+			<a href="#this" id="help6" class="btn btn-small btn-info"><i class="icon-comment"></i>¿Ayuda?</a>
+			<%= javascript_tag do %>
+				$(function () {
+					$('#help6').popover({
+			    		title: 'Descripción del campo',
+			    		content: '>Tamaño máximo de paquetes que acepta el servicio mysqld.',
+			    		placement: 'right'
+			    	});
+				});
+			<% end %>
+			<br>
+
+			<%= label_tag "mysql_basedir", "Directorio base" %>
+			<%= text_field_tag "config_hash[basedir]", @flow.hash_attributes["bind_address"], :id => "mysql_basedir" %>
+			<a href="#this" id="help7" class="btn btn-small btn-info"><i class="icon-comment"></i>¿Ayuda?</a>
+			<%= javascript_tag do %>
+				$(function () {
+			   		$('#help7').popover({
+			        	title: 'Descripción del campo',
+			        	content: 'Directorio donde se almacenarán todos los archivos de las bases de datos.',
+			        	placement: 'right'
+			    	});
+				});
+			<% end %>
+			<br>
+
+			<%= label_tag "mysql_datadir", "Directorio de datos" %>
+			<%= text_field_tag "config_hash[datadir]", @flow.hash_attributes["datadir"], :id => "mysql_datadir" %>
+			<a href="#this" id="help8" class="btn btn-small btn-info"><i class="icon-comment"></i>¿Ayuda?</a>
+				<%= javascript_tag do %>
+					$(function () {
+			    		$('#help8').popover({
+			        		title: 'Descripción del campo',
+			        		content: 'Directorio de datos (datafiles, entre otras cosas).',
+			        		placement: 'right'
+			    		});
+					});
+			<% end %>
+			<br>
+
+			<%= label_tag "mysql_tmpdir", "Directorio de archivos temporales" %>
+			<%= text_field_tag "config_hash[tmpdir]", @flow.hash_attributes["tmpdir"], :id => "mysql_tmpdir" %>
+			<a href="#this" id="help9" class="btn btn-small btn-info"><i class="icon-comment"></i>¿Ayuda?</a>
+			<%= javascript_tag do %>
+				$(function () {
+					$('#help9').popover({
+			    		title: 'Descripción del campo',
+			    		content: 'Carpeta de archivos temporales.',
+			    		placement: 'right'
+			    	});
+				});
+			<% end %>
+			<br>
+			<%= submit_tag "Guardar cambios", :data => { :confirm => "¿Estas seguro? "}, :class => "btn btn-success" %>
+			<%= link_to "Cancelar", flow_path(@flow), :class => "btn btn-danger" %>
 		<% end %>
 	</div>
 </div>

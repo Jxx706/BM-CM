@@ -34,26 +34,23 @@ class FlowsController < ApplicationController
             if params[:checkbox_mysql_client] == "yes" then
                 file.puts(write_class("mysql"))
                 params[:flow][:hash_attributes]["client"] = true
+            else
+              params[:flow][:hash_attributes]["client"] = false
             end
-
-            attr_hash = {} #Hash used for writting the file
-
 
             params[:attr].each do |k,v|
               if v.empty? || v.nil? then
                 params[:flow][:hash_attributes][k] = Flow.defaults("mysql")[k]
                 params[:attr].delete(k)
+              else
+                params[:flow][:hash_attributes][k] = v
               end
             end
 
-            params[:flow][:hash_attributes] = params[:flow][:hash_attributes].merge(params[:attr]) #Hash used to save attributes in the model.
-            attr_hash["package_ensure"] = params[:attr][:package_ensure]
-            params[:attr].delete(:package_ensure)
-
-            attr_hash["config_hash"] = params[:attr]
-
             file.reopen(flow_name, "a+")
-            file.puts(write_class("mysql::server", attr_hash))
+            file.puts(write_class("mysql::server", {"package_ensure" => params[:attr][:package_ensure], 
+                                                    "config_hash" => params[:attr].delete(:package_ensure)
+                                                    }))
           when "tomcat"
           when "couchbase"
         end
@@ -63,7 +60,7 @@ class FlowsController < ApplicationController
 
     params[:flow][:file_path] = flow_name
     @flow = current_user.flows.build(params[:flow])
-
+      
     if @flow.save
       flash[:success] = "Flujo creado"
       redirect_to @flow
@@ -81,6 +78,33 @@ class FlowsController < ApplicationController
   #It saves changes to one flow in the database
   def update #(PUT /flows/:id)
     @flow = current_user.flows.find(params[:id])
+
+    file = File.new(@flow.file_path, "w+")
+    case @flow.hash_attributes["type"]
+      when "install"
+        params[:flow][:hash_attributes] = Hash.new
+
+        params[:config_hash].each do |k, v|
+          params[:flow][:hash_attributes][k] = v
+        end
+
+        params[:flow][:hash_attributes]["package_ensure"] = params[:package_ensure]
+
+        if params[:checkbox_mysql_client] == "yes" then
+          params[:flow][:hash_attributes]["client"] = true
+          file.puts(write_class("mysql"))
+        else
+          params[:flow][:hash_attributes]["client"] = false
+        end
+
+        params[:flow][:hash_attributes]["type"] = "install"
+        params[:flow][:hash_attributes]["tool"] = "mysql"
+        file.reopen(@flow.file_path, "a+")
+        file.puts(write_class("mysql::server", {"package_ensure" => params[:package_ensure], "config_hash" => params[:config_hash]}))
+
+      when "maintenance"
+        #Nothing so far
+    end
 
     if @flow.update_attributes(params[:flow])
       flash[:success] = "Flujo actualizado con exito."
