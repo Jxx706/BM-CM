@@ -62,7 +62,13 @@ class Flow < ActiveRecord::Base
          # }
     }
 
-    COUCHBASE_DEFAULTS = {}
+    COUCHBASE_DEFAULTS = {
+      "size" => "1024",
+      "user" => "couchbase", 
+      "password" => "password",
+      "version" => "latest"
+    }
+    
     TOMCAT_DEFAULTS = {}
   	attr_accessible :file_path, #Path where the flow is stored
   					:name, #Name of this flow
