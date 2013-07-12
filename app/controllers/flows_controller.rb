@@ -27,7 +27,9 @@ class FlowsController < ApplicationController
 
     case params[:radio_button][:type]
       when "install"
+        
         params[:flow][:hash_attributes]["type"] = "install"
+        
         case params[:select_tool]
           when "mysql"
             params[:flow][:hash_attributes]["tool"] = "mysql"
@@ -51,8 +53,22 @@ class FlowsController < ApplicationController
             file.puts(write_class("mysql::server", {"package_ensure" => params[:attr][:package_ensure], 
                                                     "config_hash" => params[:attr].delete(:package_ensure)
                                                     }))
+          
           when "tomcat"
+          
           when "couchbase"
+            params[:flow][:hash_attributes]["tool"] = "couchbase"
+
+            params[:attr].each do |k, v| 
+              if v.empty? || v.nil? then
+                params[:flow][:hash_attributes][k] = Flow.defaults("couchbase")[k]
+                params[:attr].delete(k)
+              else
+                params[:flow][:hash_attributes][k] = v
+              end
+            end
+
+            file.puts(write_class("couchbase", params[:attr]))
         end
       when "maintenance"
         #handle maintenance. Analogue 

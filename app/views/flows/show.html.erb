@@ -14,7 +14,7 @@
 			<tbody>
 				<% @flow.hash_attributes.each do |k, v| %>
 					<tr>
-						<td> <%= field_translation(k).capitalize %> </td>
+						<td> <%= field_translation(@flow.hash_attributes["tool"], k).capitalize %> </td>
 						<td> <%= v %> </td>
 					</tr>
 				<% end %>

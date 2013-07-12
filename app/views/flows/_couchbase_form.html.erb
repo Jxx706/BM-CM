@@ -35,10 +35,10 @@
 
 					<%= label_tag "couchbase_attr_user", "Usuario" %>
 					<%= text_field_tag "attr[user]", nil, :id => "couchbase_attr_user", :placeholder => Flow.defaults("couchbase")["user"] %>
-					<a href="#this" id="help1" class="btn btn-small btn-info"><i class="icon-comment"></i>¿Ayuda?</a>
+					<a href="#this" id="help2" class="btn btn-small btn-info"><i class="icon-comment"></i>¿Ayuda?</a>
 					<%= javascript_tag do %>
 						$(function () {
-	   						$('#help1').popover({
+	   						$('#help2').popover({
 	       						title: 'Descripción del campo',
 	       						content: 'Nombre de usuario de la base de datos.',
 	       						placement: 'right'
@@ -49,10 +49,10 @@
 
 					<%= label_tag "couchbase_attr_password", "Contrasena" %>
 					<%= password_field_tag "attr[password]", nil, :id => "couchbase_attr_password", :placeholder => Flow.defaults("couchbase")["password"] %>
-					<a href="#this" id="help1" class="btn btn-small btn-info"><i class="icon-comment"></i>¿Ayuda?</a>
+					<a href="#this" id="help3" class="btn btn-small btn-info"><i class="icon-comment"></i>¿Ayuda?</a>
 					<%= javascript_tag do %>
 						$(function () {
-	   						$('#help1').popover({
+	   						$('#help3').popover({
 	       						title: 'Descripción del campo',
 	       						content: 'Contraseña del usuario. Por defecto se utiliza "password"',
 	       						placement: 'right'
@@ -62,7 +62,7 @@
 					<br>
 
 					<%= label_tag "couchbase_attr_version", "Version" %>
-					<%= select_tag "attr[version]", options_for_select([["2.1.0", "2.1.0"], ["2.0.1", "2.0.1"], ["2.0", "2.0"], ["1.8.2", "1.8.2"], ["1.8.1","1.8.1"], ["1.8.0", "1.8.0"], ["1.7.2", "1.7.2"], ["1.7.1", "1.7.1"]) %>
+					<%= select_tag "attr[version]", options_for_select([["2.1.0", "2.1.0"], ["2.0.1", "2.0.1"], ["2.0", "2.0"], ["1.8.2", "1.8.2"], ["1.8.1","1.8.1"], ["1.8.0", "1.8.0"], ["1.7.2", "1.7.2"], ["1.7.1", "1.7.1"]]) %>
 					<a href="#this" id="help4" class="btn btn-small btn-info"><i class="icon-comment"></i>¿Ayuda?</a>
 					<%= javascript_tag do %>
 						$(function () {
