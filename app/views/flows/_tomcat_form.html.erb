@@ -5,8 +5,22 @@
 				<h2><strong>Paso III: </strong>Configuración avanzada</h2>
 			</a>
 		</div>	
+
 		<div id="collapse3" class="accordion-body collapse">
-			
+			<div class="accordion-inner">
+				<p class="lead">
+					Se instalará la versión más reciente de Tomcat proveída por el sistema de paquetes por defecto de su computador.<br>
+
+					Si desea instalar Tomcat desde un <em>mirror</em> específico, escriba su dirección a continuación:
+				</p>
+
+				<%= label_tag "tomcat_attr_mirror", "Mirror" %>
+				<%= text_field_tag "attr[mirror]", nil, :id => "tomcat_attr_mirror", :placeholder =>  ""%>
+				<br>
+
+				<%= label_tag "tomcat_attr_version", "Version" %>
+				<%= select_tag "attr[version]", options_for_select([["7.0.42", "7.0.42"], ["6.0.37", "6.0.37"]]) %>
+			</div>
 		</div>
 	</div>
 <% end %>

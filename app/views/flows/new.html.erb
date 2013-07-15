@@ -47,7 +47,7 @@
 												<%= radio_button "radio_button", "type", "install", :onclick => '$("#select_maintenance").show(); $("#select_tool").hide();' %>
 												¡Crear un flujo de <strong><i>instalación</i></strong>!
 											</label>
-											<%= select_tag "select_tool", options_for_select([["MySQL", "mysql"], ["CouchBase", "couchbase"], ["Tomcat", "tomcat"]]) %>
+											<%= select_tag "select_tool", options_for_select([["MySQL", "mysql"], ["CouchBase", "couchbase"], ["Tomcat", "tomcat"]]), :onchange => "$('#tool').html($('#select_tool').val())" %>
 											<%= javascript_tag '$("#select_tool").hide()' %>
 										</div>
 									</li>
@@ -122,9 +122,12 @@
 						</div>
 					</div>
 				</div>
-			<%= render "flows/couchbase_form" %>
-			<%= content_for :couchbase %>
+			
+			<%= render "flows/tomcat_form" %>
+			<%= content_for :tomcat %>
+
 			<%= submit_tag "Aceptar", :data => { :confirm => "¿Estas seguro? "}, :class => "btn btn-large btn-success" %>
 		<% end %>
 	</div>
+
 </div>

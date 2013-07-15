@@ -1,5 +1,7 @@
 class UsersController < ApplicationController
   
+  skip_before_filter :verify_authenticity_token, :only => [:update]
+  
   def new
     @title = "Nuevo usuario"
     @user = User.new
@@ -18,9 +20,12 @@ class UsersController < ApplicationController
   def update
     @user = User.find(params[:id])
     @user.update_attributes(params[:user])
+
+    render "show"
   end
 
   def edit
+    @user = User.find(params[:id])
   end
 
   def show
