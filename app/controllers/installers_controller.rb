@@ -97,7 +97,6 @@ class InstallersController < ApplicationController
 		file_content += nl + "puppet module puppetlabs-stdlib"
 
 		return file_content
-
 	end
 
 	def echo(message)

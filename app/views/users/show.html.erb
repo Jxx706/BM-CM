@@ -1,2 +1,29 @@
-<h1>Users#show</h1>
-<p>Find me in app/views/users/show.html.erb</p>
+<div class="page-header">
+	<h2><strong>Perfil del usuario</strong></h2>
+</div>
+
+<div>
+	<address>
+		<strong><%= "#{@user.name} #{@user.last_name}"%></strong><br>
+		<abbr title="E-mail">M:</abbr> <%= @user.email %><br>
+		Activo desde: <%= @user.created_at %><br>
+		Última vez modificado: <%= @user.updated_at %><br>
+	</address>
+
+	<address>
+		<strong>Número de flujos</strong><br>
+		<%= link_to flows_path do %>
+			<%= @user.flows.count %>
+		<% end %>
+	</address>
+
+	<%= link_to :back, :class => "btn btn-warning" do %>
+		<i class="icon-white icon-backward"></i>Volver
+	<% end %>
+
+	<%= link_to edit_user_path(@user), :class => "btn btn-primary" do %>
+		<i class="icon-white icon-pencil"></i>Editar
+	<% end %>
+
+</div>
+
