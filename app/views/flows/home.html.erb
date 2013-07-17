@@ -4,6 +4,151 @@
 	<%= render 'flows/sidebar' %>
 	<!-- body -->
 	<div class="span9">
+		<div class="hero-unit">
+			<h1 class="text-center">
+				Flujos de configuración
+			</h1>
+			<br>
+			<p class="text-center">
+				Eficiencia y simplicidad a tu disposición. Pon a punto tus sistemas en un instante.
+			</p>			
+		</div>
+
+		<div class="page-header">
+			<h1>
+				¿Qué necesito? <small>Y dónde obtenerlo</small>
+			</h1>
+		</div>
 		
+		<div class="row fluid">
+			<div class="span5">
+				<p class="lead">
+					La <em>"magia"</em> subyacente de <strong>BM+CM</strong> se fundamenta en las cualidades de <em><%= link_to "Puppet Enterprise", "https://puppetlabs.com"  %></em>, por lo que es necesario que lo instales en cada uno de los nodos que conforman tu entorno de producción.
+					<br>
+					<br>
+
+					<%= link_to "Aqui", get_started_path %> puedes encontrar toda la información que necesitas y más.
+				</p>
+			</div>
+			
+			<div class="span4">
+				<%= link_to get_started_path do %>
+					<img src="/assets/icon-design-questions.png">
+				<% end %>
+			</div>
+		</div>
+		
+
+		<div class="page-header">
+			<h1>
+				Posibilidades...<small> Son amplias</small>
+			</h1>
+		</div>
+		<p class="lead">
+			Mediante flujos podrás instalar herramientas, configurar/editar archivos, gerenciar recursos, manejar usuarios, respaldar datos, entre un sinfín de tareas.
+		</p>
+
+		<div class="row-fluid">
+			<div class="span4">
+				<a href="http://www.mysql.com/">
+					<img src="/assets/mysql1.png" height="275" width="275">
+				</a>
+				
+				
+			</div>
+			<div class="span5">
+				<h2>Soporte</h2>			
+				<p>
+					Actualmente, <strong>BM+CM</strong> ofrece soporte para un gran número de configuraciones sobre tres herramientas: <strong><em>MySQL, Couchbase y Tomcat.</em></strong> <br><br>
+
+					Pero no te preocupes, seguimos trabajando para expandir nuestro catálogo de herramientas, a fin de agilizar (aún más) las actividades
+					propias de la gestión de la configuración de aplicaciones.
+				</p>
+			</div>
+		</div>
+
+		<div class="row-fluid">
+			<div class="span5">
+				<h2>Instala</h2>
+				<p>
+					<code>apt-get install</code> es historia. Dile a BM+CM <strong>qué</strong> quieres, <strong>cómo</strong> lo quieres y él se encargará del resto. <br><br>
+
+					Así de fácil.
+				</p>
+			</div>
+			<div class="span4">
+				<a href="http://www.couchbase.com">
+					<img src="/assets/couchbase-logo.png" height="275" width="275">
+				</a>
+				
+				
+			</div>
+		</div>
+
+		<div class="row-fluid">
+			<div class="span4">
+				<a href="http://tomcat.apache.org/">
+					<img src="/assets/tomcat-logo.png" height="275" width="275">
+				</a>
+			</div>			
+			<div class="span5">
+				<h2>Mantén</h2>
+				<p>
+					Decide qué archivos ya no son necesarios, cuáles deben estar presentes, cuáles han de cambiar de nombre o, incluso, cuál contenido deben albergar
+				</p>
+				<br>
+				<h2>Configura</h2>
+				<p>
+					Crea cuentas de usuario, esquemas y bases de datos en MySQL. Genera <em>buckets</em> de Couchbase y personalízalos a tu gusto. Administra y construye instancias de Tomcat, y más.
+				</p>
+			</div>
+		</div>
+
+		<div class="page-header">
+			<h1>
+				Importante tener en cuenta <small>¿Dónde guardar los flujos?</small>
+			</h1>
+		</div>
+		<p class="lead">
+			Una vez hayas terminado de construir el flujo a gusto, es <strong>fundamental</strong> que lo descargues en el directorio <code>/etc/puppet/manifests</code> para que los cambios puedan ser aplicados.
+		</p>
+		<br>
+		<p>
+			<span class="badge badge-warning">¡ATENCIÓN!</span>
+			<small>Hay que recordar que los flujos se guardan <strong>siempre</strong> en el nodo Maestro (donde está instalado el Puppet Master). Por limitaciones de Puppet, este nodo dene correr algún sistema operativo de la familia UNIX, preferiblemente Ubuntu o Debian.</small>
+		</p>
+
+		<div class="page-header">
+			<h1>
+				¿Algo más? <small>Últimos detalles</small>
+			</h1>
+		</div>
+		<div class="row-fluid">
+			<div class="span4">
+				<img src="/assets/arrow.png">
+			</div>
+			<div class="span5">
+				<p class="lead">
+					En el menú de la izquierda tienes a tu disposición todas las opciones asociadas con los flujos. Éstas te permiten crear, editar y consultar su información en todo momento.
+				</p>
+			</div>			
+		</div>
+
+		<div class="row-fluid">
+			<div class="span5">
+				<h2>Esto es todo, amigos</h2>
+				<p>
+					Ya sabiendo todo lo que necesitas, solo resta una cosa por añadir:  
+					<br>
+					<br>
+					<big><strong>¡MANOS A LA OBRA!</strong></big>	
+				</p>
+			</div>
+			<div class="span4">
+				<%= link_to new_flow_path do %>
+					<img src="/assets/work.png">
+				<% end %>
+			</div>
+		</div>
 	</div>
 </div>
