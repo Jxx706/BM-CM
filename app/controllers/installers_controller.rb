@@ -89,6 +89,13 @@ class InstallersController < ApplicationController
 	    file_content += nl + "sleep 3 " + comment("Tiempo suficiente para que puedas leer la lista.")
 		file_content += nl + "puppet cert sign --all " + comment("Firma todos los certificados.")
 
+		#INSTALLING DEPENDENCIES
+		file_content += nl + echo("Se instalaran las dependencias...")
+		file_content += nl + "puppet module puppetlabs-mysql"
+		file_content += nl + "puppet module jlondon-couchbase"
+		file_content += nl + "puppet module camptocamp-tomcat"
+		file_content += nl + "puppet module puppetlabs-stdlib"
+
 		return file_content
 
 	end

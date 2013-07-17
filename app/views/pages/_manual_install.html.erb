@@ -36,9 +36,33 @@
 		<h4>
 			Firmando los certificados:
 		</h4>
-			<p>
-				El Puppet Master debe firmar las solicitudes de certificados hechas por los nodos Agentes. Para ver la lista de peticiones, ejecuta <code>sudo puppet cert list</code>. Para firmar un certificado en especial, <code>sudo puppet cert sign &lt;NOMBRE&gt;</code>. Para firmar todos los certificados, <code>sudo puppet cert sign --all</code> 
-			</p>
+		<p>
+			El Puppet Master debe firmar las solicitudes de certificados hechas por los nodos Agentes. Para ver la lista de peticiones, ejecuta <code>sudo puppet cert list</code>. Para firmar un certificado en especial, <code>sudo puppet cert sign &lt;NOMBRE&gt;</code>. Para firmar todos los certificados, <code>sudo puppet cert sign --all</code> 
+		</p>
+
+		<hr>
+
+		<h4>
+			Instalando las dependencias:
+		</h4>
+		<p>
+			Para que los archivos de configuración que crees más adelante funcionen a plenitud, es necesario que instales determinadas librerías. Para ello, ejecuta los siguientes comandos:
+			<ul>
+				<li>
+					<code>sudo puppet module puppetlabs-mysql</code>
+				</li>
+				<li>
+					<code>sudo puppet module jlondon-couchbase</code>
+				</li>
+				<li>
+					<code>sudo puppet module camptocamp-tomcat</code>
+				</li>
+				<li>
+					<code>sudo puppet module puppetlabs-stdlib</code>
+				</li>
+				
+			</ul>
+		</p>
 	</div>
 	
 	<div class="modal-footer">
