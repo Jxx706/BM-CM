@@ -1,4 +1,4 @@
-source 'https://rubygems.org'
+source 'http://rubygems.org'
 
 gem 'rails', '3.2.13'
 
@@ -28,6 +28,7 @@ group :development do
 	gem 'annotate'
   gem 'rails-footnotes', '>= 3.7.9'
   gem 'yard' #Yay! A Rails Documentation Tool (get it?)
+  gem 'better_errors'
 end
 
 gem 'wicked'

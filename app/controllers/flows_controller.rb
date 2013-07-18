@@ -20,75 +20,170 @@ class FlowsController < ApplicationController
 
   #It creates a new flow and save it in the database
   #(POST /flows)
+  #Steps:
+  # 1: Flow name and node name.
+  # 2: Node type and tool selection.
+  # 3: MySQL.
+  # 4: Couchbase.
+  # 5: Tomcat
   def create
-    flow_name = current_user.directory_path << "\\#{params[:flow][:name]}.pp"
-    params[:flow][:hash_attributes] = Hash.new
-    file = File.new(flow_name, "w+")
+    @args = {:current_step => nil, :flow_id => nil}
+    case params[:current_step]
+      when "1"
+        params[:flow][:file_path] = current_user.directory_path << "\\#{params[:flow][:name]}.pp"
+        params[:flow][:hash_attributes] = Hash.new
+        @flow = current_user.flows.build(params[:flow])
 
-    case params[:radio_button][:type]
-      when "install"
-        
-        params[:flow][:hash_attributes]["type"] = "install"
-        
-        case params[:select_tool]
-          when "mysql"
-            params[:flow][:hash_attributes]["tool"] = "mysql"
-            if params[:checkbox_mysql_client] == "yes" then
-                file.puts(write_class("mysql"))
-                params[:flow][:hash_attributes]["client"] = true
-            else
-              params[:flow][:hash_attributes]["client"] = false
-            end
-
-            params[:attr].each do |k,v|
-              if v.empty? || v.nil? then
-                params[:flow][:hash_attributes][k] = Flow.defaults("mysql")[k]
-                params[:attr].delete(k)
-              else
-                params[:flow][:hash_attributes][k] = v
-              end
-            end
-
-            file.reopen(flow_name, "a+")
-            file.puts(write_class("mysql::server", {"package_ensure" => params[:attr][:package_ensure], 
-                                                    "config_hash" => params[:attr].delete(:package_ensure)
-                                                    }))
-          
-          when "tomcat"
-          
-          when "couchbase"
-            params[:flow][:hash_attributes]["tool"] = "couchbase"
-
-            params[:attr].each do |k, v| 
-              if v.empty? || v.nil? then
-                params[:flow][:hash_attributes][k] = Flow.defaults("couchbase")[k]
-                params[:attr].delete(k)
-              else
-                params[:flow][:hash_attributes][k] = v
-              end
-            end
-
-            file.puts(write_class("couchbase", params[:attr]))
+        if @flow.save! then      
+          @args[:current_step] = 2 #This is the next step.
+          @args[:flow_id] = @flow.id
+        else 
+          @args[:current_step] = 1
         end
-      when "maintenance"
-        #handle maintenance. Analogue 
-    end
 
-    params[:flow][:file_path] = flow_name
-    @flow = current_user.flows.build(params[:flow])
-      
-    if @flow.save
-      flash[:success] = "Flujo creado"
-      redirect_to @flow
-    else
-      @title = "Nuevo flujo"
-      render 'new'
+        render :new
+      when "2"
+        @flow = current_user.flows.find(params[:flow_id]) #Let's keep adding info to this flow
+
+        params[:flow] = Hash.new
+        params[:flow][:hash_attributes] = Hash.new
+        case params[:radio_button][:type]
+          when "install"
+            params[:flow][:hash_attributes][:type] = "install"
+            case params[:select_tool]
+              when "mysql"
+                params[:flow][:hash_attributes][:tool] = "mysql"
+                @args[:current_step] = 3
+              when "couchbase"
+                params[:flow][:hash_attributes][:tool] = "couchbase"
+                @args[:current_step] = 4
+              when "tomcat"
+                params[:flow][:hash_attributes][:tool] = "tomcat"
+                @args[:current_step] = 5
+            end
+          when "maintenance"
+            params[:flow][:hash_attributes][:type] = "maintenance"
+        end
+        
+        if @flow.update_attributes(params[:flow]) then
+          @args[:flow_id] = @flow.id
+        else
+          @args[:current_step] = 2
+        end
+        render :new
+      when "3"
+        @flow = current_user.flows.find(params[:flow_id])
+
+        params[:flow] = Hash.new
+        params[:flow][:hash_attributes] = Hash.new
+
+        file = file = File.new(@flow.file_path, "w+")
+        if params[:checkbox_mysql_client] == "yes" then
+          file.puts(write_class("mysql"))
+          params[:flow][:hash_attributes]["client"] = true
+        else
+          params[:flow][:hash_attributes]["client"] = false
+        end
+
+        params[:attr].each do |k,v|
+          if v.empty? || v.nil? then
+            params[:flow][:hash_attributes][k] = Flow.defaults("mysql")[k]
+            params[:attr].delete(k)
+          
+          else
+            params[:flow][:hash_attributes][k] = v
+          end
+        end
+
+        file.reopen(@flow.file_path, "a+")
+        file.puts(write_class("mysql::server", {"package_ensure" => params[:attr][:package_ensure], 
+                                                "config_hash" => params[:attr].delete(:package_ensure)
+                                                }))
+        file.close
+
+        params[:flow][:hash_attributes] = @flow.hash_attributes.merge(params[:flow][:hash_attributes])
+
+        if @flow.update_attributes(params[:flow]) then
+          redirect_to @flow
+        else
+          render :new
+        end
+      when "4"
+      when "5"
+      when "6"
     end
   end
+
+  # def create
+  #   flow_name = current_user.directory_path << "\\#{params[:flow][:name]}.pp"
+  #   params[:flow][:hash_attributes] = Hash.new
+  #   file = File.new(flow_name, "w+")
+
+  #   case params[:radio_button][:type]
+  #     when "install"
+        
+  #       params[:flow][:hash_attributes]["type"] = "install"
+        
+  #       case params[:select_tool]
+  #         when "mysql"
+  #           params[:flow][:hash_attributes]["tool"] = "mysql"
+  #           if params[:checkbox_mysql_client] == "yes" then
+  #               file.puts(write_class("mysql"))
+  #               params[:flow][:hash_attributes]["client"] = true
+  #           else
+  #             params[:flow][:hash_attributes]["client"] = false
+  #           end
+
+  #           params[:attr].each do |k,v|
+  #             if v.empty? || v.nil? then
+  #               params[:flow][:hash_attributes][k] = Flow.defaults("mysql")[k]
+  #               params[:attr].delete(k)
+  #             else
+  #               params[:flow][:hash_attributes][k] = v
+  #             end
+  #           end
+
+  #           file.reopen(flow_name, "a+")
+  #           file.puts(write_class("mysql::server", {"package_ensure" => params[:attr][:package_ensure], 
+  #                                                   "config_hash" => params[:attr].delete(:package_ensure)
+  #                                                   }))
+          
+  #         when "tomcat"
+          
+  #         when "couchbase"
+  #           params[:flow][:hash_attributes]["tool"] = "couchbase"
+
+  #           params[:attr].each do |k, v| 
+  #             if v.empty? || v.nil? then
+  #               params[:flow][:hash_attributes][k] = Flow.defaults("couchbase")[k]
+  #               params[:attr].delete(k)
+  #             else
+  #               params[:flow][:hash_attributes][k] = v
+  #             end
+  #           end
+
+  #           file.puts(write_class("couchbase", params[:attr]))
+  #       end
+  #     when "maintenance"
+  #       #handle maintenance. Analogue 
+  #   end
+
+  #   params[:flow][:file_path] = flow_name
+  #   @flow = current_user.flows.build(params[:flow])
+      
+  #   if @flow.save
+  #     flash[:success] = "Flujo creado"
+  #     redirect_to @flow
+  #   else
+  #     @title = "Nuevo flujo"
+  #     render 'new'
+  #   end
+  #end
 
   #New flow
   def new #(new_flow -- GET /flows/new)
     @title = 'Nuevo flujo'
+    @args = {:current_step => 1, :flow_id => nil}
   end
 
   #It saves changes to one flow in the database

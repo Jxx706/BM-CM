@@ -76,7 +76,7 @@ class Flow < ActiveRecord::Base
             :hash_attributes
     serialize :hash_attributes, Hash 
   	belongs_to :user
-  	before_save :path_ok?
+  	#before_save :path_ok?
   	
   	def self.defaults(tool)
       case tool
