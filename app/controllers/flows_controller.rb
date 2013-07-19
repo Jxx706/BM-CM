@@ -70,47 +70,73 @@ class FlowsController < ApplicationController
         else
           @args[:current_step] = 2
         end
+
         render :new
-      when "3"
+      else
         @flow = current_user.flows.find(params[:flow_id])
 
         params[:flow] = Hash.new
         params[:flow][:hash_attributes] = Hash.new
 
-        file = file = File.new(@flow.file_path, "w+")
-        if params[:checkbox_mysql_client] == "yes" then
-          file.puts(write_class("mysql"))
-          params[:flow][:hash_attributes]["client"] = true
-        else
-          params[:flow][:hash_attributes]["client"] = false
+        file = File.new(@flow.file_path, "w+")
+
+        case params[:current_step] 
+          when "3"
+            if params[:checkbox_mysql_client] == "yes" then
+              file.puts(write_class("mysql"))
+              params[:flow][:hash_attributes]["client"] = true
+            else
+              params[:flow][:hash_attributes]["client"] = false
+            end
+
+            params[:attr].each do |k,v|
+              if v.empty? || v.nil? then
+                params[:flow][:hash_attributes][k] = Flow.defaults("mysql")[k]
+                params[:attr].delete(k)
+              
+              else
+                params[:flow][:hash_attributes][k] = v
+              end
+            end
+
+            file.reopen(@flow.file_path, "a+")
+            file.puts(write_class("mysql::server", {"package_ensure" => params[:attr][:package_ensure], 
+                                                    "config_hash" => params[:attr].delete(:package_ensure)
+                                                    }))
+            file.close
+
+            params[:flow][:hash_attributes] = @flow.hash_attributes.merge(params[:flow][:hash_attributes])
+
+            if @flow.update_attributes(params[:flow]) then
+              redirect_to @flow
+            else
+              render :new
+            end
+          when "4"
+            params[:attr].each do |k, v| 
+              if v.empty? || v.nil? then
+                params[:flow][:hash_attributes][k] = Flow.defaults("couchbase")[k]
+                params[:attr].delete(k)
+              else
+                params[:flow][:hash_attributes][k] = v
+              end
+            end
+
+            file.puts(write_class("couchbase", params[:attr]))
+            file.close
+
+            params[:flow][:hash_attributes] = @flow.hash_attributes.merge(params[:flow][:hash_attributes])
+            if @flow.update_attributes(params[:flow]) then
+              redirect_to @flow
+            else
+              render :new
+            end
+
+          when "5"
+            #something
+          when "6"
+            #something
         end
-
-        params[:attr].each do |k,v|
-          if v.empty? || v.nil? then
-            params[:flow][:hash_attributes][k] = Flow.defaults("mysql")[k]
-            params[:attr].delete(k)
-          
-          else
-            params[:flow][:hash_attributes][k] = v
-          end
-        end
-
-        file.reopen(@flow.file_path, "a+")
-        file.puts(write_class("mysql::server", {"package_ensure" => params[:attr][:package_ensure], 
-                                                "config_hash" => params[:attr].delete(:package_ensure)
-                                                }))
-        file.close
-
-        params[:flow][:hash_attributes] = @flow.hash_attributes.merge(params[:flow][:hash_attributes])
-
-        if @flow.update_attributes(params[:flow]) then
-          redirect_to @flow
-        else
-          render :new
-        end
-      when "4"
-      when "5"
-      when "6"
     end
   end
 

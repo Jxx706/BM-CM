@@ -1,81 +1,75 @@
 <%= content_for :couchbase do %>
-	<div class="accordion-group">
-		<div class="accordion-heading">
-			<a href="#collapse3" class="accordion-toggle btn btn-danger" data-toggle="collapse" data-parent="#accordion1">
-				<h2><strong>Paso III: </strong>Configuración avanzada</h2>
-			</a>
-		</div>	
+	
+	<div class="page-header">
+		<h2><strong>Paso III: </strong>Configuración avanzada</h2>
+	</div>	
 
-		<div id="collapse3" class="accordion-body collapse">
-			<div class="accordion-inner">
-				<p class="lead">
-					Los siguientes campos permiten configurar de manera personalizada el servidor de Couchbase. Esta información es opcional; de no ser suministrada, se tomarán los valores por defecto mostrados en cada campo.<br>
-
-					¿Deseas instalar el cliente de Couchbase?
-				</p>
-				<hr>
+	<div class="container">
+		<p class="lead">
+			Los siguientes campos permiten configurar de manera personalizada el servidor de Couchbase. Esta información es opcional; de no ser suministrada, se tomarán los valores por defecto mostrados en cada campo.<br>
+			¿Deseas instalar el cliente de Couchbase?
+		</p>
+		<hr>
 
 
-				<div id="couchbase-server">
-					<h3>Servidor Couchbase</h3>
-					<hr>
+		<div id="couchbase-server">
+			<h3>Servidor Couchbase</h3>
+			<hr>
 					
-					<%= label_tag "couchbase_attr_size", "Tamanio" %>
-					<%= text_field_tag "attr[size]", nil, :id => "couchbase_attr_size", :placeholder => Flow.defaults("couchbase")["size"] %>
-					<a href="#this" id="help1" class="btn btn-small btn-info"><i class="icon-comment"></i>¿Ayuda?</a>
-					<%= javascript_tag do %>
-						$(function () {
-	   						$('#help1').popover({
-	       						title: 'Descripción del campo',
-	       						content: 'Tamaño de la base de datos.',
-	       						placement: 'right'
-	   						});
-						});
-					<% end %>
+			<%= label_tag "couchbase_attr_size", "Tamanio" %>
+			<%= text_field_tag "attr[size]", nil, :id => "couchbase_attr_size", :placeholder => Flow.defaults("couchbase")["size"] %>
+			<a href="#this" id="help1" class="btn btn-small btn-info"><i class="icon-comment"></i>¿Ayuda?</a>
+			<%= javascript_tag do %>
+				$(function () {
+					$('#help1').popover({
+   						title: 'Descripción del campo',
+   						content: 'Tamaño de la base de datos.',
+   						placement: 'right'
+					});
+				});
+			<% end %>
 
-					<%= label_tag "couchbase_attr_user", "Usuario" %>
-					<%= text_field_tag "attr[user]", nil, :id => "couchbase_attr_user", :placeholder => Flow.defaults("couchbase")["user"] %>
-					<a href="#this" id="help2" class="btn btn-small btn-info"><i class="icon-comment"></i>¿Ayuda?</a>
-					<%= javascript_tag do %>
-						$(function () {
-	   						$('#help2').popover({
-	       						title: 'Descripción del campo',
-	       						content: 'Nombre de usuario de la base de datos.',
-	       						placement: 'right'
-	   						});
-						});
-					<% end %>
-					<br>
+			<%= label_tag "couchbase_attr_user", "Usuario" %>
+			<%= text_field_tag "attr[user]", nil, :id => "couchbase_attr_user", :placeholder => Flow.defaults("couchbase")["user"] %>
+			<a href="#this" id="help2" class="btn btn-small btn-info"><i class="icon-comment"></i>¿Ayuda?</a>
+			<%= javascript_tag do %>
+				$(function () {
+					$('#help2').popover({
+						title: 'Descripción del campo',
+						content: 'Nombre de usuario de la base de datos.',
+						placement: 'right'
+	   				});
+				});
+			<% end %>
+			<br>
 
-					<%= label_tag "couchbase_attr_password", "Contrasena" %>
-					<%= password_field_tag "attr[password]", nil, :id => "couchbase_attr_password", :placeholder => Flow.defaults("couchbase")["password"] %>
-					<a href="#this" id="help3" class="btn btn-small btn-info"><i class="icon-comment"></i>¿Ayuda?</a>
-					<%= javascript_tag do %>
-						$(function () {
-	   						$('#help3').popover({
-	       						title: 'Descripción del campo',
-	       						content: 'Contraseña del usuario. Por defecto se utiliza "password"',
-	       						placement: 'right'
-	   						});
-						});
-					<% end %>
-					<br>
+			<%= label_tag "couchbase_attr_password", "Contrasena" %>
+			<%= password_field_tag "attr[password]", nil, :id => "couchbase_attr_password", :placeholder => Flow.defaults("couchbase")["password"] %>
+			<a href="#this" id="help3" class="btn btn-small btn-info"><i class="icon-comment"></i>¿Ayuda?</a>
+			<%= javascript_tag do %>
+				$(function () {
+	   				$('#help3').popover({
+	    				title: 'Descripción del campo',
+	    				content: 'Contraseña del usuario. Por defecto se utiliza "password"',
+	    				placement: 'right'
+	   				});
+				});
+			<% end %>
+			<br>
 
-					<%= label_tag "couchbase_attr_version", "Version" %>
-					<%= select_tag "attr[version]", options_for_select([["2.1.0", "2.1.0"], ["2.0.1", "2.0.1"], ["2.0", "2.0"], ["1.8.2", "1.8.2"], ["1.8.1","1.8.1"], ["1.8.0", "1.8.0"], ["1.7.2", "1.7.2"], ["1.7.1", "1.7.1"]]) %>
-					<a href="#this" id="help4" class="btn btn-small btn-info"><i class="icon-comment"></i>¿Ayuda?</a>
-					<%= javascript_tag do %>
-						$(function () {
-			    			$('#help4').popover({
-			        			title: 'Descripción del campo',
-			        			content: 'Versión del paquete. Por defecto, se instala la más reciente.',
-			        			placement: 'right'
-			    			});
-						});
-					<% end %>
-					<br>
-				</div>
-			</div>
+			<%= label_tag "couchbase_attr_version", "Version" %>
+			<%= select_tag "attr[version]", options_for_select([["2.1.0", "2.1.0"], ["2.0.1", "2.0.1"], ["2.0", "2.0"], ["1.8.2", "1.8.2"], ["1.8.1","1.8.1"], ["1.8.0", "1.8.0"], ["1.7.2", "1.7.2"], ["1.7.1", "1.7.1"]]) %>
+			<a href="#this" id="help4" class="btn btn-small btn-info"><i class="icon-comment"></i>¿Ayuda?</a>
+			<%= javascript_tag do %>
+				$(function () {
+	    			$('#help4').popover({
+	        			title: 'Descripción del campo',
+	        			content: 'Versión del paquete. Por defecto, se instala la más reciente.',
+	        			placement: 'right'
+	    			});
+				});
+			<% end %>
+			<br>
 		</div>
 	</div>
 <% end %>
