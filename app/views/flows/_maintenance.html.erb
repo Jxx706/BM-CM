@@ -1,0 +1,144 @@
+<%= content_for :maintenance do %>
+	<div class="page-header">
+		<h2>
+			<strong>Paso III: </strong>Operaciones de mantenimiento
+		</h2>
+	</div>
+
+	<div>
+		<!-- Explanation button -->
+		<a href="#explanation6" role="button" class="btn btn-inverse" data-toggle="modal">
+			Explicación
+		</a>
+		<%= render "flows/help_partials/explanation6" %>
+
+		<!-- Fields help button -->
+		<a href="#help6" role="button" class="btn btn-info" data-toggle="modal">
+			Ayuda
+		</a>
+		<%= render "flows/help_partials/help6" %>	
+	</div>
+	<br>
+	<br>
+
+	<div class="row">
+
+		<p class="lead">
+			Acá podrás crear instancias, usuarios, otorgar privilegios y planificar respaldos para bases de datos en MySQL; construir buckets en couchbase, así como instancias para Apache Tomcat. 
+
+			<br>
+		</p>
+
+		<!-- MySQL maintenance settings -->
+		<div class="span3">
+			<div class="page-header">
+				<h3><strong>MySQL</strong></h3>
+			</div>
+
+			<p>
+				Presiona la imagen para activar/desactivar las opciones de configuración de la herramienta.
+			</p>
+
+			<%= hidden_field_tag "mysql_active", "no" %>
+			<img src="/assets/mysql1.png" height="275" width="275" 
+				onclick='$("#mysql-config").toggle();  toggleValue("mysql_active", "yes", "no")'>
+
+			<div id="mysql-config">
+				<div>
+					<!-- Explanation button -->
+					<a href="#explanation6-1" role="button" class="btn btn-inverse" data-toggle="modal">
+						Explicación
+					</a>
+					<%= render "flows/help_partials/explanation6-1" %>
+
+					<!-- Fields help button -->
+					<a href="#help6-1" role="button" class="btn btn-info" data-toggle="modal">
+						Ayuda
+					</a>
+					<%= render "flows/help_partials/help6-1" %>
+				</div>
+				<br>
+				<br>
+	
+				<%= render "flows/mysql_db_form" %>
+				<%= content_for :mysql_db %>
+			</div>
+			<%= javascript_tag '$("#mysql-config").hide();' %>
+		</div>
+
+		<!-- Couchbase maintenance settings -->
+		<div class="span3">
+			<div class="page-header">
+				<h3><strong>Couchbase</strong></h3>
+			</div>
+
+			<p>
+				Presiona la imagen para activar/desactivar las opciones de configuración de la herramienta.
+			</p>
+
+			<%= hidden_field_tag "couchbase_active", "no" %>
+			<img src="/assets/couchbase-logo.png" height="275" width="275"
+				 onclick='$("#couchbase-config").toggle();  toggleValue("couchbase_active", "yes", "no")' >
+
+			<div id="couchbase-config">
+				<div>
+					<!-- Explanation button -->
+					<a href="#explanation6-2" role="button" class="btn btn-inverse" data-toggle="modal">
+						Explicación
+					</a>
+					<%= render "flows/help_partials/explanation6-1" %>
+
+					<!-- Fields help button -->
+					<a href="#help6-2" role="button" class="btn btn-info" data-toggle="modal">
+						Ayuda
+					</a>
+					<%= render "flows/help_partials/help6-2" %>
+				</div>
+				<br>
+				<br>
+					
+				<%= render "flows/couchbase_bucket_form" %>
+				<%= content_for :couchbase_bucket %>
+			</div>
+			<%= javascript_tag '$("#couchbase-config").hide();' %>
+			
+		</div>
+
+		<!-- Tomcat maintenance settings -->
+		<div clasS="span3">
+			<div class="page-header">
+				<h3><strong>Tomcat</strong></h3>
+			</div>
+
+			<p>
+				Presiona la imagen para activar/desactivar las opciones de configuración de la herramienta.
+			</p>
+
+			<%= hidden_field_tag "tomcat_active", "no" %>
+			<img src="/assets/tomcat-logo.png" height="275" width="275"
+				 onclick='$("#tomcat-config").toggle();  toggleValue("tomcat_active", "yes", "no")'>
+
+			<div id="tomcat-config">
+				<div>
+					<!-- Explanation button -->
+					<a href="#explanation6-3" role="button" class="btn btn-inverse" data-toggle="modal">
+						Explicación
+					</a>
+					<%= render "flows/help_partials/explanation6-3" %>
+
+					<!-- Fields help button -->
+					<a href="#help6-3" role="button" class="btn btn-info" data-toggle="modal">
+						Ayuda
+					</a>
+					<%= render "flows/help_partials/help6-3" %>
+				</div>
+				<br>
+				<br>
+
+				<%= render "flows/tomcat_instance_form" %>
+				<%= content_for :tomcat_instance %>
+			</div>
+			<%= javascript_tag '$("#tomcat-config").hide();' %>
+		</div>		
+	</div>
+<% end %>

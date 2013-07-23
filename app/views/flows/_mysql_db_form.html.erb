@@ -1,0 +1,54 @@
+<%= content_for :mysql_db do %>
+	
+	<p>
+		Proporciona, a continuación, la información necesaria para crear la <em>base de datos:</em>
+	</p>
+
+	<%= label_tag "attr_db_title", "Nombre" %>
+	<%= text_field_tag "attr[db][title]", nil, :id => "attr_db_title" %>
+	<br>
+
+	<%= label_tag "attr_db_charset", "Charset" %>
+	<%= text_field_tag "attr[db][charset]", nil, :id => "attr_db_charset" %>
+	<br>
+
+	<%= label_tag "attr_db_host", "Host" %>
+	<%= text_field_tag "attr[db][host]", nil, :id => "attr_db_host" %>
+	<br>
+
+	<%= label_tag "attr_db_user", "Usuario" %>
+	<%= text_field_tag "attr[db][user]", nil, :id => "attr_db_user" %>
+	<br>
+
+	<%= label_tag "attr_db_password", "Contrasena" %>
+	<%= password_field_tag "attr[db][password]", nil, :id => "attr_db_password" %>
+	<br>
+
+	<%= label_tag "attr_db_grant", "Privilegios" %>
+	<%= select_tag "attr[db][grant]", options_for_select([["TODOS", "all"], ["Insercion", "Insert_priv"], ["Seleccion", "Select_priv"], ["Eliminacion", "Delete_priv"], ["Actualizacion", "Update_priv"]]), :multiple => true %>
+	<br>
+	<hr>
+
+	<label>
+		<input type="checkbox" id="checkbox_db_backup" name="backup" value="no" onchange='changeIfChecked(this); $("#backup_options").toggle()'>
+			¿Desea crear un respaldo?
+	</label>
+	<div id="backup_options">
+		<p>
+			Provee la información necesaria para instalar un script de respaldo, así como un cronograma de trabajo y un usuario de respaldo:
+			<br>
+		</p>
+
+		<%= label_tag "attr_db_backup_user", "Usuario de respaldo" %>
+		<%= text_field_tag "attr[db][backupuser]", nil, :id => "attr_db_backup_user" %>
+		<br>
+
+		<%= label_tag "attr_db_backup_password", "Contrasena" %>
+		<%= password_field_tag "attr[db][backuppassword]", nil, :id => "attr_db_backup_password" %>
+		<br>
+
+		<%= label_tag "attr_db_backup_dir", "Directorio de respaldo" %>
+		<%= text_field_tag "attr[db][backupdir]", nil, :id => "attr_db_backup_dir" %>
+	</div>
+	<%= javascript_tag "$('#backup_options').hide();" %>
+<% end %>

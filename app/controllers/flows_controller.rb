@@ -63,6 +63,7 @@ class FlowsController < ApplicationController
             end
           when "maintenance"
             params[:flow][:hash_attributes][:type] = "maintenance"
+            @args[:current_step] = 6
         end
         
         if @flow.update_attributes(params[:flow]) then

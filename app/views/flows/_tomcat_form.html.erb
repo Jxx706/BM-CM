@@ -1,8 +1,23 @@
 <%= content_for :tomcat do %>
 	<div class="page-header">
 		<h2><strong>Paso III: </strong>Configuración avanzada</h2>
+	</div>
 
-	</div>	
+	<div>
+		<!-- Explanation button -->
+		<a href="#explanation5" role="button" class="btn btn-inverse" data-toggle="modal">
+			Explicación
+		</a>
+		<%= render "flows/help_partials/explanation5" %>
+
+		<!-- Fields help button -->
+		<a href="#help5" role="button" class="btn btn-info" data-toggle="modal">
+			Ayuda
+		</a>
+		<%= render "flows/help_partials/help5" %>	
+	</div>
+	<br>
+	<br>
 
 	<div class="container">
 		<p class="lead">

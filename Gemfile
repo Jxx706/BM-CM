@@ -31,7 +31,6 @@ group :development do
   gem 'better_errors'
 end
 
-gem 'wicked'
 gem 'jquery-rails'
 
 # To use ActiveModel has_secure_password

@@ -1,0 +1,33 @@
+<%= content_for :couchbase_bucket do %>
+	<p>
+		Proporcione, a continuación, la información necesaria para crear el <em>bucket:</em>
+	</p>
+
+	<%= label_tag "attr_bucket_title", "Nombre" %>
+	<%= text_field_tag "attr[bucket][title]", nil, :id => "attr_bucket_title" %>
+	<br>
+
+	<%= label_tag "attr_bucket_port", "Puerto" %>
+	<%= text_field_tag "attr[bucket][port]", nil, :id => "attr_bucket_port" %>
+	<br>
+
+	<%= label_tag "attr_bucket_size", "Tamano" %>
+	<%= text_field_tag "attr[bucket][size]", nil, :id => "attr_bucket_size" %>
+	<br>
+
+	<%= label_tag "attr_bucket_user", "Usuario" %>
+	<%= text_field_tag "attr[bucket][user]", nil, :id => "attr_bucket_user" %>
+	<br>
+
+	<%= label_tag "attr_bucket_password", "Contrasena" %>
+	<%= password_field_tag "attr[bucket][password]", nil, :id => "attr_bucket_password" %>
+	<br>
+
+	<%= label_tag "attr_bucket_type", "Tipo" %>
+	<%= select_tag "attr[bucket][type]", options_for_select([["Memcached", "memcached"], ["	Couchbase", "couchbase"]]) %>
+	<br>
+
+	<%= label_tag "attr_bucket_replica", "Numero de replicas" %>
+	<%= number_field_tag "attr[bucket][replica]", nil, :in => 1..10, :id => "attr_bucket_replica" %>
+	<br>
+<% end %>

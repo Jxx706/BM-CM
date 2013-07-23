@@ -71,3 +71,12 @@ function changeIfChecked(self) {
 		$(self).val("no"); 	
 	}
 }
+
+function toggleValue(elementId, val1, val2) {
+	var selector = $("#" + elementId) 
+	if (selector.val() == val1) {
+		selector.val(val2);
+	} else {
+		selector.val(val1);
+	}
+}
