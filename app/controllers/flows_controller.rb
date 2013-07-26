@@ -26,9 +26,11 @@ class FlowsController < ApplicationController
   # 3: MySQL.
   # 4: Couchbase.
   # 5: Tomcat
+  # 6: Maintenance
   def create
     @args = {:current_step => nil, :flow_id => nil}
     case params[:current_step]
+      #Flow name and node
       when "1"
         params[:flow][:file_path] = current_user.directory_path << "\\#{params[:flow][:name]}.pp"
         params[:flow][:hash_attributes] = Hash.new
@@ -42,6 +44,7 @@ class FlowsController < ApplicationController
         end
 
         render :new
+      #Flow type
       when "2"
         @flow = current_user.flows.find(params[:flow_id]) #Let's keep adding info to this flow
 
@@ -82,6 +85,7 @@ class FlowsController < ApplicationController
         file = File.new(@flow.file_path, "w+")
 
         case params[:current_step] 
+          #Install - MySQL
           when "3"
             if params[:checkbox_mysql_client] == "yes" then
               file.puts(write_class("mysql"))
@@ -113,6 +117,7 @@ class FlowsController < ApplicationController
             else
               render :new
             end
+          #Install - Couchbase
           when "4"
             params[:attr].each do |k, v| 
               if v.empty? || v.nil? then
@@ -132,11 +137,132 @@ class FlowsController < ApplicationController
             else
               render :new
             end
-
+          #Install - Tomcat
           when "5"
-            #something
+            params[:attr].each do |k, v| 
+              if v.empty? || v.nil? then
+                params[:flow][:hash_attributes][k] = Flow.defaults("tomcat")[k]
+                params[:attr].delete(k)
+              else
+                params[:flow][:hash_attributes][k] = v
+              end
+            end
+
+            file.puts(write_class("tomcat", params[:attr]))
+            file.close
+
+            params[:flow][:hash_attributes] = @flow.hash_attributes.merge(params[:flow][:hash_attributes])
+            if @flow.update_attributes(params[:flow]) then
+              redirect_to @flow
+            else
+              render :new
+            end
+          #Maintenance
           when "6"
-            #something
+            
+            #Retrieve the current user
+            @flow = current_user.flows.find(params[:flow_id])
+
+            #Create the hash that will contain the updated info.
+            params[:flow] = Hash.new
+            params[:flow][:hash_attributes] = Hash.new
+
+            #Reopen the file with writing privileges
+            file = File.new(@flow.file_path, "w+")
+
+            #Check if there's any maintenance to do with MySQL
+            if params[:mysql_active] == "yes" then
+
+              #Create the hash that will contain the info about the database instance
+              params[:flow][:hash_attributes][:db] = Hash.new
+
+              #Remember that these params are mandatory:
+              #  - User
+              #  - Title
+              #  - Password
+              params[:attr][:db].each do |k, v| #k stands for "key" and v for "value"
+                if v.empty? || v.nil? then #If there's no value, use default (and erase the key associated to it)
+                  params[:flow][:hash_attributes][:db][k] = Flow.defaults("mysql")["db"][k]
+                  params[:attr][:db].delete(k)
+                else #Otherwise, use the value provided.
+                  params[:flow][:hash_attributes][:db][k] = v
+                end
+              end
+
+              #Write to file
+              file.puts(write_resource('mysql::db', params[:attr][:db].delete("title"), params[:attr][:db]))
+
+              #If the user wants a backup...
+              if params[:backup] == "yes" then
+
+                #Create the hash that will contain all the backup info
+                params[:flow][:hash_attributes][:db_backup] = Hash.new
+                
+                #Copy one hash into other
+                #Remember that these params are mandatory:
+                #  - Backupuser
+                #  - Backuppassword
+                #  - Backupdir
+                params[:attr][:db_backup].each do |k, v| 
+                  params[:flow][:hash_attributes][:db_backup][k] = v
+                end
+
+                #Write to file again
+                file.puts(write_class('mysql::backup', params[:attr][:db_backup]))
+              end
+
+              params[:flow][:hash_attributes] = @flow.hash_attributes.merge(params[:flow][:hash_attributes])
+            end
+
+            #Check if there's any maintenance to do with Couchbase
+            if params[:couchbase_active] == "yes" then
+              #Create the hash that will contain the info about the bucket
+              params[:flow][:hash_attributes][:bucket] = Hash.new
+
+              #Remember that these params are mandatory:
+              #  - Title
+              params[:attr][:bucket].each do |k, v| 
+                if v.empty? || v.nil? then 
+                  params[:flow][:hash_attributes][:bucket][k] = Flow.defaults("couchbase")["bucket"][k]
+                  params[:attr][:bucket].delete(k)
+                else
+                  params[:flow][:hash_attributes][:bucket][k] = v
+                end
+              end
+
+              file.puts(write_resource("couchbase::bucket", params[:attr][:bucket].delete("title"), params[:attr][:bucket]))
+              params[:flow][:hash_attributes] = @flow.hash_attributes.merge(params[:flow][:hash_attributes])
+            end            
+
+            #Check if there's any maintenance to do with Tomcat
+            if params[:tomcat_active] == "yes" then
+              #Create the hash that will contain the info about the instance
+              params[:flow][:hash_attributes][:instance] = Hash.new
+
+              #Remember that these params are mandatory:
+              #  - Name
+              params[:attr][:instance].each do |k, v| 
+                if v.empty? || v.nil? then 
+                  params[:flow][:hash_attributes][:instance][k] = Flow.defaults("tomcat")["instance"][k]
+                  params[:attr][:instance].delete(k)
+                else
+                  params[:flow][:hash_attributes][:instance][k] = v
+                end
+              end
+
+              file.puts(write_resource("tomcat::instance", params[:attr][:instance].delete("name"), params[:attr][:instance]))
+              params[:flow][:hash_attributes] = @flow.hash_attributes.merge(params[:flow][:hash_attributes])
+            end
+
+            #There's nothing left to do
+            file.close
+
+            #Update
+            if @flow.update_attributes(params[:flow]) then #On success
+              redirect_to @flow
+            else #On failure
+              render :new
+            end
         end
     end
   end

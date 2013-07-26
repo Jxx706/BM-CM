@@ -1,26 +1,62 @@
 module FlowsHelper
 	FIELDS = {
-		"mysql" => { "port" => "puerto",
-					 "basedir" => "directorio base",
-					 "datadir" => "directorio de datos",
-					 "type" => "tipo de flujo",
-					 "tool" => "herramienta",
-					 "client" => "cliente",
-					 "tmpdir" => "directorio de temporales",
-					 "package_ensure" => "version",
-					 "max_allowed_packet" => "tamanio maximo de paquete",
-					 "bind_address" => "direccion de vinculacion",
-					 "root_group" => "grupo de usuario root",
-					 "root_password" => "contrasenia de usuario root"
-			  },
-		"couchbase" => { "user" => "usuario",
-						 "password" => "contrasenia",
-						 "version" => "version",
-						 "size" => "tamanio",
+		"install" => {
+			"mysql" => { "port" => "puerto",
+						 "basedir" => "directorio base",
+						 "datadir" => "directorio de datos",
 						 "type" => "tipo de flujo",
-					 	 "tool" => "herramienta"
-			 		   },
-		"tomcat" => {}
+						 "tool" => "herramienta",
+						 "client" => "cliente",
+						 "tmpdir" => "directorio de temporales",
+						 "package_ensure" => "version",
+						 "max_allowed_packet" => "tamanio maximo de paquete",
+						 "bind_address" => "direccion de vinculacion",
+						 "root_group" => "grupo de usuario root",
+						 "root_password" => "contrasenia de usuario root"
+				  },
+			"couchbase" => { "user" => "usuario",
+							 "password" => "contrasenia",
+							 "version" => "version",
+							 "size" => "tamanio",
+							 "type" => "tipo de flujo",
+						 	 "tool" => "herramienta"
+				 		   },
+			"tomcat" => {}
+		},
+		"maintenance" => {
+			"db" => {
+				"title" => "nombre",
+				"charset" => "charset",
+				"host" => "host",
+				"user" => "usuario",
+				"password" => "contrasenia",
+				"grant" => "privilegios"
+			},
+			"db_backup" => {
+				"backupuser" => "usuario de respaldo",
+				"backuppassword" => "contrasenia de usuario de respaldo",
+				"backupdir" => "directorio de respaldo"
+			},
+			"bucket" => {
+				"title" => "nombre",
+				"port" => "puerto",
+				"size" => "tamano",
+				"user" => "usuario",
+				"password" => "contrasenia",
+				"type" => "tipo",
+				"replica" => "numero de replicas"
+			},
+			"instance" => {
+				"name" => "nombre",
+				"ensure" => "estado",
+				"owner" => "propietario",
+				"group" => "grupo",
+				"server_port" => "puerto del servidor",
+				"http_port" => "puerto HTTP",
+				"ajp_port" => "puerto AJP",
+				"sample" => "ejemplo disponible"
+			}
+		}
 	}
 
 	# EXPLANATION_MESSAGES = {
@@ -41,8 +77,8 @@ module FlowsHelper
 	# 	6 => ""
 	# }
 
-	def field_translation(tool, field_name)
-		FIELDS[tool][field_name]
+	def field_translation(type)
+		FIELDS[type]
 	end
 
 	# def form_help(form_number)

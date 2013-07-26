@@ -24,7 +24,7 @@ class Flow < ActiveRecord::Base
        #   "client_package_name"   => 'mysql',
         #  "config_file"           => '/etc/my.cnf',
           "datadir"               => '/var/lib/mysql',
-          "tmpdir"                => '/tmp'#,
+          "tmpdir"                => '/tmp',
          # "java_package_name"     => 'mysql-connector-java',
           #"log_error"             => '/var/log/mysqld.log',
          # "php_package_name"      => 'php-mysql',
@@ -60,20 +60,42 @@ class Flow < ActiveRecord::Base
          #  "ssl_cert"             => '/etc/mysql/server-cert.pem',
          #  "ssl_key"              => '/etc/mysql/server-key.pem',
          # }
+    
+         "db" => {
+            "charset" => "utf8",
+            "host" => "localhost",
+            "grant" => ['all']
+         }
     }
 
     COUCHBASE_DEFAULTS = {
       "size" => "1024",
       "user" => "couchbase", 
       "password" => "password",
-      "version" => "latest"
+      "version" => "latest",
+      "bucket" => {
+        "port" => "8091",
+        "size" => "1024",
+        "user" => "couchbase",
+        "password" => "password",
+        "type" => "memcached",
+        "replica" => "1"
+      }
     }
     
-    TOMCAT_DEFAULTS = {}
+    TOMCAT_DEFAULTS = {
+      "instance" => {
+        "group" => "adm",
+        "owner" => "tomcat",
+        "server_port" => "8005",
+        "http_port" => "8080", 
+        "ajp_port" => "8009"
+      }
+    }
   	attr_accessible :file_path, #Path where the flow is stored
-  					:name, #Name of this flow
-  					:node_name, #Name of the node that owns this flow
-            :hash_attributes
+          					:name, #Name of this flow
+          					:node_name, #Name of the node that owns this flow
+                    :hash_attributes
     serialize :hash_attributes, Hash 
   	belongs_to :user
   	#before_save :path_ok?

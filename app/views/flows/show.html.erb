@@ -2,25 +2,119 @@
 	<%= render 'flows/sidebar' %>
 
 	<div class="span9">
-		<h1>Síntesis del flujo:</h1>
-		<table class="table table-striped table-hover">
-			<caption><h2><b>Datos del flujo <em><%= @flow.name %></em>, perteneciente al nodo <em><%= @flow.node_name %></em>:</b></h2></caption>
-			<thead>
-				<tr>
-					<th>Atributo</th>
-					<th>Valor</th>
-				</tr>
-			</thead>
-			<tbody>
-				<% @flow.hash_attributes.each do |k, v| %>
+		<h1>Síntesis del flujo <b><big><%= @flow.name %></b></big>, perteneciente al nodo <big><b><%= @flow.node_name %></b></big>:</h1>
+		<% if @flow.hash_attributes["type"] == "install" then %>
+			<table class="table table-striped table-hover">
+				<caption><h2>Datos de instalación: </h2></caption>
+				<thead>
 					<tr>
-						<td> <%= field_translation(@flow.hash_attributes["tool"], k).capitalize %> </td>
-						<td> <%= v %> </td>
+						<th>Atributo</th>
+						<th>Valor</th>
 					</tr>
-				<% end %>
-			</tbody>
-		</table>
+				</thead>
+				<tbody>
+					<% @flow.hash_attributes.each do |k, v| %>
+						<tr>
+							<td> <%= field_translation("install")[@flow.hash_attributes["tool"]][k].capitalize %> </td>
+							<td> <%= v %> </td>
+						</tr>
+					<% end %>
+				</tbody>
+			</table>
+		<% elsif @flow.hash_attributes["type"] == "maintenance" then %>
+			
+			<% if @flow.hash_attributes.has_key?(:db) then %>
+				<table class="table table-stripped table-hover">
+					<caption><h2>Datos de configuración de la base de datos (MySQL):</h2></caption>
+					<thead>
+						<tr>
+							<th>
+								Atributo	
+							</th>
+							<th>
+								Valor
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<% @flow.hash_attributes[:db].each do |k, v| %>
+							<tr>
+								<td>
+									<%= field_translation("maintenance")["db"][k].capitalize %>
+								</td>
+								<td><%= v %></td>
+							</tr>
+						<% end %>
 
+						<% if @flow.hash_attributes.has_key?(:db_backup) then %>
+							<%= flow.hash_attributes[:db_backup].each do |k,v| %>
+								<tr>
+									<td>
+										<%= field_translation("maintenance")["db_backup"][k].capitalize %>
+									</td>
+									<td><%= v %></td>
+								</tr>
+							<% end %>
+						<% end %>
+					</tbody>
+				</table>
+			<% end %>
+			<hr>
+			<br>
+			<% if @flow.hash_attributes.has_key?(:bucket) then %>
+				<table class="table table-stripped table-hover">
+					<caption><h2>Datos de configuración del bucket (Couchbase):</h2></caption>
+					<thead>
+						<tr>
+							<th>
+								Atributo	
+							</th>
+							<th>
+								Valor
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<% @flow.hash_attributes[:bucket].each do |k, v| %>
+							<tr>
+								<td>
+									<%= field_translation("maintenance")["bucket"][k].capitalize %>
+								</td>
+								<td><%= v %></td>
+							</tr>
+						<% end %>
+					</tbody>
+				</table>
+			<% end %>
+			<hr>
+			<br>
+			<% if @flow.hash_attributes.has_key?(:instance) then %>
+				<table class="table table-stripped table-hover">
+					<caption><h2>Datos de configuración de la instancia (Tomcat):</h2></caption>
+					<thead>
+						<tr>
+							<th>
+								Atributo	
+							</th>
+							<th>
+								Valor
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<% @flow.hash_attributes[:instance].each do |k, v| %>
+							<tr>
+								<td>
+									<%= field_translation("maintenance")["instance"][k].capitalize %>
+								</td>
+								<td><%= v %></td>
+							</tr>
+						<% end %>
+					</tbody>
+				</table>
+			<% end %>
+		<% end%>
+			
 		<br>
 
 		<%= link_to download_flow_path(@flow), :class => "btn btn-success" do %>
