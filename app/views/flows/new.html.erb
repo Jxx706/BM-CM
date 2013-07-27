@@ -107,8 +107,8 @@
 									<div class="caption">
 										<h3>Instalación</h3>
 									</div>
-									<label class="radio" onclick='$("#select_maintenance").hide(); $("#select_tool").show();'>
-										<%= radio_button "radio_button", "type", "install", :onclick => '$("#select_maintenance").show(); $("#select_tool").hide();' %>
+									<label class="radio" onclick='$("#select_tool").show();'>
+										<%= radio_button "radio_button", "type", "install", :onclick => '$("#select_tool").show();' %>
 											¡Crear un flujo de <strong><i>instalación</i></strong>!
 									</label>
 									<%= select_tag "select_tool", options_for_select([["MySQL", "mysql"], ["CouchBase", "couchbase"], ["Tomcat", "tomcat"]]), :onchange => "$('#tool').html($('#select_tool').val())" %>
@@ -122,12 +122,10 @@
 									<div class="caption">
 										<h3>Mantenimiento</h3>
 									</div>
-									<label class="radio" onclick='$("#select_maintenance").show(); $("#select_tool").hide();'>
-										<%= radio_button "radio_button", "type", "maintenance", :onclick => '$("#select_maintenance").show(); $("#select_tool").hide();' %>
+									<label class="radio" onclick='$("#select_tool").hide();'>
+										<%= radio_button "radio_button", "type", "maintenance", :onclick => '$("#select_tool").hide();' %>
 											¡Crear un flujo de <strong><i>mantenimiento</i></strong>!
 									</label>
-									<%= select_tag "select_maintenance", options_for_select([]) %>
-									<%= javascript_tag '$("#select_maintenance").hide()' %>
 								</div>
 							</li>
 
