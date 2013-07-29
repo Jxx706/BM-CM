@@ -74,13 +74,18 @@ class InstallersController < ApplicationController
 		#INSTALLING THE PUPPET MASTER
 		file_content += nl + echo("Instalando el Puppet Master")
 		file_content += nl + "apt-get install puppetmaster " + comment("Instalar el Puppet Master") 
+		file_content += nl + "puppet master --reports=http" + comment("Los reportes se enviaran remotamente a BM+CM")
+		file_content += nl + "puppet master --reporturl=ALGO"
 		file_content += nl
 
-		#STABLISHING SSH CONNECTIONS WITH EVERY NODE AND ATTEMPTING TO INSTALL PUPPET ON THEM.		
+		#STABLISHING SSH CONNECTIONS WITH EVERY NODE AND ATTEMPTING TO INSTALL PUPPET ON THEM.
+		#ENABLING THE REPORTS AS WELL.		
 		file_content += nl + "for n in $NODES" 
 		file_content += nl + "do"
 		file_content += nl + tab + echo("Iniciando conexion SSH con el nodo. Ingrese su contrasena de ROOT!")
 		file_content += nl + tab + "ssh -l root $n \"apt-get install puppet\"" 
+		file_content += nl + tab + "puppet agent --reports"
+
 		file_content += nl + "done"
 
 		#SIGNING THE CERTIFICATES 
@@ -90,11 +95,11 @@ class InstallersController < ApplicationController
 		file_content += nl + "puppet cert sign --all " + comment("Firma todos los certificados.")
 
 		#INSTALLING DEPENDENCIES
-		file_content += nl + echo("Se instalaran las dependencias...")
-		file_content += nl + "puppet module puppetlabs-mysql"
-		file_content += nl + "puppet module jlondon-couchbase"
-		file_content += nl + "puppet module camptocamp-tomcat"
-		file_content += nl + "puppet module puppetlabs-stdlib"
+		file_content += (nl * 2) + echo("Se instalaran las dependencias...")
+		file_content += nl + "puppet module puppetlabs-mysql" #For handle MySQL
+		file_content += nl + "puppet module jlondon-couchbase" #For handle Couchbase
+		file_content += nl + "puppet module camptocamp-tomcat" #For handle Tomcat
+		file_content += nl + "puppet module puppetlabs-stdlib" #For handle file edition
 
 		return file_content
 	end

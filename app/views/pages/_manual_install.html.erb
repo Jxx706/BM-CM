@@ -63,6 +63,19 @@
 				
 			</ul>
 		</p>
+
+		<hr>
+		<h4>
+			Activando el envío de reportes:
+		</h4>
+		<p>
+			Es necesario activar, tanto en los nodos Agents como en el Master, el envío (recepción) de reportes. Para ello, ejecutar las siguientes instrucciones en el terminal:
+			<br>
+			<br>
+			En cada nodo <b>Agent</b>, ejecutar <code>sudo puppet agent --report</code>.
+			<br>
+			En el nodo <b>Master</b>, ejecutar <code>sudo puppet master --reports=http</code>, seguidamente de <code>sudo puppet master --reporturl='url del sistema'</code>.
+		</p>
 	</div>
 	
 	<div class="modal-footer">
