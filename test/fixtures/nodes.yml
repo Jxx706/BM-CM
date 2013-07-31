@@ -1,0 +1,27 @@
+# == Schema Information
+#
+# Table name: nodes
+#
+#  id         :integer          not null, primary key
+#  ip         :string(255)
+#  hostname   :string(255)
+#  domain     :string(255)
+#  fqdn       :string(255)
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  user_id    :integer
+#
+
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  ip: MyString
+  hostname: MyString
+  domain: MyString
+  fqdn: MyString
+
+two:
+  ip: MyString
+  hostname: MyString
+  domain: MyString
+  fqdn: MyString

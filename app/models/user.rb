@@ -44,6 +44,8 @@ class User < ActiveRecord::Base
 
     has_many :flows, :dependent => :destroy, #If the user is destroyed, all his flows are gone too.
                      :order => 'updated_at'
+    has_many :nodes, :dependent => :destroy,
+                     :order => 'hostname'
 
   	private
   		def create_remember_token

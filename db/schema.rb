@@ -11,7 +11,14 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130704175601) do
+ActiveRecord::Schema.define(:version => 20130731001223) do
+
+  create_table "configurations", :force => true do |t|
+    t.integer  "node_id"
+    t.integer  "flow_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "flows", :force => true do |t|
     t.string   "name"
@@ -24,6 +31,23 @@ ActiveRecord::Schema.define(:version => 20130704175601) do
   end
 
   add_index "flows", ["user_id", "created_at"], :name => "index_flows_on_user_id_and_created_at"
+
+  create_table "nodes", :force => true do |t|
+    t.string   "ip"
+    t.string   "hostname"
+    t.string   "domain"
+    t.string   "fqdn"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+    t.integer  "user_id"
+  end
+
+  create_table "reports", :force => true do |t|
+    t.string   "file_path"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+    t.integer  "node_id"
+  end
 
   create_table "users", :force => true do |t|
     t.string   "name"
