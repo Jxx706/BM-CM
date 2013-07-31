@@ -1,0 +1,27 @@
+<div class="row-fluid">
+	<%= render 'nodes/sidebar' %>
+
+	<div class="span9">
+		<% if @nodes.nil? || @nodes.empty? then %>
+			<div class="alert alert-error">
+				<big><b>¡No tienes ningún nodo!</b></big><br><br>
+				<big><%= link_to 'Agregar un nodo', new_node_path, :class => "btn btn-small btn-primary" %></big>
+			</div>
+		<% else %>
+		 	<% @nodes.each do |node| %>
+		 		<div class="well">
+		 			<h2><big><b><%= node.fqdn %></b></big></h2>
+		 			<br>
+		 			<p class="text-right">
+		 				<%= link_to node_path(node), :class => "btn btn-small btn-success" do %>
+		 					<i class="icon-white icon-eye-open"></i> Ver
+		 				<% end %>
+		 				<%= link_to node_path(node), :method => 'delete', :class => "btn btn-small btn-danger" do %>
+		 					<i class="icon-white icon-remove"></i> Eliminar
+		 				<% end %>	 				
+		 			</p>
+		 		</div>
+		 	<% end %>
+		<% end %>
+	</div>
+</div>

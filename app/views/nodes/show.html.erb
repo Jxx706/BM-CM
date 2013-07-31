@@ -1,0 +1,44 @@
+<div class="row-fluid">
+	<%= render 'nodes/sidebar' %>
+
+	<div class="span7">
+		<address>
+			<strong><%= "#{@node.fqdn}"%></strong><br>
+			<abbr title="Direccion IP">IP:</abbr> <%= @node.ip %><br>
+			Creado: <%= @node.created_at.strftime("%B %d, %Y") %><br>
+			Última vez modificado: <%= @node.updated_at %><br>
+		</address>
+
+		<address>
+			<strong>Número de flujos asociados</strong><br>
+			<%= link_to '#' do %>
+				<%= @node.flows.count %>
+			<% end %>
+		</address>
+
+		<address>
+			<strong>
+				Número de reportes
+			</strong><br>
+			<%= link_to '#' do %>
+				<%= @node.reports.count %>
+			<% end %>
+		</address>
+
+		<%= link_to node_path(@node), :method => "delete", :class => "btn btn-danger" do %>
+			<i class="icon-white icon-remove-circle"></i> Eliminar
+		<% end %>
+	</div>
+
+	<div class="span2">
+		<div class="alert alert-info">
+			Hasta el momento tienes <%= pluralize(current_user.nodes.count, 'nodo', 'nodos') %>.
+			<br>
+			<br>
+
+			<%= link_to new_node_path, :class => "btn btn-small btn-primary" do %>
+				<b><big>¿Deseas añadir otro?</big></b>
+			<% end %>
+		</div>
+	</div>
+</div>

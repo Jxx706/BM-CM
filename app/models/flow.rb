@@ -101,7 +101,7 @@ class Flow < ActiveRecord::Base
     serialize :hash_attributes, Hash 
   	belongs_to :user
     has_many :configurations
-    has_many :nodes, :through :configurations
+    has_many :nodes, :through => :configurations
   	#before_save :path_ok?
   	
   	def self.defaults(tool)

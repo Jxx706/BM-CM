@@ -1,0 +1,32 @@
+<div class="row-fluid">
+	<%= render 'nodes/sidebar' %>
+
+
+	<div class="span9">
+		<% if current_user.nodes.count != 10 then %>
+			<div class="alert">
+				<strong><big>¡ATENCIÓN!</big></strong> Recuerda que solo puedes administrar un máximo de <b>10</b> nodos.
+				<br>
+				<br>
+				Actualmente tienes <b><%= current_user.nodes.count %></b> 
+			</div>
+			<%= form_for @node, :class => "form" do |f| %>
+				<!-- mandatory -->
+				Dirección IP: <%= f.text_field :ip, :placeholder => "Ej: 192.15.6.255"%>
+				<br>
+				<!-- mandatory -->
+				Hostname: <%= f.text_field :hostname, :placeholder => "Ej: mihost" %>
+				<br>
+				<!-- mandatory -->
+				Dominio: <%= f.text_field :domain, :placeholder => "Ej: midominio.local" %>
+				<br>
+
+			<%= f.submit "Aceptar", :class => "btn btn-small btn-primary" %>
+			<% end %>
+		<% else %>
+			<div class="alert alert-error">
+				<strong><big>¡Lo sentimos mucho!</big></strong> Has llegado al número límite de nodos administrables.
+			</div>
+		<% end %>
+	</div>
+</div>

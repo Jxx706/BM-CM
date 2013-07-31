@@ -1,12 +1,20 @@
 BmCm::Application.routes.draw do
   
+  get "nodes/new"
+
+  get "nodes/create"
+
+  get "nodes/index"
+
   resources :sessions, :only => [:new, :create, :destroy]
   resources :users
   resources :flows
+  resources :nodes, :only => [:new, :create, :destroy, :index, :show]
   resources :installers, :only => [:new, :create]
   root :to => 'pages#home'
   match '/get_started', :to => 'pages#get_started'
   match '/flows_home', :to => 'flows#home', :as => "flows_home"
+  match '/nodes_home', :to => 'nodes#home', :as => "nodes_home"
   match '/signup', :to => 'users#new'
   match '/signin', :to => 'sessions#new'
   match '/signout', :to => 'sessions#destroy', :via => :delete #DELETE HTTP

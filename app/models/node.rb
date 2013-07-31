@@ -19,11 +19,12 @@ class Node < ActiveRecord::Base
   VALID_IP_ADDRESS = //
   validates :hostname, :presence => true
   validates :ip, :presence => true,
-  		    	 :format   => { :with => VALID_IP_ADDRESS}
-  has_many :reports
+  		    	 :format   => { :with => VALID_IP_ADDRESS }
+  has_many :reports, :dependent => :destroy,
+  					 :order => 'created_at'
   belongs_to :user
   has_many :configurations
-  has_many :flows, :through :configurations
+  has_many :flows, :through => :configurations
 
   private
   	def create_fqdn
