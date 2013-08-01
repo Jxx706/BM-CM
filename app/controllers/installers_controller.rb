@@ -2,19 +2,11 @@ class InstallersController < ApplicationController
 
   
   skip_before_filter :verify_authenticity_token, :only => [:create]
+ 
   #Generates installer file.
   def create
-  	ips = []
-  	shell = ""
-
-  	params[:installer].each do |k, v|
-  		case k
-  		when "shell"
-  			shell = v
-  		else
-  			ips.push(v)
-  		end
-  	end
+  	ips = current_user.nodes.map { |n| n.ip if n.fqdn != params[:master_node] }
+  	shell = params[:shell]
 
   	installer_name = current_user.directory_path << "\\installer.sh"
   	file = File.new(installer_name, "w+")
