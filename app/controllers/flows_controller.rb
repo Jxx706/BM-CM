@@ -32,9 +32,14 @@ class FlowsController < ApplicationController
     case params[:current_step]
       #Flow name and node
       when "1"
-        params[:flow][:file_path] = current_user.directory_path << "\\#{params[:flow][:name]}.pp"
+        params[:flow][:file_path] =  current_user.directory_path << (params[:flow][:node_name].empty? ? "\\#{params[:flow][:name]}.pp" : "\\#{params[:flow][:node_name]}\\#{params[:flow][:name]}.pp")
         params[:flow][:hash_attributes] = Hash.new
         @flow = current_user.flows.build(params[:flow])
+
+        #If the node name has been provided, then create the corresponding association.
+        unless params[:flow][:node_name].empty? then
+          @flow.nodes << current_user.nodes.find_by_fqdn(params[:flow][:node_name])
+        end
 
         if @flow.save! then      
           @args[:current_step] = 2 #This is the next step.
