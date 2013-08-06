@@ -20,7 +20,7 @@
 			<strong>
 				Número de reportes
 			</strong><br>
-			<%= link_to '#' do %>
+			<%= link_to node_reports_path(@node) do %>
 				<%= @node.reports.count %>
 			<% end %>
 		</address>

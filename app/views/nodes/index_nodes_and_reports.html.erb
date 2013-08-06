@@ -1,0 +1,48 @@
+<div class="row-fluid">
+	<%= render 'nodes/sidebar' %>
+
+	<div class="span9">
+		<% if !(@nodes.nil?) then %>
+			<h1>
+				Lista de <b>reportes</b> por nodo.
+			</h1>
+
+			<%= @nodes.each do |n| %>
+				<table class="table table-stripped table-hover">
+					<caption>
+						<h2>
+							<b>Nodo: </b><%= n.fqdn %>
+						</h2>
+					</caption>
+					<thead>
+						<tr>
+							<th>Reporte</th>
+							<th>Acción</th>
+						</tr>
+					</thead>
+					<tbody>
+						<%= n.reports.each do |r| %>
+							<tr>
+								<td><%= r.name %></td>
+								<td><%= link_to node_report_path(n, r), :class => "btn btn-small btn-success" do %>
+										<i class="icon-eye-open icon-white"></i>Más detalles
+									<% end %>
+								</td>
+							</tr>
+						<% end %>
+					</tbody>
+				</table>
+				<br>
+				<hr>
+			<% end %>
+		<% else %>
+			<div class="alert alert-error">
+				<h2><b>¡Aún no tienes nodos!</b></h2><br>
+				<br>
+				<%= link_to new_node_path, :class => "btn btn-small btn-primary" do %>
+					<i class="icon-white icon-plus"></i>Agregar un nuevo nodo
+				<% end %>
+			</div>
+		<% end %>
+	</div>
+</div>

@@ -30,6 +30,11 @@ class NodesController < ApplicationController
   	@title = "Nodos"
   end
 
+  #Shows all the reports, discriminated by node.
+  def index_nodes_and_reports
+    @node = current_user.nodes
+  end
+
   def destroy
   	@node = current_user.nodes.find(params[:id])
 

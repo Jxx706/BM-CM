@@ -5,7 +5,10 @@
 		<% if @nodes.nil? || @nodes.empty? then %>
 			<div class="alert alert-error">
 				<big><b>¡No tienes ningún nodo!</b></big><br><br>
-				<big><%= link_to 'Agregar un nodo', new_node_path, :class => "btn btn-small btn-primary" %></big>
+				<big><%= link_to new_node_path, :class => "btn btn-small btn-primary" do %>
+						<i class="icon-white icon-plus"></i>Agregar un nuevo nodo
+					 <% end %>
+				</big>
 			</div>
 		<% else %>
 		 	<% @nodes.each do |node| %>
