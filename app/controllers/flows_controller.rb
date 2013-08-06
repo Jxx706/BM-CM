@@ -32,8 +32,9 @@ class FlowsController < ApplicationController
     case params[:current_step]
       #Flow name and node
       when "1"
-        params[:flow][:file_path] =  current_user.directory_path << (params[:flow][:node_name].empty? ? "\\#{params[:flow][:name]}.pp" : "\\#{params[:flow][:node_name]}\\#{params[:flow][:name]}.pp")
+        #params[:flow][:file_path] =  current_user.directory_path << (params[:flow][:node_name].empty? ? "\\#{params[:flow][:name]}.pp" : "\\#{params[:flow][:node_name]}\\#{params[:flow][:name]}.pp")
         params[:flow][:hash_attributes] = Hash.new
+        params[:flow][:body] = String.new
         @flow = current_user.flows.build(params[:flow])
 
         #If the node name has been provided, then create the corresponding association.
@@ -86,14 +87,14 @@ class FlowsController < ApplicationController
 
         params[:flow] = Hash.new
         params[:flow][:hash_attributes] = Hash.new
-
-        file = File.new(@flow.file_path, "w+")
+        params[:flow][:body] = "\n\n"
+        #file = File.new(@flow.file_path, "w+")
 
         case params[:current_step] 
           #Install - MySQL
           when "3"
             if params[:checkbox_mysql_client] == "yes" then
-              file.puts(write_class("mysql"))
+              params[:flow][:body] << write_class("mysql")
               params[:flow][:hash_attributes]["client"] = true
             else
               params[:flow][:hash_attributes]["client"] = false
@@ -109,11 +110,11 @@ class FlowsController < ApplicationController
               end
             end
 
-            file.reopen(@flow.file_path, "a+")
-            file.puts(write_class("mysql::server", {"package_ensure" => params[:attr][:package_ensure], 
+            #file.reopen(@flow.file_path, "a+")
+            params[:flow][:body] << write_class("mysql::server", {"package_ensure" => params[:attr][:package_ensure], 
                                                     "config_hash" => params[:attr].delete(:package_ensure)
-                                                    }))
-            file.close
+                                                    })
+            #file.close
 
             params[:flow][:hash_attributes] = @flow.hash_attributes.merge(params[:flow][:hash_attributes])
 
@@ -133,8 +134,8 @@ class FlowsController < ApplicationController
               end
             end
 
-            file.puts(write_class("couchbase", params[:attr]))
-            file.close
+            params[:flow][:body] << write_class("couchbase", params[:attr])
+            #file.close
 
             params[:flow][:hash_attributes] = @flow.hash_attributes.merge(params[:flow][:hash_attributes])
             if @flow.update_attributes(params[:flow]) then
@@ -153,8 +154,8 @@ class FlowsController < ApplicationController
               end
             end
 
-            file.puts(write_class("tomcat", params[:attr]))
-            file.close
+            params[:flow][:body] << write_class("tomcat", params[:attr])
+            #file.close
 
             params[:flow][:hash_attributes] = @flow.hash_attributes.merge(params[:flow][:hash_attributes])
             if @flow.update_attributes(params[:flow]) then
@@ -171,9 +172,10 @@ class FlowsController < ApplicationController
             #Create the hash that will contain the updated info.
             params[:flow] = Hash.new
             params[:flow][:hash_attributes] = Hash.new
+            params[:flow][:body] = "\n\n"
 
             #Reopen the file with writing privileges
-            file = File.new(@flow.file_path, "w+")
+            #file = File.new(@flow.file_path, "w+")
 
             #Check if there's any maintenance to do with MySQL
             if params[:mysql_active] == "yes" then
@@ -195,7 +197,7 @@ class FlowsController < ApplicationController
               end
 
               #Write to file
-              file.puts(write_resource('mysql::db', params[:attr][:db].delete("title"), params[:attr][:db]))
+              params[:flow][:body] << write_resource('mysql::db', params[:attr][:db].delete("title"), params[:attr][:db])
 
               #If the user wants a backup...
               if params[:backup] == "yes" then
@@ -213,7 +215,7 @@ class FlowsController < ApplicationController
                 end
 
                 #Write to file again
-                file.puts(write_class('mysql::backup', params[:attr][:db_backup]))
+                params[:flow][:body] << write_class('mysql::backup', params[:attr][:db_backup])
               end
 
               params[:flow][:hash_attributes] = @flow.hash_attributes.merge(params[:flow][:hash_attributes])
@@ -235,7 +237,7 @@ class FlowsController < ApplicationController
                 end
               end
 
-              file.puts(write_resource("couchbase::bucket", params[:attr][:bucket].delete("title"), params[:attr][:bucket]))
+              params[:flow][:body] << write_resource("couchbase::bucket", params[:attr][:bucket].delete("title"), params[:attr][:bucket])
               params[:flow][:hash_attributes] = @flow.hash_attributes.merge(params[:flow][:hash_attributes])
             end            
 
@@ -255,12 +257,12 @@ class FlowsController < ApplicationController
                 end
               end
 
-              file.puts(write_resource("tomcat::instance", params[:attr][:instance].delete("name"), params[:attr][:instance]))
+              params[:flow][:body] << write_resource("tomcat::instance", params[:attr][:instance].delete("name"), params[:attr][:instance])
               params[:flow][:hash_attributes] = @flow.hash_attributes.merge(params[:flow][:hash_attributes])
             end
 
             #There's nothing left to do
-            file.close
+            #file.close
 
             #Update
             if @flow.update_attributes(params[:flow]) then #On success
@@ -348,10 +350,11 @@ class FlowsController < ApplicationController
   def update #(PUT /flows/:id)
     @flow = current_user.flows.find(params[:id])
 
-    file = File.new(@flow.file_path, "w+")
+    #file = File.new(@flow.file_path, "w+")
     case @flow.hash_attributes["type"]
       when "install"
         params[:flow][:hash_attributes] = Hash.new
+        params[:flow][:body] = "\n\n"
 
         params[:config_hash].each do |k, v|
           params[:flow][:hash_attributes][k] = v
@@ -361,15 +364,15 @@ class FlowsController < ApplicationController
 
         if params[:checkbox_mysql_client] == "yes" then
           params[:flow][:hash_attributes]["client"] = true
-          file.puts(write_class("mysql"))
+          params[:flow][:body] << write_class("mysql")
         else
           params[:flow][:hash_attributes]["client"] = false
         end
 
         params[:flow][:hash_attributes]["type"] = "install"
         params[:flow][:hash_attributes]["tool"] = "mysql"
-        file.reopen(@flow.file_path, "a+")
-        file.puts(write_class("mysql::server", {"package_ensure" => params[:package_ensure], "config_hash" => params[:config_hash]}))
+        #file.reopen(@flow.file_path, "a+")
+        params[:flow][:body] << write_class("mysql::server", {"package_ensure" => params[:package_ensure], "config_hash" => params[:config_hash]})
 
       when "maintenance"
         #Nothing so far
@@ -394,7 +397,7 @@ class FlowsController < ApplicationController
   #(DELETE /flows/:id)
   def destroy
     @flow = current_user.flows.find(params[:id])
-    File.delete(@flow.file_path)
+    #File.delete(@flow.file_path)
     @flow.destroy
     flash[:success] = "Flujo destruido con exito."
 
@@ -402,10 +405,10 @@ class FlowsController < ApplicationController
   end
 
   #Download this file.
-  def download
-    @flow = current_user.flows.find(params[:id])
-    send_file(@flow.file_path)
-  end
+  #def download
+    #@flow = current_user.flows.find(params[:id])
+    #send_file(@flow.file_path)
+  #end
 
   private
     #Given a hash filled with the attributes of the resource and 
