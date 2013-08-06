@@ -26,6 +26,7 @@ class Node < ActiveRecord::Base
   belongs_to :user
   has_many :configurations
   has_many :flows, :through => :configurations
+  has_many :reports
 
   private
   	def create_fqdn
@@ -33,8 +34,8 @@ class Node < ActiveRecord::Base
   	end
 
     def create_directory
-      self.directory_path = "C:\\Users\\Jxx706\\Documents\\GitHub\\BM-CM\\node_reports\\#{self.fqdn}"
-      #self.directory_path = "C:\\Users\\jesus\\Desktop\\Pasantia\\Proyecto\\bancaplus-postventa\\BM-CM\\node_reports\\#{self.fqdn}"
+      #self.directory_path = "C:\\Users\\Jxx706\\Documents\\GitHub\\BM-CM\\node_reports\\#{self.fqdn}"
+      self.directory_path = "C:\\Users\\jesus\\Desktop\\Pasantia\\Proyecto\\bancaplus-postventa\\BM-CM\\node_reports\\#{self.fqdn}"
 
       #The node's directory is created if isn't existed before.
       unless Dir.exists?(self.directory_path) then

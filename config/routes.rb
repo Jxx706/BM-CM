@@ -1,16 +1,16 @@
 BmCm::Application.routes.draw do
   
-  get "nodes/new"
-
-  get "nodes/create"
-
-  get "nodes/index"
+  match '/reports', :to => 'reports#create', :via => :post, :as => 'report_path'
 
   resources :sessions, :only => [:new, :create, :destroy]
   resources :users
   resources :flows
   resources :nodes, :only => [:new, :create, :destroy, :index, :show]
   resources :installers, :only => [:new, :create]
+  resources :nodes do
+    resources :reports, :only => [:show, :index]
+  end
+
   root :to => 'pages#home'
   match '/get_started', :to => 'pages#get_started'
   match '/flows_home', :to => 'flows#home', :as => "flows_home"
@@ -21,6 +21,8 @@ BmCm::Application.routes.draw do
   match '/installers/download', :to => 'installers#download', :via => :get, :as => "download_installer"
   match '/installers/destroy', :to =>  'installers#destroy', :as => "destroy_installer", :via => :delete
   match '/flows/:id/download', :to => "flows#download", :via => :get, :as => "download_flow"
+  match '/nodes/:node_id/reports/:id/download', :to => "reports#download", :via => :get, :as => "download_report"
+  match '/nodes_and_reports', :to => 'nodes#index_nodes_and_reports', :via => :get, :as => 'nodes_and_reports'
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

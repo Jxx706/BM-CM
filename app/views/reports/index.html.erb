@@ -1,0 +1,22 @@
+<div class="row-fluid">
+	<%= render 'nodes/sidebar' %>
+
+	<div class="span9">
+		<% if @reports.nil? || @reports.empty? then %>
+			<div class="alert alert-error">
+				<big><b>Aún no hay reportes</b></big><br><br>
+			</div>
+		<% else %>
+		 	<% @reports.each do |r| %>
+		 		<div class="well">
+		 			<h2><big><b><%= r.name %></b></big></h2>
+		 			<br>
+		 			
+		 			<%= link_to node_report_path(@node.id, r.id), :class => "btn btn-small btn-success" do %>
+		 				<i class="icon-white icon-eye-open"></i> Ver
+		 			<% end %>
+		 		</div>
+		 	<% end %>
+		<% end %>
+	</div>
+</div>
