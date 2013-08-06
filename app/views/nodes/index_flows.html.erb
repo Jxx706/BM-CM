@@ -1,0 +1,38 @@
+<div class="row-fluid">
+	<%= render 'nodes/sidebar' %>
+	
+	<div class="span9">
+		<% unless @node.flows.nil? || @node.flows.empty? then %>
+			<h1>
+				Flujos del nodo <b><%= @node.fqdn %></b>
+			</h1>
+			<hr>
+			<% @node.flows.each do |f| %>
+				<div class="well">
+					<h2><%= f.name %></h2><br>
+					
+					<p class="text-left">
+						Creado el: <em><%= f.created_at %></em>
+						Última vez actualizado: <em><%= f.updated_at %></em>
+					</p>
+
+					<%= link_to flow_path(f), :class => "btn btn-small btn-success" do %>
+						<i class="icon-white icon-eye-open"></i> Ver
+					<% end %>
+
+					<%= link_to '#this', :class => "btn btn-small btn-warning" do %>
+						<i class="icon-white icon-exclamation-sign"></i> Desvincular
+					<% end %>
+				</div>
+			<% end %>
+			
+			<%= link_to download_conf_node_path(@node), :class => "btn btn-success" do %>
+				<i class="icon-white icon-download"></i> Descargar configuración de este nodo
+			<% end %>
+		<% else %>
+			<div class="alert alert-error">
+				<h3>¡Este nodo aún no tiene ningún flujo asociado!</h3>
+			</div>
+		<% end %>
+	</div>
+</div>

@@ -16,7 +16,7 @@ class ReportsController < ApplicationController
 	end
 
 	def download
-		send_file(current_user.nodes.find(params[:node_id])).reports.find(params[:id]).file_path)
+		send_file(current_user.nodes.find(params[:node_id]).reports.find(params[:id]).file_path)
 	end
 
 	def create

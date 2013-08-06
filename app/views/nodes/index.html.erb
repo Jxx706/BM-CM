@@ -19,6 +19,11 @@
 		 			<%= link_to node_path(node), :class => "btn btn-small btn-success" do %>
 		 				<i class="icon-white icon-eye-open"></i> Ver
 		 			<% end %>
+		 			<% unless node.flows.nil? || node.flows.empty? then %>
+			 			<%= link_to download_conf_node_path(node), :class => "btn btn-small btn-primary" do  %>
+			 				<i class="icon-white icon-download"></i> Descargar configuración
+			 			<% end %>
+			 		<% end %>
 		 			<%= link_to node_path(node), :method => 'delete', :class => "btn btn-small btn-danger" do %>
 		 				<i class="icon-white icon-remove"></i> Eliminar
 		 			<% end %>	 				

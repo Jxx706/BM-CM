@@ -1,7 +1,7 @@
 <div class="row-fluid">
 	<%= render 'nodes/sidebar' %>
 
-	<div class="span7">
+	<div class="span5">
 		<address>
 			<strong><%= "#{@node.fqdn}"%></strong><br>
 			<abbr title="Direccion IP">IP:</abbr> <%= @node.ip %><br>
@@ -11,7 +11,7 @@
 
 		<address>
 			<strong>Número de flujos asociados</strong><br>
-			<%= link_to '#' do %>
+			<%= link_to node_flows_path(@node) do %>
 				<%= @node.flows.count %>
 			<% end %>
 		</address>
@@ -30,7 +30,7 @@
 		<% end %>
 	</div>
 
-	<div class="span2">
+	<div class="span4">
 		<div class="alert alert-info">
 			Hasta el momento tienes <%= pluralize(current_user.nodes.count, 'nodo', 'nodos') %>.
 			<br>
@@ -38,6 +38,18 @@
 
 			<%= link_to new_node_path, :class => "btn btn-small btn-primary" do %>
 				<b><big>¿Deseas añadir otro?</big></b>
+			<% end %>
+		</div>
+
+		<div class="alert ">
+			<%= form_tag({:controller => :nodes, :action => :vinculate}, :method => :post) do %>
+				¿Deseas vincular flujos a este nodo? Escógelos aquí:
+				<br>
+				<br>
+
+				<%= hidden_field_tag "node_id", @node.id %>
+				<%= select_tag "flows_to_vinculate", options_for_select(current_user.flows.map { |f| f.name }), :multiple => true %>
+				<%= submit_tag "Aceptar", :data => { :confirm => "¿Estas seguro?" }, :class => "btn btn-small btn-primary" %>
 			<% end %>
 		</div>
 	</div>
