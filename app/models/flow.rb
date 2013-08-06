@@ -4,12 +4,12 @@
 #
 #  id              :integer          not null, primary key
 #  name            :string(255)
-#  file_path       :string(255)
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #  node_name       :string(255)
 #  user_id         :integer
 #  hash_attributes :text
+#  body            :string(255)
 #
 
 class Flow < ActiveRecord::Base
@@ -94,7 +94,7 @@ class Flow < ActiveRecord::Base
         "ajp_port" => "8009"
       }
     }
-  	attr_accessible :file_path, #Path where the flow is stored
+  	attr_accessible :body, #Content of the flow
           					:name, #Name of this flow
           					:node_name, #Name of the node that owns this flow
                     :hash_attributes
@@ -102,7 +102,6 @@ class Flow < ActiveRecord::Base
   	belongs_to :user
     has_many :configurations
     has_many :nodes, :through => :configurations
-  	#before_save :path_ok?
   	
   	def self.defaults(tool)
       case tool
@@ -112,9 +111,4 @@ class Flow < ActiveRecord::Base
       end
     end
   	
-    private
-    #A path is ok when the file addressed by it exists.
-  		def path_ok?
-  			File.exists?(self.file_path)
-  		end
 end

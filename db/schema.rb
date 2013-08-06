@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130805201443) do
+ActiveRecord::Schema.define(:version => 20130806161203) do
 
   create_table "configurations", :force => true do |t|
     t.integer  "node_id"
@@ -22,12 +22,12 @@ ActiveRecord::Schema.define(:version => 20130805201443) do
 
   create_table "flows", :force => true do |t|
     t.string   "name"
-    t.string   "file_path"
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
     t.string   "node_name"
     t.integer  "user_id"
     t.text     "hash_attributes"
+    t.string   "body"
   end
 
   add_index "flows", ["user_id", "created_at"], :name => "index_flows_on_user_id_and_created_at"
