@@ -2,7 +2,9 @@
 	<%= render 'flows/sidebar' %>
 
 	<div class="span9">
-		<h1>Síntesis del flujo <b><big><%= @flow.name %></b></big>, perteneciente al nodo <big><b><%= @flow.node_name %></b></big>:</h1>
+		<h1>Síntesis del flujo <b><big><%= @flow.name %></b></big>
+		<% unless @flow.node_name.empty? then %>, perteneciente al nodo <big><b><%= @flow.node_name %></b><%end%></big>:</h1>
+		<pre><%= @flow.body %></pre>
 		<% if @flow.hash_attributes["type"] == "install" then %>
 			<table class="table table-striped table-hover">
 				<caption><h2>Datos de instalación: </h2></caption>
@@ -47,7 +49,7 @@
 						<% end %>
 
 						<% if @flow.hash_attributes.has_key?(:db_backup) then %>
-							<%= flow.hash_attributes[:db_backup].each do |k,v| %>
+							<% @flow.hash_attributes[:db_backup].each do |k,v| %>
 								<tr>
 									<td>
 										<%= field_translation("maintenance")["db_backup"][k].capitalize %>
@@ -117,11 +119,34 @@
 			
 		<br>
 
-		<%= link_to edit_flow_path(@flow), :class => "btn btn-primary" do %>
-			<i class="icon-white icon-pencil"></i> Editar
-		<% end %>
-		<%= link_to flow_path(@flow), :method => "delete", :class => "btn btn-danger" do %>
-			<i class="icon-white icon-remove-circle"></i> Descartar
-		<% end %>
+		<div class="span4 alert alert-warning">
+			<%= form_tag({:controller => :flows, :action => :vinculate}, :method => :post) do %>
+				<p>
+					<big>
+						¿Deseas vincular este flujo a otros nodos?
+						Escoge a cuales aquí:
+					</big>
+				</p>
+
+				<%= hidden_field_tag "flow_id", @flow.id %>
+				<%= select_tag "nodes_to_vinculate", options_for_select(current_user.nodes.map { |n| n.fqdn }), :multiple => true %><br>
+				<%= submit_tag "Aceptar", :data => { :confirm => "¿Estas seguro?"}, :class => "btn btn-primary" %>
+
+			<% end %>
+		</div>
+
+		<div class="span3">
+
+			<p class="lead">
+				Más acciones:
+			</p>
+			
+			<%= link_to edit_flow_path(@flow), :class => "btn btn-primary" do %>
+				<i class="icon-white icon-pencil"></i> Editar
+			<% end %>
+			<%= link_to flow_path(@flow), :method => "delete", :class => "btn btn-danger" do %>
+				<i class="icon-white icon-remove-circle"></i> Descartar
+			<% end %>
+		</div>
 	</div>
 </div>

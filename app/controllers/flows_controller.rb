@@ -1,6 +1,6 @@
 class FlowsController < ApplicationController
 
-  skip_before_filter :verify_authenticity_token, :only => [:create]
+  skip_before_filter :verify_authenticity_token, :only => [:create, :vinculate]
 
   def home #(flows_home_path)
     @title = "Flujos"
@@ -94,7 +94,7 @@ class FlowsController < ApplicationController
           #Install - MySQL
           when "3"
             if params[:checkbox_mysql_client] == "yes" then
-              params[:flow][:body] << write_class("mysql")
+              params[:flow][:body] << write_class("mysql") << "\n\n"
               params[:flow][:hash_attributes]["client"] = true
             else
               params[:flow][:hash_attributes]["client"] = false
@@ -111,9 +111,14 @@ class FlowsController < ApplicationController
             end
 
             #file.reopen(@flow.file_path, "a+")
-            params[:flow][:body] << write_class("mysql::server", {"package_ensure" => params[:attr][:package_ensure], 
-                                                    "config_hash" => params[:attr].delete(:package_ensure)
-                                                    })
+            server_hash = Hash.new
+            server_hash["package_ensure"] = params[:attr][:package_ensure]
+
+            unless params[:attr].except(:package_ensure).empty? then
+              server_hash["config_hash"] = params[:attr].except(:package_ensure)
+            end
+
+            params[:flow][:body] << write_class("mysql::server", server_hash)
             #file.close
 
             params[:flow][:hash_attributes] = @flow.hash_attributes.merge(params[:flow][:hash_attributes])
@@ -154,7 +159,7 @@ class FlowsController < ApplicationController
               end
             end
 
-            params[:flow][:body] << write_class("tomcat", params[:attr])
+            params[:flow][:body] << write_class("tomcat", params[:attr]) << "\n\n"
             #file.close
 
             params[:flow][:hash_attributes] = @flow.hash_attributes.merge(params[:flow][:hash_attributes])
@@ -197,7 +202,7 @@ class FlowsController < ApplicationController
               end
 
               #Write to file
-              params[:flow][:body] << write_resource('mysql::db', params[:attr][:db].delete("title"), params[:attr][:db])
+              params[:flow][:body] << write_resource('mysql::db', params[:attr][:db].delete("title"), params[:attr][:db]) << "\n\n"
 
               #If the user wants a backup...
               if params[:backup] == "yes" then
@@ -215,7 +220,7 @@ class FlowsController < ApplicationController
                 end
 
                 #Write to file again
-                params[:flow][:body] << write_class('mysql::backup', params[:attr][:db_backup])
+                params[:flow][:body] << write_class('mysql::backup', params[:attr][:db_backup]) << "\n\n"
               end
 
               params[:flow][:hash_attributes] = @flow.hash_attributes.merge(params[:flow][:hash_attributes])
@@ -237,7 +242,7 @@ class FlowsController < ApplicationController
                 end
               end
 
-              params[:flow][:body] << write_resource("couchbase::bucket", params[:attr][:bucket].delete("title"), params[:attr][:bucket])
+              params[:flow][:body] << write_resource("couchbase::bucket", params[:attr][:bucket].delete("title"), params[:attr][:bucket]) << "\n\n"
               params[:flow][:hash_attributes] = @flow.hash_attributes.merge(params[:flow][:hash_attributes])
             end            
 
@@ -257,7 +262,7 @@ class FlowsController < ApplicationController
                 end
               end
 
-              params[:flow][:body] << write_resource("tomcat::instance", params[:attr][:instance].delete("name"), params[:attr][:instance])
+              params[:flow][:body] << write_resource("tomcat::instance", params[:attr][:instance].delete("name"), params[:attr][:instance]) << "\n\n"
               params[:flow][:hash_attributes] = @flow.hash_attributes.merge(params[:flow][:hash_attributes])
             end
 
@@ -391,6 +396,24 @@ class FlowsController < ApplicationController
   def edit #(edit_flow -- GET /flows/:id/edit)
     @title = "Editar flujo"
     @flow = current_user.flows.find(params[:id]) #Retrieves the info of the flow instance with id = :id
+  end
+
+  def vinculate 
+    @flow = current_user.flows.find(params[:flow_id])
+
+    unless params[:nodes_to_vinculate].nil? || params[:nodes_to_vinculate].empty? then
+      params[:nodes_to_vinculate].each do |node_fqdn|
+        n = current_user.flows.find_by_name(node_fqdn)
+        @flow.nodes << n
+      end
+    end
+
+    if @flow.save! then
+      redirect_to @flow
+    else
+      render 'home'
+    end
+    
   end
 
   #It destroys one flow (i.e. removes it from the database)
