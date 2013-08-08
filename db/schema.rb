@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130806161203) do
+ActiveRecord::Schema.define(:version => 20130807221154) do
 
   create_table "configurations", :force => true do |t|
     t.integer  "node_id"
@@ -24,7 +24,6 @@ ActiveRecord::Schema.define(:version => 20130806161203) do
     t.string   "name"
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
-    t.string   "node_name"
     t.integer  "user_id"
     t.text     "hash_attributes"
     t.string   "body"

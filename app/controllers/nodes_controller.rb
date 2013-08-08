@@ -52,7 +52,7 @@ class NodesController < ApplicationController
     else
       render 'home'
     end
-    
+
   end
 
   #Downloads the file containing all the configurations made by the
@@ -93,7 +93,7 @@ class NodesController < ApplicationController
   	@node = current_user.nodes.find(params[:id])
 
   	if @node.destroy then
-  		render :home
+  		render :index
   	else
   		redirect_to @node
   	end

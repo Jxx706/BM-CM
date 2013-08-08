@@ -57,8 +57,8 @@
 						<% end %>
 						<br>
 
-						<%= label_tag "flow_node_name", "Nombre del nodo" %>
-						<%= select_tag "flow[node_name]", options_for_select(current_user.nodes.map { |n| n.fqdn }), :include_blank => true, :id => "flow_node_name" %>
+						<%= label_tag "flow_node_name", "Nodos a vincular" %>
+						<%= select_tag "flow[nodes]", options_for_select(current_user.nodes.map { |n| n.fqdn }), :include_blank => true, :multiple => :true, :id => "flow_node_name" %>
 						<a href="#this" id="help0" class="btn btn-small btn-info"><i class="icon-comment"></i>¿Ayuda?</a>
 						<%= javascript_tag do %>
 							$(function () {
