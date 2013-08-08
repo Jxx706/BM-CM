@@ -14,49 +14,38 @@
   				</p>
 			</div>
 		<% else %>
-			<% counter = 1 %>
-			<% @flows.each do |flow| %>
-				<% if counter.even? %>
-					<blockquote class="pull-left span4">
-						<h3>Flujo <%= flow.name %></h2>
-						<p>
-							<b><em>Nodo: </em></b> <%= flow.node_name %> <br>
-							<b><em>Creado: </em></b> <%= flow.created_at %> <br>
-							<b><em>Última vez modificado: </em></b> <%= flow.updated_at %>
-						</p>
+			<% @flows.each do |f| %>
+				<div class="well">
+					<h2><%= f.name %></h2>
+					Nodos: <br>
+					<dl>
+						<% f.nodes.each do |n| %>
+							<dt>
+								<%= n.hostname %>
+							</dt>
+							<dd>
+								FQDN: <%= n.fqdn %>
+							</dd>
+						<% end %>
+					</dl> <br>
 
-						<br><br><br>
-						<%= link_to flow_path(flow), :class => "btn btn-success" do %>
-							<i class="icon-white icon-eye-open"></i> Ver
-						<% end %>
-						<%= link_to edit_flow_path(flow), :class => "btn btn-primary" do %>
-							<i class="icon-white icon-pencil"></i> Editar
-						<% end %>
-						<%= link_to flow_path(flow), :method => "delete", :class => "btn btn-danger" do %>
-							<i class="icon-white icon-remove-circle"></i> Eliminar
-						<% end %>
-					</blockquote>
-				<% else %>
-					<blockquote class="pull-right span4">
-						<h3>Flujo <%= flow.name %></h2>
-						<p>
-							<b><em>Nodo: </em></b> <%= flow.node_name %><br>
-							<b><em>Creado: </em></b> <%= flow.created_at %> <br>
-							<b><em>Última vez modificado: </em></b> <%= flow.updated_at %>
-						</p>
-						<br>
-						<%= link_to flow_path(flow), :class => "btn btn-success" do %>
-							<i class="icon-white icon-eye-open"></i> Ver
-						<% end %>
-						<%= link_to edit_flow_path(flow), :class => "btn btn-primary" do %>
-							<i class="icon-white icon-pencil"></i> Editar
-						<% end %>
-						<%= link_to flow_path(flow), :method => "delete", :class => "btn btn-danger" do %>
-							<i class="icon-white icon-remove-circle"></i> Eliminar
-						<% end %>
-					</blockquote>
-				<% end %>
-				<% counter += 1 %>
+					Creado: <small><%= f.created_at %></small> <br>
+					Última vez actualizado: <small><%= f.updated_at %></small>
+
+					<hr>
+					Acciones:
+					<%= link_to new_flow_path(f), :class => "btn btn-small btn-success" do %>
+						<i class="icon-white icon-eye-open"></i> Ver
+					<% end %>
+
+					<%= link_to edit_flow_path(f), :class => "btn btn-small btn-primary" do %>
+						<i class="icon-white icon-pencil"></i> Editar
+					<% end %>
+
+					<%= link_to flow_path(f), :class => "btn btn-small btn-danger", :method => :delete do %>
+						<i class="icon-white icon-remove"></i> Eliminar
+					<% end %>
+				</div>
 			<% end %>
 		<% end %>
 	</div>

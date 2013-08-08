@@ -153,19 +153,14 @@ class FlowsController < ApplicationController
             end
           #Install - Tomcat
           when "5"
-            params[:attr].each do |k, v| 
-              if v.empty? || v.nil? then
-                params[:flow][:hash_attributes][k] = Flow.defaults("tomcat")[k]
-                params[:attr].delete(k)
-              else
-                params[:flow][:hash_attributes][k] = v
-              end
+
+            if params[:attr][:version].nil? || params[:attr][:version].empty? then 
+              params[:flow][:body] << "include tomcat"
+            else
+              params[:flow][:body] << "$tomcat::mirror = \"#{params[:attr][:mirror]}\"\n$tomcat::version = \"#{params[:attr][:version]}\"\ninclude tomcat::source"
             end
-
-            params[:flow][:body] << write_class("tomcat", params[:attr]) << "\n\n"
-            #file.close
-
-            params[:flow][:hash_attributes] = @flow.hash_attributes.merge(params[:flow][:hash_attributes])
+            
+            params[:flow][:hash_attributes] = @flow.hash_attributes.merge(params[:attr])
             if @flow.update_attributes(params[:flow]) then
               redirect_to @flow
             else

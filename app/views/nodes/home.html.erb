@@ -41,7 +41,9 @@
 		
 		<div class="row-fluid">
 			<div class="span5">
-				<img src="/assets/network.png" height="275" width="275">
+				<%= link_to new_node_path do %>
+					<img src="/assets/network.png" height="275" width="275">
+				<% end %>
 			</div>
 
 			<div class="span4">
@@ -63,13 +65,17 @@
 			</div>
 
 			<div class="span5">
-				<img src="/assets/handshake.png" height="275" width="275">
+				<%= link_to nodes_path do %>
+					<img src="/assets/handshake.png" height="275" width="275">
+				<% end %>
 			</div>
 		</div>
 
 		<div class="row-fluid">
 			<div class="span5">
-				<img src="/assets/report.png" height="275" width="275">
+				<%= link_to nodes_and_reports_path do %>
+					<img src="/assets/report.png" height="275" width="275">
+				<% end %>
 			</div>
 
 			<div class="span4">
