@@ -2,8 +2,7 @@
 	<%= render 'flows/sidebar' %>
 
 	<div class="span9">
-		<h1>Síntesis del flujo <b><big><%= @flow.name %></b></big>
-		<% unless @flow.node_name.empty? then %>, perteneciente al nodo <big><b><%= @flow.node_name %></b><%end%></big>:</h1>
+		<h1>Síntesis del flujo <b><big><%= @flow.name %></b></big>:</h1>
 		<pre><%= @flow.body %></pre>
 		<% if @flow.hash_attributes["type"] == "install" then %>
 			<table class="table table-striped table-hover">
@@ -119,7 +118,26 @@
 			
 		<br>
 
-		<div class="span4 alert alert-warning">
+		<div class="well">
+			
+			<% unless @flow.nodes.nil? || @flow.nodes.empty? then %>
+				<p class="lead">
+					Actualmente, este flujo se encuentra vinculado a <%= link_to 'estos nodos', '#this', :onclick => "$('#nodes-list').show()" %>
+					<dl id="nodes-list">
+						<% @flow.nodes.each do |n| %>
+							<dt><%= n.hostname %></dt>
+							<dd>FQDN: <%= n.fqdn %> </dd>
+						<% end %>
+					</dl>
+					<%= javascript_tag "$('#nodes-list').hide()" %>
+				</p>
+			<% else %>
+				<p>
+					No hay nodos vinculados a este flujo.
+				</p>
+			<% end %>
+
+			<hr>
 			<%= form_tag({:controller => :flows, :action => :vinculate}, :method => :post) do %>
 				<p>
 					<big>
@@ -129,7 +147,12 @@
 				</p>
 
 				<%= hidden_field_tag "flow_id", @flow.id %>
-				<%= select_tag "nodes_to_vinculate", options_for_select(current_user.nodes.map { |n| n.fqdn }), :multiple => true %><br>
+				<%= 
+					options_array = (current_user.nodes.map { |n| n.fqdn }).reject { |n| (@flow.nodes.map { |n2| n2.fqdn }).include?(n) }
+
+					select_tag "nodes_to_vinculate", options_for_select(options_array), :multiple => true 
+				%>
+				<br>
 				<%= submit_tag "Aceptar", :data => { :confirm => "¿Estas seguro?"}, :class => "btn btn-primary" %>
 
 			<% end %>
@@ -140,7 +163,7 @@
 			<p class="lead">
 				Más acciones:
 			</p>
-			
+
 			<%= link_to edit_flow_path(@flow), :class => "btn btn-primary" do %>
 				<i class="icon-white icon-pencil"></i> Editar
 			<% end %>
