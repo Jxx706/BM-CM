@@ -9,6 +9,7 @@
 #  user_id         :integer
 #  hash_attributes :text
 #  body            :string(255)
+#  type            :string(255)
 #
 
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html

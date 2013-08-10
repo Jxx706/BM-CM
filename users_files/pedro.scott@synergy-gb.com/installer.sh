@@ -1,4 +1,4 @@
-!/bin/bash
+#!/bin/bash
 NODES=" "
 echo "Se probaran las direcciones IP proveidas. Espere..."
 sleep 2
@@ -15,7 +15,7 @@ echo "Privilegios de root requeridos. Introduzca contrasena: "
 su
 echo "Instalando el Puppet Master"
 apt-get install puppetmaster #Instalar el Puppet Master
-puppet master --reports=http#Los reportes se enviaran remotamente a BM+CM
+puppet master --reports=http #Los reportes se enviaran remotamente a BM+CM
 puppet master --reporturl=ALGO
 
 for n in $NODES

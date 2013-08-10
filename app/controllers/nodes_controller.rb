@@ -93,9 +93,10 @@ class NodesController < ApplicationController
   	@node = current_user.nodes.find(params[:id])
 
   	if @node.destroy then
+      @nodes = current_user.nodes
   		render :index
   	else
-  		redirect_to @node
+  		redirect_to :home
   	end
   end
 end

@@ -5,7 +5,7 @@
 		<%= form_tag({:controller => :flows, :action => :update, :id => @flow.id}, :method => :put) do %>
 			
 			<%= label_tag "flow_node_name", "Nombre del nodo" %>
-			<%= text_field_tag "flow[node_name]", @flow.node_name, :id => "flow_node_name" %>
+			<%= text_field_tag "flow[]", @flow.node_name, :id => "flow_node_name" %>
 			<a href="#this" id="help0" class="btn btn-small btn-info"><i class="icon-comment"></i>¿Ayuda?</a>
 			<%= javascript_tag do %>
 				$(function () {

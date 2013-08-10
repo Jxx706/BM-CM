@@ -59,9 +59,9 @@ class FlowsController < ApplicationController
 
         params[:flow] = Hash.new
         params[:flow][:hash_attributes] = Hash.new
-        case params[:radio_button][:type]
+        case params[:flow][:type]
           when "install"
-            params[:flow][:hash_attributes][:type] = "install"
+            #params[:flow][:hash_attributes][:type] = "install"
             case params[:select_tool]
               when "mysql"
                 params[:flow][:hash_attributes][:tool] = "mysql"
@@ -74,7 +74,7 @@ class FlowsController < ApplicationController
                 @args[:current_step] = 5
             end
           when "maintenance"
-            params[:flow][:hash_attributes][:type] = "maintenance"
+            #params[:flow][:hash_attributes][:type] = "maintenance"
             @args[:current_step] = 6
         end
         
@@ -288,7 +288,7 @@ class FlowsController < ApplicationController
     @flow = current_user.flows.find(params[:id])
 
     #file = File.new(@flow.file_path, "w+")
-    case @flow.hash_attributes["type"]
+    case @flow.type
       when "install"
         params[:flow][:hash_attributes] = Hash.new
         params[:flow][:body] = "\n\n"
@@ -306,7 +306,7 @@ class FlowsController < ApplicationController
           params[:flow][:hash_attributes]["client"] = false
         end
 
-        params[:flow][:hash_attributes]["type"] = "install"
+        params[:flow][:type] = "install"
         params[:flow][:hash_attributes]["tool"] = "mysql"
         #file.reopen(@flow.file_path, "a+")
         params[:flow][:body] << write_class("mysql::server", {"package_ensure" => params[:package_ensure], "config_hash" => params[:config_hash]})
@@ -335,7 +335,7 @@ class FlowsController < ApplicationController
 
     unless params[:nodes_to_vinculate].nil? || params[:nodes_to_vinculate].empty? then
       params[:nodes_to_vinculate].each do |node_fqdn|
-        n = current_user.flows.find_by_name(node_fqdn)
+        n = current_user.nodes.find_by_fqdn(node_fqdn)
         @flow.nodes << n
       end
     end

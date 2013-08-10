@@ -33,7 +33,7 @@ class InstallersController < ApplicationController
 	#it writes the shell script Puppet installer
 	#contents.
 	def write_installer(ip_addresses, shell = "bash")
-		file_content = "!/bin/#{shell}" #Shell type.
+		file_content = "#!/bin/#{shell}" #Shell type.
 
 	
 
@@ -49,9 +49,9 @@ class InstallersController < ApplicationController
 	    #ARE THE GIVEN ADDRESSES REACHABLE?
 		file_content += nl + echo("Se probaran las direcciones IP proveidas. Espere...")
 		file_content += nl + "sleep 2"
-		file_content += nl + "for i in $NODES"
+		file_content += nl + "for i in $NODES;"
 		file_content += nl + "do"
-		file_content += nl + tab + "if [[`ping -q -c 2 $i`]]"
+		file_content += nl + tab + "if [[`ping -q -c 2 $i`]];"
 	    file_content += nl + tab + "then"
 		file_content += nl + (tab * 2) + echo("Conexion exitosa con el nodo.")
 		file_content += nl + tab + "else"
@@ -72,7 +72,7 @@ class InstallersController < ApplicationController
 
 		#STABLISHING SSH CONNECTIONS WITH EVERY NODE AND ATTEMPTING TO INSTALL PUPPET ON THEM.
 		#ENABLING THE REPORTS AS WELL.		
-		file_content += nl + "for n in $NODES" 
+		file_content += nl + "for n in $NODES;" 
 		file_content += nl + "do"
 		file_content += nl + tab + echo("Iniciando conexion SSH con el nodo. Ingrese su contrasena de ROOT!")
 		file_content += nl + tab + "ssh -l root $n \"apt-get install puppet\"" 
