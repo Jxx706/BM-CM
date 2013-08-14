@@ -37,11 +37,11 @@ class FlowsController < ApplicationController
         #params[:flow][:file_path] =  current_user.directory_path << (params[:flow][:node_name].empty? ? "\\#{params[:flow][:name]}.pp" : "\\#{params[:flow][:node_name]}\\#{params[:flow][:name]}.pp")
         params[:flow][:hash_attributes] = Hash.new
         params[:flow][:body] = String.new
-        nodes = params[:flow].delete(:nodes)
+        nodes = params[:flow][:nodes].nil? ? nil : params[:flow][:nodes].delete_if { |e| e.blank? || e.nil? } 
         @flow = current_user.flows.build(params[:flow])
 
         #If the nodes names have been provided, then create the corresponding association.
-        unless nodes.nil? || nodes.empty? then
+        unless nodes.nil? || nodes.empty?  then
           nodes.each do |n| 
             @flow.nodes << current_user.nodes.find_by_fqdn(n)
           end
@@ -265,18 +265,9 @@ class FlowsController < ApplicationController
               params[:flow][:hash_attributes] = @flow.hash_attributes.merge(params[:flow][:hash_attributes])
             end
 
-            
-
-            #Associate with the specified nodes
-            unless params[:nodes_to_vinculate].nil? || params[:nodes_to_vinculate].empty? then
-              params[:nodes_to_vinculate].each do |node_fqdn|
-                n = current_user.nodes.find_by_fqdn(node_fqdn)
-                @flow.nodes << n
-              end
-            end
 
             #Update
-            if @flow.save && @flow.update_attributes(params[:flow]) then #On success
+            if @flow.update_attributes(params[:flow]) then #On success
               redirect_to @flow
             else #On failure
               render :new
@@ -370,6 +361,21 @@ class FlowsController < ApplicationController
 
         params[:flow][:hash_attributes] = Hash.new
         params[:flow][:body] = "\n\n"
+
+
+        #Remove unselected configurations
+        if params[:mysql_active] == "no" then
+          @flow.hash_attributes.delete(:db)
+          @flow.hash_attributes.delete(:db_backup)
+        end
+
+        if params[:couchbase_active] == "no" then
+          @flow.hash_attributes.delete(:bucket)
+        end
+
+        if params[:tomcat_active] == "no" then
+          @flow.hash_attributes.delete(:instance)
+        end
 
         #Handle MYSQL Update
         if params[:mysql_active] == "yes" then
@@ -485,6 +491,14 @@ class FlowsController < ApplicationController
           #This line is crucial: It mixes ALL the OLD parameters with the new
           params[:flow][:hash_attributes] = @flow.hash_attributes.merge(params[:flow][:hash_attributes])
         end
+    end
+
+      #Associate with the specified nodes
+    unless params[:nodes_to_vinculate].nil? || params[:nodes_to_vinculate].empty?  then
+      params[:nodes_to_vinculate].each do |node_fqdn|
+        n = current_user.nodes.find_by_fqdn(node_fqdn)
+        @flow.nodes << n
+      end
     end
 
     if @flow.update_attributes(params[:flow])

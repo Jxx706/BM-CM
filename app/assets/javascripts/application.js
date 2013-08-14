@@ -80,3 +80,25 @@ function toggleValue(elementId, val1, val2) {
 		selector.val(val1);
 	}
 }
+
+function switchConfigTool(text_id, field_id) {
+	var text = $(text_id);
+	var field = $(field_id);
+
+	if (field.val() == "yes") {
+		field.val("no")
+	} else {
+		field.val("yes")
+	};
+
+	if (text.hasClass("text-error")) {
+		text.removeClass("text-error");
+		text.addClass("text-success");
+		text.text("Configurar");
+	} else {
+		text.removeClass("text-success");
+		text.addClass("text-error");
+		text.text("No configurar (eliminar configuracion)");
+	}
+
+}

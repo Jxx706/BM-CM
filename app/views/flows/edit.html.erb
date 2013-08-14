@@ -71,8 +71,11 @@
 								<h2>MySQL</h2>
 							</div>
 
-							<%= label_tag "mysql_active", "¿Configurar MySQL?" %>
-							<%= check_box_tag "mysql_active", (@flow.hash_attributes.has_key?("db") ? "yes" : "no"), @flow.hash_attributes.has_key?("db"), :onchange => 'toggleValue("mysql_active", "yes", "no")' %>
+							<p id="db-text" class="text-<%= @flow.hash_attributes.has_key?('db') ? 'success' : 'error' %>">
+								<%= @flow.hash_attributes.has_key?('db') ? "Configurar" : "No configurar (eliminar configuracion)" %>
+							</p>
+							<%= button_to_function "Cambiar", 'switchConfigTool("#db-text", "#mysql_active")', :class => "btn btn-link" %>
+							<%= hidden_field_tag "mysql_active", (@flow.hash_attributes.has_key?("db") ? "yes" : "no") %>
 
 							<br>
 							<br>
@@ -94,8 +97,11 @@
 								<h2>Couchbase</h2>
 							</div>
 
-							<%= label_tag "couchbase_active", "¿Configurar Couchbase?" %>
-							<%= check_box_tag "couchbase_active", (@flow.hash_attributes.has_key?("bucket") ? "yes" : "no"), @flow.hash_attributes.has_key?("bucket"), :onchange => 'toggleValue("couchbase_active", "yes", "no")'  %>
+							<p id="bucket-text" class="text-<%= @flow.hash_attributes.has_key?('bucket') ? 'success' : 'error' %>">
+								<%= @flow.hash_attributes.has_key?('bucket') ? "Configurar" : "No configurar (eliminar configuracion)" %>
+							</p>
+							<%= button_to_function "Cambiar", 'switchConfigTool("#bucket-text", "#couchbase_active")', :class => "btn btn-link" %>
+							<%= hidden_field_tag "couchbase_active", (@flow.hash_attributes.has_key?("bucket") ? "yes" : "no") %>
 							<br>
 							<br>
 
@@ -116,8 +122,12 @@
 								<h2>Tomcat</h2>
 							</div>
 
-							<%= label_tag "tomcat_active", "¿Configurar Tomcat?" %>
-							<%= check_box_tag "tomcat_active", (@flow.hash_attributes.has_key?("instance") ? "yes" : "no"), @flow.hash_attributes.has_key?("instance"), :onchange => 'toggleValue("tomcat_active", "yes", "no")'  %>
+							<p id="instance-text" class="text-<%= @flow.hash_attributes.has_key?('instance') ? 'success' : 'error' %>">
+								<%= @flow.hash_attributes.has_key?('instance') ? "Configurar" : "No configurar (eliminar configuracion)" %>
+							</p>
+							<%= button_to_function "Cambiar", 'switchConfigTool("#instance-text", "#tomcat_active")', :class => "btn btn-link" %>
+							<%= hidden_field_tag "tomcat_active", (@flow.hash_attributes.has_key?("instance") ? "yes" : "no") %>
+
 							<br>
 							<br>
 							<% if @flow.hash_attributes.has_key?("instance") then %>
