@@ -32,10 +32,10 @@
 	<br>
 	<hr>
 
-	<label>
-		<input type="checkbox" id="checkbox_db_backup" name="backup" value='<%= edit && hash_attributes.has_key?(:db_backup) ? "yes" : "no" %>' onchange='changeIfChecked(this); $("#backup_options").toggle()'>
-			¿Desea crear un respaldo?
-	</label>
+
+	<%= label_tag "checkbox_db_backup", "¿Desea crear un respaldo?" %>
+	<%= check_box_tag "backup", (edit && hash_attributes.has_key?(:db_backup) ? "yes" : "no"), @flow.hash_attributes.has_key?(:db_backup), :id => "checkbox_db_backup", :onchange => 'changeIfChecked(this); $("#backup_options").toggle()' %>
+	
 	<div id="backup_options">
 		<p>
 			Provee la información necesaria para instalar un script de respaldo, así como un cronograma de trabajo y un usuario de respaldo:

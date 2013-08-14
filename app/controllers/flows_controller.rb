@@ -2,6 +2,7 @@ class FlowsController < ApplicationController
 
   skip_before_filter :verify_authenticity_token, :only => [:create, :vinculate]
 
+######################################################################
   def home #(flows_home_path)
     @title = "Flujos"
   end
@@ -18,6 +19,7 @@ class FlowsController < ApplicationController
     @flow = current_user.flows.find(params[:id]) #Retrieves the info of the flow instance with id = :id
   end
 
+######################################################################
   #It creates a new flow and save it in the database
   #(POST /flows)
   #Steps:
@@ -263,11 +265,18 @@ class FlowsController < ApplicationController
               params[:flow][:hash_attributes] = @flow.hash_attributes.merge(params[:flow][:hash_attributes])
             end
 
-            #There's nothing left to do
-            #file.close
+            
+
+            #Associate with the specified nodes
+            unless params[:nodes_to_vinculate].nil? || params[:nodes_to_vinculate].empty? then
+              params[:nodes_to_vinculate].each do |node_fqdn|
+                n = current_user.nodes.find_by_fqdn(node_fqdn)
+                @flow.nodes << n
+              end
+            end
 
             #Update
-            if @flow.update_attributes(params[:flow]) then #On success
+            if @flow.save && @flow.update_attributes(params[:flow]) then #On success
               redirect_to @flow
             else #On failure
               render :new
@@ -276,14 +285,22 @@ class FlowsController < ApplicationController
     end
   end
 
+######################################################################
+
   #New flow
   def new #(new_flow -- GET /flows/new)
     @title = 'Nuevo flujo'
     @args = {:current_step => 1, :flow_id => nil}
   end
 
+######################################################################
   #It saves changes to one flow in the database
-  #THIS LINE IS IMPORTANT! new_hash_attributes = @flow.hash_attributes.merge(params[:hash_attributes]) {|k, ov, nv| nv.nil? ? ov : nv}
+  #The overall behavior goes like this:
+  #  --> Check the kind of the flow:
+  #    --> If install: Easy; just keep the values which 
+  #                    aren't blank or nil and mix them with
+  #                    the values given to the flow when created.
+  #                    Then re-write the body.
   def update #(PUT /flows/:id)
     #Retrieve the flow to be edited
     @flow = current_user.flows.find(params[:id])
@@ -298,6 +315,7 @@ class FlowsController < ApplicationController
         case @flow.hash_attributes["tool"]
           when "mysql"
 
+            #First check if MySQL Client must be installed
             if params[:checkbox_mysql_client] == "yes" then
               params[:flow][:body] << write_class("mysql") << "\n\n"
               params[:flow][:hash_attributes]["client"] = true
@@ -305,45 +323,69 @@ class FlowsController < ApplicationController
               params[:flow][:hash_attributes]["client"] = false
             end
 
+            #Mix the old and the new values and store them in the corresponding hash 
             params[:flow][:hash_attributes] = @flow.hash_attributes.merge(params[:attr].delete_if { |key, value| value.blank? || value.nil? })
 
+            #This hash is used only for the parametters related with the MySQL Server.
             server_hash = Hash.new
+            #Remove the version from the params hash, and store it
             server_hash["package_ensure"] = params[:attr].delete(:package_ensure)
 
+            #If the only attribute specified by the user was the server version,
+            #then ain't no need to write a config_hash
             unless params[:attr].empty? then
               server_hash["config_hash"] = params[:attr]
             end
 
+            #Lastly, write the body
             params[:flow][:body] << write_class("mysql::server", server_hash)
 
           when "couchbase"
-            #Replace old values with the new ones that aren't nil
+            #Replace old values with the new ones that aren't nil nor blank.
             params[:flow][:hash_attributes] = @flow.hash_attributes.merge(params[:attr].delete_if { |key, value| value.blank? || value.nil? })
-            #Rewritte the body of the flow.
+            #Re-writte the body of the flow.
             params[:flow][:body] << write_class("couchbase", params[:flow][:hash_attributes])
           when "tomcat"
+            
+            #If the version is not specified, then install the most recent provided by
+            #the default package manager of the OS.
             if params[:attr][:version].nil? || params[:attr][:version].empty? then 
               params[:flow][:body] << "include tomcat"
+            #Otherwise, if the version was provided, then a mirror MUST have been provided as well!
             else
               params[:flow][:body] << "$tomcat::mirror = \"#{params[:attr][:mirror]}\"\n$tomcat::version = \"#{params[:attr][:version]}\"\ninclude tomcat::source"
             end
             
+            #Replace old values with the new ones.
             params[:flow][:hash_attributes] = @flow.hash_attributes.merge(params[:attr])
         end
         
+      #This is the tricky part
       when "maintenance"
+
+        ########################################################################################################
+        # KEEP THIS IN MIND: Mix old values with new. BUT if there's a tool configuration                      #
+        # that wasn't set up in the beginning, we must handle like if a new config (instead of a modification) #
+        ########################################################################################################
+
         params[:flow][:hash_attributes] = Hash.new
         params[:flow][:body] = "\n\n"
 
+        #Handle MYSQL Update
         if params[:mysql_active] == "yes" then
           params[:flow][:hash_attributes][:db] = Hash.new
 
+          #If there are previous values, then mix
           if @flow.hash_attributes.has_key?(:db) then
-            params[:flow][:hash_attributes][:db] = @flow.hash_attributes[:db].merge(params[:attr][:db].delete_if {|key, value| value.blank? || value.nil?})
+            params[:flow][:hash_attributes][:db] = @flow.hash_attributes[:db].merge(
+              params[:attr][:db].delete_if do |key, value| 
+                value.blank? || value.nil?
+              end
+            )
           else
             #if there wasn't configurations for mysql, then handle like it's new
             params[:attr][:db].each do |k, v| #k stands for "key" and v for "value"
-                if v.empty? || v.nil? then #If there's no value, use default (and erase the key associated to it)
+                if v.empty? || v.blank? || v.nil? then #If there's no value, use default (and erase the key associated to it)
                   params[:flow][:hash_attributes][:db][k] = Flow.defaults("mysql")["db"][k]
                   params[:attr][:db].delete(k)
                 else #Otherwise, use the value provided.
@@ -352,22 +394,47 @@ class FlowsController < ApplicationController
               end
           end
 
-          params[:flow][:body] << write_resource('mysql::db', params[:flow][:hash_attributes][:db].except("title"), params[:flow][:hash_attributes][:db]) << "\n\n"
+          #This line is crucial: It mixes ALL the OLD parameters with the new
+          params[:flow][:hash_attributes] = @flow.hash_attributes.merge(params[:flow][:hash_attributes])
+
+          params[:flow][:body] << write_resource(
+            'mysql::db', #Name of the resource 
+            params[:flow][:hash_attributes][:db]["title"], #mysql::db {'<title>': ... }
+            params[:flow][:hash_attributes][:db].except("title") #The attributes without title
+            ) << "\n\n" 
           
+
+          #If the user wants a backup 
           if params[:backup] == "yes" then
+
             params[:flow][:hash_attributes][:db_backup] = Hash.new
-            params[:flow][:hash_attributes][:db_backup] = @flow.hash_attributes[:db_backup].merge(params[:attr][:db_backup].delete_if {|key, value| value.blank? || value.nil?})            
+
+            #Check if there are previous values for backup
+            if @flow.hash_attributes.has_key?(:db_backup) then
+              params[:flow][:hash_attributes][:db_backup] = @flow.hash_attributes[:db_backup].merge(params[:attr][:db_backup].delete_if {|key, value| value.blank? || value.nil?})            
+            #Handle like it's new
+            else
+              params[:flow][:hash_attributes][:db_backup] = params[:attr][:db_backup]
+            end
+
+            #This line is crucial: It mixes ALL the OLD parameters with the new
+            params[:flow][:hash_attributes] = @flow.hash_attributes.merge(params[:flow][:hash_attributes])
+
             params[:flow][:body] << write_class('mysql::backup', params[:flow][:hash_attributes][:db_backup]) << "\n\n"
           else
             @flow.hash_attributes.delete(:db_backup)
           end
         end
 
+        # Handle COUCHBASE Update
         if params[:couchbase_active] == "yes" then
+
           params[:flow][:hash_attributes][:bucket] = Hash.new
 
+          #If there was previous values
           if @flow.hash_attributes.has_key?(:bucket) then
             params[:flow][:hash_attributes][:bucket] = @flow.hash_attributes[:bucket].merge(params[:attr][:bucket].delete_if {|key, value| value.blank? || value.nil?})
+          #Handle like it's new
           else
             params[:attr][:bucket].each do |k, v| 
                 if v.empty? || v.nil? then 
@@ -379,12 +446,44 @@ class FlowsController < ApplicationController
               end
           end
 
-          params[:flow][:body] << write_resource("couchbase::bucket", params[:flow][:hash_attributes][:bucket].except("title"), params[:flow][:hash_attributes][:bucket]) << "\n\n"
+          params[:flow][:body] << write_resource(
+            "couchbase::bucket", #resource type
+            params[:flow][:hash_attributes][:bucket]["title"], #couchbase::bucket {'<title>': ...}
+            params[:flow][:hash_attributes][:bucket].except("title") #attributes except title
+            ) << "\n\n"
+
+          #This line is crucial: It mixes ALL the OLD parameters with the new
+          params[:flow][:hash_attributes] = @flow.hash_attributes.merge(params[:flow][:hash_attributes])
         end
 
+        # Handle TOMCAT Update
         if params[:tomcat_active] == "yes" then
+
           params[:flow][:hash_attributes][:instance] = Hash.new
-          params[:flow][:hash_attributes][:instance] = @flow.hash_attributes[:instance].merge(params[:attr][:instance].delete_if {|key, value| value.blank? || value.nil?})
+          #Mix the old with the new
+          if @flow.hash_attributes.has_key?(:instance) then
+            params[:flow][:hash_attributes][:instance] = @flow.hash_attributes[:instance].merge(params[:attr][:instance].delete_if {|key, value| value.blank? || value.nil?})
+
+          #Handle like it's new
+          else
+             params[:attr][:instance].each do |k, v| 
+                if v.empty? || v.nil? then 
+                  params[:flow][:hash_attributes][:instance][k] = Flow.defaults("tomcat")["instance"][k]
+                  params[:attr][:instance].delete(k)
+                else
+                  params[:flow][:hash_attributes][:instance][k] = v
+                end
+              end
+
+              params[:flow][:body] << write_resource(
+                "tomcat::instance", #resource type
+                params[:flow][:hash_attributes][:instance]["name"], #tomcat::instance {'<name>': ... }
+                params[:flow][:hash_attributes][:instance].except("name") #attributes except name
+                ) << "\n\n"
+          end
+
+          #This line is crucial: It mixes ALL the OLD parameters with the new
+          params[:flow][:hash_attributes] = @flow.hash_attributes.merge(params[:flow][:hash_attributes])
         end
     end
 
@@ -397,11 +496,14 @@ class FlowsController < ApplicationController
     end
   end
 
+######################################################################
   #It edits the info of a flow
   def edit #(edit_flow -- GET /flows/:id/edit)
     @title = "Editar flujo"
     @flow = current_user.flows.find(params[:id]) #Retrieves the info of the flow instance with id = :id
   end
+
+######################################################################
 
   def vinculate 
     @flow = current_user.flows.find(params[:flow_id])
@@ -421,6 +523,7 @@ class FlowsController < ApplicationController
     
   end
 
+######################################################################
   #It destroys one flow (i.e. removes it from the database)
   #(DELETE /flows/:id)
   def destroy
@@ -432,6 +535,7 @@ class FlowsController < ApplicationController
     redirect_to flows_path #Indexes all of the flows again.
   end
 
+######################################################################
   #Download this file.
   #def download
     #@flow = current_user.flows.find(params[:id])

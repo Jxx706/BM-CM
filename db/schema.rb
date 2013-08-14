@@ -55,11 +55,11 @@ ActiveRecord::Schema.define(:version => 20130812183905) do
     t.string   "name"
     t.string   "last_name"
     t.string   "email"
+    t.boolean  "super_admin"
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
     t.string   "password_digest"
     t.string   "remember_token"
-    t.boolean  "super_admin"
     t.string   "directory_path"
   end
 
