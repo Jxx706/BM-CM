@@ -21,8 +21,9 @@ module FlowsHelper
 							 "type" => "tipo de flujo",
 						 	 "tool" => "herramienta"
 				 		   },
-			"tomcat" => {"mirror" => "mirror",
-						 "version" => "version"}
+			"tomcat" => { "mirror" => "mirror",
+						  "version" => "version",
+						   "tool" => "herramienta"}
 		},
 		"maintenance" => {
 			"db" => {

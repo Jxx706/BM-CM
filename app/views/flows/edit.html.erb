@@ -1,163 +1,142 @@
 <div class="row">
 	<%= render 'flows/sidebar' %>
+	
 	<div class="span9">
-		<h1>Edición de flujo <em><%= @flow.name %></em></h1>
-		<%= form_tag({:controller => :flows, :action => :update, :id => @flow.id}, :method => :put) do %>
-			
-			<%= label_tag "flow_node_name", "Nombre del nodo" %>
-			<%= text_field_tag "flow[]", @flow.node_name, :id => "flow_node_name" %>
-			<a href="#this" id="help0" class="btn btn-small btn-info"><i class="icon-comment"></i>¿Ayuda?</a>
-			<%= javascript_tag do %>
-				$(function () {
-					$('#help0').popover({
-						title: 'Descripción del campo',
-			        	content: 'Nombre del nodo a ser configurado por este flujo.',
-			        	placement: 'right'
-			    	});
-				});
-			<% end %>
+		<h1>Edición del flujo <b><%= @flow.name %></b></h1>
+		<br>
+		<%= form_tag({:controller => :flows, :action => :update}, :method => :put) do %>
+			<div class="well">
+				
+				<% unless @flow.nodes.nil? || @flow.nodes.empty? then %>
+					<p class="lead">
+						Actualmente, este flujo se encuentra vinculado a <%= link_to 'estos nodos', '#this', :onclick => "$('#nodes-list').show()" %>
+						<dl id="nodes-list">
+							<% @flow.nodes.each do |n| %>
+								<dt><%= n.hostname %></dt>
+								<dd>FQDN: <%= n.fqdn %> </dd>
+							<% end %>
+						</dl>
+						<%= javascript_tag "$('#nodes-list').hide()" %>
+					</p>
+				<% else %>
+					<p>
+						No hay nodos vinculados a este flujo.
+					</p>
+				<% end %>
 
-			<label>
-				<input type="checkbox" id="checkbox_mysql_client" name="checkbox_mysql_client" value="<%= @flow.hash_attributes["client"] %>" onchange='changeIfChecked(this)'>
-				¿Instalar cliente MySQL?
-			</label>
-			<%= javascript_tag do %>
-				var selector = "#checkbox_mysql_client";
-				if ($(selector).val() == "yes") {
-					$(selector).prop("checked", true);
-				}
-			<% end %>
+				<hr>
+				
+				<p>
+					<big>
+						¿Deseas vincular este flujo a otros nodos?
+						Escoge a cuales aquí:
+					</big>
+				</p>
+
+				<%= hidden_field_tag "flow_id", @flow.id %>
+				<%= 
+					options_array = (current_user.nodes.map { |n| n.fqdn }).reject { |n| (@flow.nodes.map { |n2| n2.fqdn }).include?(n) }
+
+					select_tag "nodes_to_vinculate", options_for_select(options_array), :multiple => true 
+				%>
+				<br>
+			</div>
+
 			<hr>
-			<h3> Datos del servidor MySQL</h3>
-			<hr>
 
-			<%= label_tag "mysql_attr_port", "Puerto" %>
-			<%= text_field_tag "config_hash[port]", @flow.hash_attributes["port"], :id => "mysql_attr_port", :placeholder => Flow.defaults("mysql")["port"] %>
-			<a href="#this" id="help1" class="btn btn-small btn-info"><i class="icon-comment"></i>¿Ayuda?</a>
-			<%= javascript_tag do %>
-				$(function () {
-					$('#help1').popover({
-						title: 'Descripción del campo',
-						content: 'Puerto donde el servidor escuchará peticiones.',
-			   			placement: 'right'
-			    	});
-				});
-			<% end %>
-			<br>
 
-			<%= label_tag "mysql_attr_root_group", "Grupo de usuario root" %>
-			<%= text_field_tag "config_hash[root_group]", @flow.hash_attributes["root_group"], :id => "mysql_attr_root_group" %>
-			<a href="#this" id="help2" class="btn btn-small btn-info"><i class="icon-comment"></i>¿Ayuda?</a>
-			<%= javascript_tag do %>
-				$(function () {
-					$('#help2').popover({
-						title: 'Descripción del campo',
-						content: 'Grupo para los archivos pertenecientes al usuario root.',
-						placement: 'right'
-			    	});
-				});
-			<% end %>
-			<br>
 
-			<%= label_tag "mysql_attr_root_password", "Contraseña root" %>
-			<%= password_field_tag "config_hash[root_password]", @flow.hash_attributes["root_password"], :id => "mysql_attr_root_password" %>
-			<a href="#this" id="help3" class="btn btn-small btn-info"><i class="icon-comment"></i>¿Ayuda?</a>
-			<%= javascript_tag do %>
-				$(function () {
-			    	$('#help3').popover({
-			        	title: 'Descripción del campo',
-			        	content: 'Contraseña para el usuario root.',
-			        	placement: 'right'
-			    	});
-				});
-			<% end %>
-			<br>
+			<div>
+				<% case @flow.kind %>
+					<% when "install" %>
+						<% case @flow.hash_attributes["tool"] %>
+							<% when "mysql" %>
+								<%= render :partial => "flows/mysql_form", :locals => { :edit => true, :hash_attributes => @flow.hash_attributes } %>
+								<%= content_for :mysql %>
 
-			<%= label_tag "mysql_attr_package_ensure", "Version" %>
-			<%= select_tag "package_ensure", options_for_select([["5.6", "5.6"], ["5.5", "5.5"], ["5.1", "5.1"], ["5.0", "5.0"]]) %>
-			<a href="#this" id="help4" class="btn btn-small btn-info"><i class="icon-comment"></i>¿Ayuda?</a>
-			<%= javascript_tag do %>
-				$(function () {
-					$('#help4').popover({
-						title: 'Descripción del campo',
-						content: 'Versión del paquete. Por defecto, se instala la más reciente.',
-			        	placement: 'right'
-			    	});
-				});
-			<% end %>
-			<br>
+							<% when "couchbase" %>
+								<%= render :partial => "flows/couchbase_form", :locals => { :edit => true, :hash_attributes => @flow.hash_attributes } %>
+								<%= content_for :couchbase %>
+							<% when "tomcat" %>
+								<%= render :partial => "flows/tomcat_form", :locals => { :edit => true, :hash_attributes => @flow.hash_attributes } %>
+								<%= content_for :tomcat %>
+								
+						<% end %>
+					<% when "maintenance" %>
+						<p class="lead">
+							Si el <em>checkbox</em> está marcado, significa que existen valores previos de configuración. Si no, entonces se mostrará un formulario con los valores por defecto a utilizar en caso de no especificarlos. <b>Si no desea tomar en cuenta alguna de las herramientas, retire la selección del <em>checkbox</em>.</b>
+						</p>
+						<div class="span3">
+							<div class="page-header">
+								<h2>MySQL</h2>
+							</div>
 
-			<%= label_tag "mysql_bind_address", "Direccion de asociacion" %>
-			<%= text_field_tag "config_hash[bind_address]", @flow.hash_attributes["bind_address"], :id => "mysql_bind_address" %>
-			<a href="#this" id="help5" class="btn btn-small btn-info"><i class="icon-comment"></i>¿Ayuda?</a>
-			<%= javascript_tag do %>
-				$(function () {
-					$('#help5').popover({
-			    		title: 'Descripción del campo',
-			        	content: 'Dirección IP asociada al servidor.',
-			        	placement: 'right'
-			    	});
-				});
-			<% end %>
-			<br>
+							<%= label_tag "mysql_active", "¿Configurar MySQL?" %>
+							<%= check_box_tag "mysql_active", (@flow.hash_attributes.has_key?("db") ? "yes" : "no"), @flow.hash_attributes.has_key?("db"), :onchange => 'toggleValue("mysql_active", "yes", "no")' %>
 
-			<%= label_tag "mysql_max_allowed_packet", "Tamanio maximo de paquete" %>
-			<%= text_field_tag "config_hash[max_allowed_packet]", @flow.hash_attributes["max_allowed_packet"], :id => "mysql_max_allowed_packet" %>
-			<a href="#this" id="help6" class="btn btn-small btn-info"><i class="icon-comment"></i>¿Ayuda?</a>
-			<%= javascript_tag do %>
-				$(function () {
-					$('#help6').popover({
-			    		title: 'Descripción del campo',
-			    		content: '>Tamaño máximo de paquetes que acepta el servicio mysqld.',
-			    		placement: 'right'
-			    	});
-				});
-			<% end %>
-			<br>
+							<br>
+							<br>
 
-			<%= label_tag "mysql_basedir", "Directorio base" %>
-			<%= text_field_tag "config_hash[basedir]", @flow.hash_attributes["basedir"], :id => "mysql_basedir" %>
-			<a href="#this" id="help7" class="btn btn-small btn-info"><i class="icon-comment"></i>¿Ayuda?</a>
-			<%= javascript_tag do %>
-				$(function () {
-			   		$('#help7').popover({
-			        	title: 'Descripción del campo',
-			        	content: 'Directorio donde se almacenarán todos los archivos de las bases de datos.',
-			        	placement: 'right'
-			    	});
-				});
-			<% end %>
-			<br>
+							<% if @flow.hash_attributes.has_key?("db") then %>
+								<%= render :partial => "/flows/mysql_db_form", :locals => { :edit => true, :hash_attributes => @flow.hash_attributes } %>
+								<%= content_for :mysql_db %>
+							<% else %>
+								<p>No existen configuraciones para esta herramienta.</p>
+								<br>
+								<br>
+								<%= render :partial => "flows/mysql_db_form", :locals => { :edit => false } %>
+								<%= content_for :mysql_db %>
+							<% end %>
+						</div>
 
-			<%= label_tag "mysql_datadir", "Directorio de datos" %>
-			<%= text_field_tag "config_hash[datadir]", @flow.hash_attributes["datadir"], :id => "mysql_datadir" %>
-			<a href="#this" id="help8" class="btn btn-small btn-info"><i class="icon-comment"></i>¿Ayuda?</a>
-				<%= javascript_tag do %>
-					$(function () {
-			    		$('#help8').popover({
-			        		title: 'Descripción del campo',
-			        		content: 'Directorio de datos (datafiles, entre otras cosas).',
-			        		placement: 'right'
-			    		});
-					});
-			<% end %>
-			<br>
+						<div class="span3">
+							<div class="page-header">
+								<h2>Couchbase</h2>
+							</div>
 
-			<%= label_tag "mysql_tmpdir", "Directorio de archivos temporales" %>
-			<%= text_field_tag "config_hash[tmpdir]", @flow.hash_attributes["tmpdir"], :id => "mysql_tmpdir" %>
-			<a href="#this" id="help9" class="btn btn-small btn-info"><i class="icon-comment"></i>¿Ayuda?</a>
-			<%= javascript_tag do %>
-				$(function () {
-					$('#help9').popover({
-			    		title: 'Descripción del campo',
-			    		content: 'Carpeta de archivos temporales.',
-			    		placement: 'right'
-			    	});
-				});
-			<% end %>
+							<%= label_tag "couchbase_active", "¿Configurar Couchbase?" %>
+							<%= check_box_tag "couchbase_active", (@flow.hash_attributes.has_key?("bucket") ? "yes" : "no"), @flow.hash_attributes.has_key?("bucket"), :onchange => 'toggleValue("couchbase_active", "yes", "no")'  %>
+							<br>
+							<br>
+
+							<% if @flow.hash_attributes.has_key?("bucket") then %>
+								<%= render :partial => "/flows/couchbase_bucket_form", :locals => { :edit => true, :hash_attributes => @flow.hash_attributes } %>
+								<%= content_for :couchbase_bucket %>
+							<% else %>
+								<p>No existen configuraciones para esta herramienta.</p>
+								<br>
+								<br>
+								<%= render :partial => "/flows/couchbase_bucket_form", :locals => { :edit => false } %>
+								<%= content_for :couchbase_bucket %>
+							<% end %>
+						</div>
+
+						<div class="span2">
+							<div class="page-header">
+								<h2>Tomcat</h2>
+							</div>
+
+							<%= label_tag "tomcat_active", "¿Configurar Tomcat?" %>
+							<%= check_box_tag "tomcat_active", (@flow.hash_attributes.has_key?("instance") ? "yes" : "no"), @flow.hash_attributes.has_key?("instance"), :onchange => 'toggleValue("tomcat_active", "yes", "no")'  %>
+							<br>
+							<br>
+							<% if @flow.hash_attributes.has_key?("instance") then %>
+								<%= render :partial => "/flows/tomcat_instance_form", :locals => { :edit => true, :hash_attributes => @flow.hash_attributes } %>
+								<%= content_for :tomcat_instance %>
+							<% else %>
+								<p>No existen configuraciones para esta herramienta.</p>
+								<br>
+								<br>
+								<%= render :partial => "/flows/tomcat_instance_form", :locals => { :edit => false } %>
+								<%= content_for :tomcat_instance %>
+							<% end %>
+						</div>
+				<% end %>	
+			</div>
 			<br>
-			<%= submit_tag "Guardar cambios", :data => { :confirm => "¿Estas seguro? "}, :class => "btn btn-success" %>
-			<%= link_to "Cancelar", flow_path(@flow), :class => "btn btn-danger" %>
+			<br>
+			<%= submit_tag "Guardar cambios", :data => { :confirm => "¿Estas seguro?"}, :class => "btn btn-primary" %>
+			<%= link_to "Descartar", flow_path(@flow), :class => "btn btn-danger" %>
 		<% end %>
 	</div>
 </div>

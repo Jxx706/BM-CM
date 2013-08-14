@@ -9,7 +9,7 @@
 #  user_id         :integer
 #  hash_attributes :text
 #  body            :string(255)
-#  type            :string(255)
+#  kind            :string(255)
 #
 
 class Flow < ActiveRecord::Base
@@ -96,8 +96,8 @@ class Flow < ActiveRecord::Base
     }
   	attr_accessible :body, #Content of the flow
           					:name, #Name of this flow
-          					:node_name, #Name of the node that owns this flow
-                    :hash_attributes
+                    :hash_attributes,
+                    :kind
     serialize :hash_attributes, Hash 
   	belongs_to :user
     has_many :configurations
@@ -105,9 +105,9 @@ class Flow < ActiveRecord::Base
   	
   	def self.defaults(tool)
       case tool
-      when "mysql" then MYSQL_DEFAULTS
-      when "couchbase" then COUCHBASE_DEFAULTS
-      else TOMCAT_DEFAULTS
+        when "mysql" then MYSQL_DEFAULTS
+        when "couchbase" then COUCHBASE_DEFAULTS
+        else TOMCAT_DEFAULTS
       end
     end
   	

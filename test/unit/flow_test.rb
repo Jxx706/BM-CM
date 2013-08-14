@@ -9,7 +9,7 @@
 #  user_id         :integer
 #  hash_attributes :text
 #  body            :string(255)
-#  type            :string(255)
+#  kind            :string(255)
 #
 
 require 'test_helper'

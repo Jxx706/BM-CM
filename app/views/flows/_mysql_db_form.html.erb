@@ -6,25 +6,25 @@
 
 	<!-- Mandatory -->
 	<%= label_tag "attr_db_title", "Nombre" %>
-	<%= text_field_tag "attr[db][title]", nil, :id => "attr_db_title" %>
+	<%= text_field_tag "attr[db][title]", nil, :id => "attr_db_title", :placeholder => edit ? hash_attributes["db"]["title"] : "" %>
 	<br>
 
 	<%= label_tag "attr_db_charset", "Charset" %>
-	<%= text_field_tag "attr[db][charset]", nil, :id => "attr_db_charset", :placeholder => Flow.defaults("mysql")["db"]["charset"] %>
+	<%= text_field_tag "attr[db][charset]", nil, :id => "attr_db_charset", :placeholder => edit ? hash_attributes["db"]["charset"] : Flow.defaults("mysql")["db"]["charset"] %>
 	<br>
 
 	<%= label_tag "attr_db_host", "Host" %>
-	<%= text_field_tag "attr[db][host]", nil, :id => "attr_db_host", :placeholder => Flow.defaults("mysql")["db"]["host"] %>
+	<%= text_field_tag "attr[db][host]", nil, :id => "attr_db_host", :placeholder => edit ? hash_attributes["db"]["host"] : Flow.defaults("mysql")["db"]["host"] %>
 	<br>
 
 	<!-- Mandatory -->
 	<%= label_tag "attr_db_user", "Usuario" %>
-	<%= text_field_tag "attr[db][user]", nil, :id => "attr_db_user" %>
+	<%= text_field_tag "attr[db][user]", nil, :id => "attr_db_user", :placeholder => edit ? hash_attributes["db"]["user"] : "" %>
 	<br>
 
 	<!-- Mandatory -->
 	<%= label_tag "attr_db_password", "Contrasena" %>
-	<%= password_field_tag "attr[db][password]", nil, :id => "attr_db_password" %>
+	<%= password_field_tag "attr[db][password]", nil, :id => "attr_db_password", :placeholder => edit ? hash_attributes["db"]["password"] : "" %>
 	<br>
 
 	<%= label_tag "attr_db_grant", "Privilegios" %>
@@ -33,7 +33,7 @@
 	<hr>
 
 	<label>
-		<input type="checkbox" id="checkbox_db_backup" name="backup" value="no" onchange='changeIfChecked(this); $("#backup_options").toggle()'>
+		<input type="checkbox" id="checkbox_db_backup" name="backup" value='<%= edit && hash_attributes.has_key?(:db_backup) ? "yes" : "no" %>' onchange='changeIfChecked(this); $("#backup_options").toggle()'>
 			¿Desea crear un respaldo?
 	</label>
 	<div id="backup_options">
@@ -44,17 +44,17 @@
 
 		<!-- Mandatory -->
 		<%= label_tag "attr_db_backup_user", "Usuario de respaldo" %>
-		<%= text_field_tag "attr[db_backup][backupuser]", nil, :id => "attr_db_backup_user" %>
+		<%= text_field_tag "attr[db_backup][backupuser]", nil, :id => "attr_db_backup_user", :placeholder => edit && hash_attributes.has_key?("db_backup") ? hash_attributes["db_backup"]["backupuser"] : "" %>
 		<br>
 
 		<!-- Mandatory -->
 		<%= label_tag "attr_db_backup_password", "Contrasena" %>
-		<%= password_field_tag "attr[db_backup][backuppassword]", nil, :id => "attr_db_backup_password" %>
+		<%= password_field_tag "attr[db_backup][backuppassword]", nil, :id => "attr_db_backup_password", :placeholder => edit && hash_attributes.has_key?("db_backup") ? hash_attributes["db_backup"]["backuppassword"] : "" %>
 		<br>
 
 		<!-- Mandatory -->
 		<%= label_tag "attr_db_backup_dir", "Directorio de respaldo" %>
-		<%= text_field_tag "attr[db_backup][backupdir]", nil, :id => "attr_db_backup_dir" %>
+		<%= text_field_tag "attr[db_backup][backupdir]", nil, :id => "attr_db_backup_dir", :placeholder => edit && hash_attributes.has_key?("db_backup") ? hash_attributes["db_backup"]["backupdir"] : "" %>
 	</div>
 	<%= javascript_tag "$('#backup_options').hide();" %>
 <% end %>

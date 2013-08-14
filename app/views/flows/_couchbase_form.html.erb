@@ -34,7 +34,7 @@
 			<hr>
 					
 			<%= label_tag "couchbase_attr_size", "Tamanio" %>
-			<%= text_field_tag "attr[size]", nil, :id => "couchbase_attr_size", :placeholder => Flow.defaults("couchbase")["size"] %>
+			<%= text_field_tag "attr[size]", nil, :id => "couchbase_attr_size", :placeholder => edit ? hash_attributes["size"] : Flow.defaults("couchbase")["size"] %>
 			<a href="#this" id="help1" class="btn btn-small btn-info"><i class="icon-comment"></i>¿Ayuda?</a>
 			<%= javascript_tag do %>
 				$(function () {
@@ -47,7 +47,7 @@
 			<% end %>
 
 			<%= label_tag "couchbase_attr_user", "Usuario" %>
-			<%= text_field_tag "attr[user]", nil, :id => "couchbase_attr_user", :placeholder => Flow.defaults("couchbase")["user"] %>
+			<%= text_field_tag "attr[user]", nil, :id => "couchbase_attr_user", :placeholder => edit ? hash_attributes["user"] : Flow.defaults("couchbase")["user"] %>
 			<a href="#this" id="help2" class="btn btn-small btn-info"><i class="icon-comment"></i>¿Ayuda?</a>
 			<%= javascript_tag do %>
 				$(function () {
@@ -61,7 +61,7 @@
 			<br>
 
 			<%= label_tag "couchbase_attr_password", "Contrasena" %>
-			<%= password_field_tag "attr[password]", nil, :id => "couchbase_attr_password", :placeholder => Flow.defaults("couchbase")["password"] %>
+			<%= password_field_tag "attr[password]", nil, :id => "couchbase_attr_password", :placeholder => edit ? hash_attributes["password"] : Flow.defaults("couchbase")["password"] %>
 			<a href="#this" id="help3" class="btn btn-small btn-info"><i class="icon-comment"></i>¿Ayuda?</a>
 			<%= javascript_tag do %>
 				$(function () {

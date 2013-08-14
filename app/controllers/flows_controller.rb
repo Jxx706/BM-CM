@@ -53,15 +53,17 @@ class FlowsController < ApplicationController
         end
 
         render :new
-      #Flow type
+      #Flow kind
       when "2"
         @flow = current_user.flows.find(params[:flow_id]) #Let's keep adding info to this flow
 
         params[:flow] = Hash.new
         params[:flow][:hash_attributes] = Hash.new
-        case params[:flow][:type]
+        params[:flow][:kind] = params[:flow_kind]
+        
+        case params[:flow][:kind]
           when "install"
-            #params[:flow][:hash_attributes][:type] = "install"
+            #params[:flow][:hash_attributes][:kind] = "install"
             case params[:select_tool]
               when "mysql"
                 params[:flow][:hash_attributes][:tool] = "mysql"
@@ -74,7 +76,7 @@ class FlowsController < ApplicationController
                 @args[:current_step] = 5
             end
           when "maintenance"
-            #params[:flow][:hash_attributes][:type] = "maintenance"
+            #params[:flow][:hash_attributes][:kind] = "maintenance"
             @args[:current_step] = 6
         end
         
@@ -176,9 +178,6 @@ class FlowsController < ApplicationController
             params[:flow] = Hash.new
             params[:flow][:hash_attributes] = Hash.new
             params[:flow][:body] = "\n\n"
-
-            #Reopen the file with writing privileges
-            #file = File.new(@flow.file_path, "w+")
 
             #Check if there's any maintenance to do with MySQL
             if params[:mysql_active] == "yes" then
@@ -284,35 +283,109 @@ class FlowsController < ApplicationController
   end
 
   #It saves changes to one flow in the database
+  #THIS LINE IS IMPORTANT! new_hash_attributes = @flow.hash_attributes.merge(params[:hash_attributes]) {|k, ov, nv| nv.nil? ? ov : nv}
   def update #(PUT /flows/:id)
+    #Retrieve the flow to be edited
     @flow = current_user.flows.find(params[:id])
+    params[:flow] = Hash.new
 
-    #file = File.new(@flow.file_path, "w+")
-    case @flow.type
+    #Different actions depends on the kind of flow
+    case @flow.kind
       when "install"
         params[:flow][:hash_attributes] = Hash.new
         params[:flow][:body] = "\n\n"
 
-        params[:config_hash].each do |k, v|
-          params[:flow][:hash_attributes][k] = v
+        case @flow.hash_attributes["tool"]
+          when "mysql"
+
+            if params[:checkbox_mysql_client] == "yes" then
+              params[:flow][:body] << write_class("mysql") << "\n\n"
+              params[:flow][:hash_attributes]["client"] = true
+            else
+              params[:flow][:hash_attributes]["client"] = false
+            end
+
+            params[:flow][:hash_attributes] = @flow.hash_attributes.merge(params[:attr].delete_if { |key, value| value.blank? || value.nil? })
+
+            server_hash = Hash.new
+            server_hash["package_ensure"] = params[:attr].delete(:package_ensure)
+
+            unless params[:attr].empty? then
+              server_hash["config_hash"] = params[:attr]
+            end
+
+            params[:flow][:body] << write_class("mysql::server", server_hash)
+
+          when "couchbase"
+            #Replace old values with the new ones that aren't nil
+            params[:flow][:hash_attributes] = @flow.hash_attributes.merge(params[:attr].delete_if { |key, value| value.blank? || value.nil? })
+            #Rewritte the body of the flow.
+            params[:flow][:body] << write_class("couchbase", params[:flow][:hash_attributes])
+          when "tomcat"
+            if params[:attr][:version].nil? || params[:attr][:version].empty? then 
+              params[:flow][:body] << "include tomcat"
+            else
+              params[:flow][:body] << "$tomcat::mirror = \"#{params[:attr][:mirror]}\"\n$tomcat::version = \"#{params[:attr][:version]}\"\ninclude tomcat::source"
+            end
+            
+            params[:flow][:hash_attributes] = @flow.hash_attributes.merge(params[:attr])
         end
-
-        params[:flow][:hash_attributes]["package_ensure"] = params[:package_ensure]
-
-        if params[:checkbox_mysql_client] == "yes" then
-          params[:flow][:hash_attributes]["client"] = true
-          params[:flow][:body] << write_class("mysql")
-        else
-          params[:flow][:hash_attributes]["client"] = false
-        end
-
-        params[:flow][:type] = "install"
-        params[:flow][:hash_attributes]["tool"] = "mysql"
-        #file.reopen(@flow.file_path, "a+")
-        params[:flow][:body] << write_class("mysql::server", {"package_ensure" => params[:package_ensure], "config_hash" => params[:config_hash]})
-
+        
       when "maintenance"
-        #Nothing so far
+        params[:flow][:hash_attributes] = Hash.new
+        params[:flow][:body] = "\n\n"
+
+        if params[:mysql_active] == "yes" then
+          params[:flow][:hash_attributes][:db] = Hash.new
+
+          if @flow.hash_attributes.has_key?(:db) then
+            params[:flow][:hash_attributes][:db] = @flow.hash_attributes[:db].merge(params[:attr][:db].delete_if {|key, value| value.blank? || value.nil?})
+          else
+            #if there wasn't configurations for mysql, then handle like it's new
+            params[:attr][:db].each do |k, v| #k stands for "key" and v for "value"
+                if v.empty? || v.nil? then #If there's no value, use default (and erase the key associated to it)
+                  params[:flow][:hash_attributes][:db][k] = Flow.defaults("mysql")["db"][k]
+                  params[:attr][:db].delete(k)
+                else #Otherwise, use the value provided.
+                  params[:flow][:hash_attributes][:db][k] = v
+                end
+              end
+          end
+
+          params[:flow][:body] << write_resource('mysql::db', params[:flow][:hash_attributes][:db].except("title"), params[:flow][:hash_attributes][:db]) << "\n\n"
+          
+          if params[:backup] == "yes" then
+            params[:flow][:hash_attributes][:db_backup] = Hash.new
+            params[:flow][:hash_attributes][:db_backup] = @flow.hash_attributes[:db_backup].merge(params[:attr][:db_backup].delete_if {|key, value| value.blank? || value.nil?})            
+            params[:flow][:body] << write_class('mysql::backup', params[:flow][:hash_attributes][:db_backup]) << "\n\n"
+          else
+            @flow.hash_attributes.delete(:db_backup)
+          end
+        end
+
+        if params[:couchbase_active] == "yes" then
+          params[:flow][:hash_attributes][:bucket] = Hash.new
+
+          if @flow.hash_attributes.has_key?(:bucket) then
+            params[:flow][:hash_attributes][:bucket] = @flow.hash_attributes[:bucket].merge(params[:attr][:bucket].delete_if {|key, value| value.blank? || value.nil?})
+          else
+            params[:attr][:bucket].each do |k, v| 
+                if v.empty? || v.nil? then 
+                  params[:flow][:hash_attributes][:bucket][k] = Flow.defaults("couchbase")["bucket"][k]
+                  params[:attr][:bucket].delete(k)
+                else
+                  params[:flow][:hash_attributes][:bucket][k] = v
+                end
+              end
+          end
+
+          params[:flow][:body] << write_resource("couchbase::bucket", params[:flow][:hash_attributes][:bucket].except("title"), params[:flow][:hash_attributes][:bucket]) << "\n\n"
+        end
+
+        if params[:tomcat_active] == "yes" then
+          params[:flow][:hash_attributes][:instance] = Hash.new
+          params[:flow][:hash_attributes][:instance] = @flow.hash_attributes[:instance].merge(params[:attr][:instance].delete_if {|key, value| value.blank? || value.nil?})
+        end
     end
 
     if @flow.update_attributes(params[:flow])

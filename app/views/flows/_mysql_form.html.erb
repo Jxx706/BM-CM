@@ -28,7 +28,7 @@
 		</p>
 
 		<label>
-			<input type="checkbox" id="checkbox_mysql_client" name="checkbox_mysql_client" value="no" onchange='changeIfChecked(this)'>
+			<input type="checkbox" id="checkbox_mysql_client" name="checkbox_mysql_client" value='<%= edit ? (hash_attributes["client"] ? "yes" : "no") : "no" %>' onchange='changeIfChecked(this)'>
 			Cliente MySQL
 		</label>
 
@@ -37,7 +37,7 @@
 			<hr>
 
 			<%= label_tag "mysql_attr_port", "Puerto" %>
-			<%= text_field_tag "attr[port]", nil, :id => "mysql_attr_port", :placeholder => Flow.defaults("mysql")["port"] %>
+			<%= text_field_tag "attr[port]", nil, :id => "mysql_attr_port", :placeholder => edit ? hash_attributes["port"] : Flow.defaults("mysql")["port"] %>
 			<a href="#this" id="help1" class="btn btn-small btn-info"><i class="icon-comment"></i>¿Ayuda?</a>
 			<%= javascript_tag do %>
 				$(function () {
@@ -51,7 +51,7 @@
 			<br>
 
 			<%= label_tag "mysql_attr_root_group", "Grupo de usuario root" %>
-			<%= text_field_tag "attr[root_group]", nil, :id => "mysql_attr_root_group", :placeholder => Flow.defaults("mysql")["root_group"] %>
+			<%= text_field_tag "attr[root_group]", nil, :id => "mysql_attr_root_group", :placeholder => edit ? hash_attributes["root_group"] : Flow.defaults("mysql")["root_group"] %>
 			<a href="#this" id="help2" class="btn btn-small btn-info"><i class="icon-comment"></i>¿Ayuda?</a>
 			<%= javascript_tag do %>
 				$(function () {
@@ -65,7 +65,7 @@
 			<br>
 
 			<%= label_tag "mysql_attr_root_password", "Contraseña root" %>
-			<%= password_field_tag "attr[root_password]", nil, :id => "mysql_attr_root_password", :placeholder => Flow.defaults("mysql")["root_password"] %>
+			<%= password_field_tag "attr[root_password]", nil, :id => "mysql_attr_root_password", :placeholder => edit ? hash_attributes["root_password"] : Flow.defaults("mysql")["root_password"] %>
 			<a href="#this" id="help3" class="btn btn-small btn-info"><i class="icon-comment"></i>¿Ayuda?</a>
 			<%= javascript_tag do %>
 				$(function () {
@@ -93,7 +93,7 @@
 			<br>
 
 			<%= label_tag "mysql_bind_address", "Direccion de asociacion" %>
-			<%= text_field_tag "attr[bind_address]", nil, :id => "mysql_bind_address", :placeholder => Flow.defaults("mysql")["bind_address"] %>
+			<%= text_field_tag "attr[bind_address]", nil, :id => "mysql_bind_address", :placeholder => edit ? hash_attributes["bind_address"] : Flow.defaults("mysql")["bind_address"] %>
 			<a href="#this" id="help5" class="btn btn-small btn-info"><i class="icon-comment"></i>¿Ayuda?</a>
 			<%= javascript_tag do %>
 				$(function () {
@@ -107,7 +107,7 @@
 			<br>
 
 			<%= label_tag "mysql_max_allowed_packet", "Tamanio maximo de paquete" %>
-			<%= text_field_tag "attr[max_allowed_packet]", nil, :id => "mysql_max_allowed_packet", :placeholder => Flow.defaults("mysql")["max_allowed_packet"] %>
+			<%= text_field_tag "attr[max_allowed_packet]", nil, :id => "mysql_max_allowed_packet", :placeholder => edit ? hash_attributes["max_allowed_packet"] : Flow.defaults("mysql")["max_allowed_packet"] %>
 			<a href="#this" id="help6" class="btn btn-small btn-info"><i class="icon-comment"></i>¿Ayuda?</a>
 			<%= javascript_tag do %>
 				$(function () {
@@ -121,7 +121,7 @@
 			<br>
 
 			<%= label_tag "mysql_basedir", "Directorio base" %>
-			<%= text_field_tag "attr[basedir]", nil, :id => "mysql_basedir", :placeholder => Flow.defaults("mysql")["basedir"] %>
+			<%= text_field_tag "attr[basedir]", nil, :id => "mysql_basedir", :placeholder => edit ? hash_attributes["basedir"] : Flow.defaults("mysql")["basedir"] %>
 			<a href="#this" id="help7" class="btn btn-small btn-info"><i class="icon-comment"></i>¿Ayuda?</a>
 			<%= javascript_tag do %>
 				$(function () {
@@ -135,7 +135,7 @@
 			<br>
 
 			<%= label_tag "mysql_datadir", "Directorio de datos" %>
-			<%= text_field_tag "attr[datadir]", nil, :id => "mysql_datadir", :placeholder => Flow.defaults("mysql")["datadir"] %>
+			<%= text_field_tag "attr[datadir]", nil, :id => "mysql_datadir", :placeholder => edit ? hash_attributes["datadir"] : Flow.defaults("mysql")["datadir"] %>
 			<a href="#this" id="help8" class="btn btn-small btn-info"><i class="icon-comment"></i>¿Ayuda?</a>
 			<%= javascript_tag do %>
 				$(function () {
@@ -149,7 +149,7 @@
 			<br>
 
 			<%= label_tag "mysql_tmpdir", "Directorio de archivos temporales" %>
-			<%= text_field_tag "attr[tmpdir]", nil, :id => "mysql_tmpdir", :placeholder => Flow.defaults("mysql")["tmpdir"] %>
+			<%= text_field_tag "attr[tmpdir]", nil, :id => "mysql_tmpdir", :placeholder => edit ? hash_attributes["tmpdir"] : Flow.defaults("mysql")["tmpdir"] %>
 			<a href="#this" id="help9" class="btn btn-small btn-info"><i class="icon-comment"></i>¿Ayuda?</a>
 			<%= javascript_tag do %>
 				$(function () {

@@ -22,7 +22,7 @@
 			</ul>
 		</p>
 
-		<!-- Type of flow -->
+		<!-- kind of flow -->
 		<% case @args[:current_step] %>
 			<% when 1 %>
 				<%= form_tag({:controller => :flows, :action => :create}, :method => :post) do %>
@@ -108,7 +108,7 @@
 										<h3>Instalación</h3>
 									</div>
 									<label class="radio" onclick='$("#select_tool").show();'>
-										<%= radio_button "flow", "type", "install", :onclick => '$("#select_tool").show();' %>
+										<%= radio_button_tag "flow_kind", "install", :onclick => '$("#select_tool").show();' %>
 											¡Crear un flujo de <strong><i>instalación</i></strong>!
 									</label>
 									<%= select_tag "select_tool", options_for_select([["MySQL", "mysql"], ["CouchBase", "couchbase"], ["Tomcat", "tomcat"]]), :onchange => "$('#tool').html($('#select_tool').val())" %>
@@ -123,7 +123,7 @@
 										<h3>Mantenimiento</h3>
 									</div>
 									<label class="radio" onclick='$("#select_tool").hide();'>
-										<%= radio_button "flow", "type", "maintenance", :onclick => '$("#select_tool").hide();' %>
+										<%= radio_button_tag "flow_kind", "maintenance", :onclick => '$("#select_tool").hide();' %>
 											¡Crear un flujo de <strong><i>mantenimiento</i></strong>!
 									</label>
 								</div>
@@ -148,7 +148,7 @@
 				<% end %>
 			<% when 3 %>
 				<%= form_tag({:controller => :flows, :action => :create}, :method => :post) do %>
-					<%= render "flows/mysql_form" %>
+					<%= render :partial => "flows/mysql_form", :locals => { :edit => false } %>
 					<%= content_for :mysql %>
 					<%= hidden_field_tag "current_step", "3" %>
 					<%= hidden_field_tag "flow_id", @args[:flow_id] %>
@@ -159,7 +159,7 @@
 				<% end %>
 			<% when 4 %>
 				<%= form_tag({:controller => :flows, :action => :create}, :method => :post) do %>
-					<%= render "flows/couchbase_form" %>
+					<%= render :partial => "flows/couchbase_form", :locals => { :edit => false } %>
 					<%= content_for :couchbase %>
 					<%= hidden_field_tag "current_step", "4" %>
 					<%= hidden_field_tag "flow_id", @args[:flow_id] %>
@@ -170,7 +170,7 @@
 				<% end %>
 			<% when 5 %>
 				<%= form_tag({:controller => :flows, :action => :create}, :method => :post) do %>
-					<%= render "flows/tomcat_form" %>
+					<%= render :partial => "flows/tomcat_form", :locals => { :edit => false } %>
 					<%= content_for :tomcat %>
 					<%= hidden_field_tag "current_step", "5" %>
 					<%= hidden_field_tag "flow_id", @args[:flow_id] %>

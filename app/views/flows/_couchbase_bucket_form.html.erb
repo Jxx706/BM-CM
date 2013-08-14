@@ -5,23 +5,23 @@
 
 	<!-- Mandatory -->
 	<%= label_tag "attr_bucket_title", "Nombre" %>
-	<%= text_field_tag "attr[bucket][title]", nil, :id => "attr_bucket_title" %>
+	<%= text_field_tag "attr[bucket][title]", nil, :id => "attr_bucket_title", :placeholder => edit ? hash_attributes["bucket"]["title"] : "" %>
 	<br>
 
 	<%= label_tag "attr_bucket_port", "Puerto" %>
-	<%= text_field_tag "attr[bucket][port]", nil, :id => "attr_bucket_port", :placeholder => Flow.defaults("couchbase")["bucket"]["port"] %>
+	<%= text_field_tag "attr[bucket][port]", nil, :id => "attr_bucket_port", :placeholder => edit ? hash_attributes["bucket"]["port"] : Flow.defaults("couchbase")["bucket"]["port"] %>
 	<br>
 
 	<%= label_tag "attr_bucket_size", "Tamano" %>
-	<%= text_field_tag "attr[bucket][size]", nil, :id => "attr_bucket_size", :placeholder => Flow.defaults("couchbase")["bucket"]["size"] %>
+	<%= text_field_tag "attr[bucket][size]", nil, :id => "attr_bucket_size", :placeholder => edit ? hash_attributes["bucket"]["size"] : Flow.defaults("couchbase")["bucket"]["size"] %>
 	<br>
 
 	<%= label_tag "attr_bucket_user", "Usuario" %>
-	<%= text_field_tag "attr[bucket][user]", nil, :id => "attr_bucket_user", :placeholder => Flow.defaults("couchbase")["bucket"]["user"] %>
+	<%= text_field_tag "attr[bucket][user]", nil, :id => "attr_bucket_user", :placeholder => edit ? hash_attributes["bucket"]["user"] : Flow.defaults("couchbase")["bucket"]["user"] %>
 	<br>
 
 	<%= label_tag "attr_bucket_password", "Contrasena" %>
-	<%= password_field_tag "attr[bucket][password]", nil, :id => "attr_bucket_password", :placeholder => Flow.defaults("couchbase")["bucket"]["password"] %>
+	<%= password_field_tag "attr[bucket][password]", nil, :id => "attr_bucket_password", :placeholder => edit ? hash_attributes["bucket"]["password"] : Flow.defaults("couchbase")["bucket"]["password"] %>
 	<br>
 
 	<%= label_tag "attr_bucket_type", "Tipo" %>
@@ -29,6 +29,6 @@
 	<br>
 
 	<%= label_tag "attr_bucket_replica", "Numero de replicas" %>
-	<%= number_field_tag "attr[bucket][replica]", nil, :in => 1..10, :id => "attr_bucket_replica", :placeholder => Flow.defaults("couchbase")["bucket"]["replica"] %>
+	<%= number_field_tag "attr[bucket][replica]", nil, :in => 1..10, :id => "attr_bucket_replica", :placeholder => edit ? hash_attributes["bucket"]["replica"] : Flow.defaults("couchbase")["bucket"]["replica"] %>
 	<br>
 <% end %>

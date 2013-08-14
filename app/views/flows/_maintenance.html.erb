@@ -61,7 +61,7 @@
 				<br>
 				<br>
 	
-				<%= render "flows/mysql_db_form" %>
+				<%= render :partial => "flows/mysql_db_form", :locals => { :edit => false } %>
 				<%= content_for :mysql_db %>
 			</div>
 			<%= javascript_tag '$("#mysql-config").hide();' %>
@@ -98,7 +98,7 @@
 				<br>
 				<br>
 					
-				<%= render "flows/couchbase_bucket_form" %>
+				<%= render :partial => "flows/couchbase_bucket_form", :locals => { :edit => false } %>
 				<%= content_for :couchbase_bucket %>
 			</div>
 			<%= javascript_tag '$("#couchbase-config").hide();' %>
@@ -106,7 +106,7 @@
 		</div>
 
 		<!-- Tomcat maintenance settings -->
-		<div class="span3">
+		<div class="span2">
 			<div class="page-header">
 				<h3><strong>Tomcat</strong></h3>
 			</div>
@@ -136,7 +136,7 @@
 				<br>
 				<br>
 
-				<%= render "flows/tomcat_instance_form" %>
+				<%= render :partial => "flows/tomcat_instance_form", :locals => { :edit => false } %>
 				<%= content_for :tomcat_instance %>
 			</div>
 			<%= javascript_tag '$("#tomcat-config").hide();' %>
