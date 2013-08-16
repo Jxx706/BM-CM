@@ -33,14 +33,15 @@ class User < ActiveRecord::Base
 
 	  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 
-   	validates :name, :presence => true,
-                     :length => { :maximum => 50 }
-   	validates :email, :presence => true,
-                      :format => { :with => VALID_EMAIL_REGEX},
-                      :uniqueness => { :case_sensitive => :false }
-    validates :password, :presence => true, 
-    					 :length => { :minimum => 6 }
-    validates :password_confirmation, :presence => true
+   	validates :name, :presence => { :message => "El nombre es obligatorio" },
+                     :length => { :maximum => 50, :message => "Nombre muy largo." }
+   	validates :email, :presence => { :message => "El email es obligatorio."},
+                      :format => { :with => VALID_EMAIL_REGEX, :message => "El email no es valido."},
+                      :uniqueness => { :case_sensitive => false, :message => "E-mail ya existente." }
+    validates :password, :presence => { :message => "La contrasena es obligatoria." }, 
+    					 :length => { :minimum => 6, :message => "Clave muy corta. Por lo menos 6 caracteres."},
+    					 :confirmation => true
+    validates :password_confirmation, :presence => { :message => "Hace falta confirmacion de contrasena." }
 
     has_many :flows, :dependent => :destroy, #If the user is destroyed, all his flows are gone too.
                      :order => 'updated_at'

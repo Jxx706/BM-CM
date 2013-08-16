@@ -1,18 +1,36 @@
 <h1>Editar información de <%= @user.name + " #{@user.last_name}" %></h1>
-<%= form_for(@user) do |f| %>
-		<%= f.label :name, "Nombre" %>
-		<%= f.text_field :name %>
+<div class="row-fluid">
+	<%= form_for(@user) do |f| %>
+		<div class="span5">
+			<%= f.label :name, "Nombre" %>
+			<%= f.text_field :name %>
 
-		<%= f.label :last_name, "Apellido" %>
-		<%= f.text_field :last_name %>
+			<%= f.label :last_name, "Apellido" %>
+			<%= f.text_field :last_name %>
 
-		<%= f.label :password, "Contraseña" %>
-		<%= f.password_field :password %>
+			<%= f.label :password, "Contraseña" %>
+			<%= f.password_field :password %>
 
-		<%= f.label :password_confirmation, "Repita su contraseña" %>
-		<%= f.password_field :password_confirmation %>
+			<%= f.label :password_confirmation, "Repita su contraseña" %>
+			<%= f.password_field :password_confirmation %>
 
-		<p> 
-			<%= f.submit "Gurdar cambios", :class => "btn btn-large btn-success" %>
-		</p>
-<% end %>
+			<p> 
+				<%= f.submit "Gurdar cambios", :class => "btn btn-large btn-success" %>
+			</p>
+		</div>
+
+		<% if @user.errors.any? %>
+			<div id="error_explanation", class="span4 alert alert-error alert-block">
+		    	<h2>
+		    		<b><%= pluralize(@user.errors.count, "error", "errores") %></b> <%= @user.errors.count > 1 ? "prohibieron" : "prohibio" %> la creación de este Usuario:
+		    	</h2>
+			 
+		    	<ul>
+			    	<% @user.errors.each do |attr, msg| %>
+			      		<li><%= msg %></li>
+			    	<% end %>
+		    	</ul>
+		  	</div>
+		<% end %>	
+	<% end %>
+</div>

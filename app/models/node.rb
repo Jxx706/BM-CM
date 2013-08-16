@@ -17,10 +17,10 @@ class Node < ActiveRecord::Base
   attr_accessible :domain, :fqdn, :hostname, :ip
   before_save :create_fqdn
 
-  VALID_IP_ADDRESS = //
-  validates :hostname, :presence => true
-  validates :ip, :presence => true,
-  		    	 :format   => { :with => VALID_IP_ADDRESS }
+  VALID_IP_ADDRESS = /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/
+  validates :hostname, :presence => { :message => "El hostname es obligatorio."}
+  validates :ip, :presence => { :message => "La direccion IP es obligatoria." },
+  		    	 :format   => { :with => VALID_IP_ADDRESS, :message => "Direccion IP no cumple formato valido." }
   has_many :reports, :dependent => :destroy,
   					 :order => 'created_at'
   belongs_to :user

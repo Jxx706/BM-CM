@@ -26,53 +26,69 @@
 		<% case @args[:current_step] %>
 			<% when 1 %>
 				<%= form_tag({:controller => :flows, :action => :create}, :method => :post) do %>
-					<div class="page-header">
-						<h2><strong>Paso I: </strong>Información básica</h2> 
-					</div>
+					
+					<div class="span5">
+						<div class="page-header">
+							<h2><strong>Paso I: </strong>Información básica</h2> 
+						</div>
 
-					<!-- Explanation button -->
-					<a href="#explanation1" role="button" class="btn btn-inverse" data-toggle="modal">
-						Explicación
-					</a>
-					<%= render "flows/help_partials/explanation1" %>
+						<!-- Explanation button -->
+						<a href="#explanation1" role="button" class="btn btn-inverse" data-toggle="modal">
+							Explicación
+						</a>
+						<%= render "flows/help_partials/explanation1" %>
 
-					<!-- Fields help button -->
-					<a href="#help1" role="button" class="btn btn-info" data-toggle="modal">
-						Ayuda
-					</a>
-					<%= render "flows/help_partials/help1" %>
+						<!-- Fields help button -->
+						<a href="#help1" role="button" class="btn btn-info" data-toggle="modal">
+							Ayuda
+						</a>
+						<%= render "flows/help_partials/help1" %>
 
-					<div class="container">
-						<%= label_tag "flow_name", "Nombre del flujo" %>
-						<%= text_field_tag "flow[name]", nil, :id => "flow_name", :placeholder => "Ejemplo: mysql-installer" %>
-						<a href="#this" id="help-1" class="btn btn-small btn-info"><i class="icon-comment"></i>¿Ayuda?</a>
-						<%= javascript_tag do %>
-							$(function () {
-								$('#help-1').popover({
-									title: 'Descripción del campo',
-									content: 'Nombre del archivo correspondiente a este nodo.',
-									placement: 'right'
+						<div class="container">
+							<%= label_tag "flow_name", "Nombre del flujo" %>
+							<%= text_field_tag "flow[name]", nil, :id => "flow_name", :placeholder => "Ejemplo: mysql-installer" %>
+							<a href="#this" id="help-1" class="btn btn-small btn-info"><i class="icon-comment"></i>¿Ayuda?</a>
+							<%= javascript_tag do %>
+								$(function () {
+									$('#help-1').popover({
+										title: 'Descripción del campo',
+										content: 'Nombre del archivo correspondiente a este nodo.',
+										placement: 'right'
+									});
 								});
-							});
-						<% end %>
-						<br>
+							<% end %>
+							<br>
 
-						<%= label_tag "flow_nodes", "Nodos a vincular" %>
-						<%= select_tag "flow[nodes]", options_for_select(current_user.nodes.map { |n| n.fqdn }), :include_blank => true, :multiple => true, :id => "flow_nodes" %>
-						<a href="#this" id="help0" class="btn btn-small btn-info"><i class="icon-comment"></i>¿Ayuda?</a>
-						<%= javascript_tag do %>
-							$(function () {
-						   		$('#help0').popover({
-						       		title: 'Descripción del campo',
-						       		content: 'Nombre del nodo a ser configurado por este flujo.',
-						       		placement: 'right'
-						   		});
-							});
-						<% end %>
-						<br>
+							<%= label_tag "flow_nodes", "Nodos a vincular" %>
+							<%= select_tag "flow[nodes]", options_for_select(current_user.nodes.map { |n| n.fqdn }), :include_blank => true, :multiple => true, :id => "flow_nodes" %>
+							<a href="#this" id="help0" class="btn btn-small btn-info"><i class="icon-comment"></i>¿Ayuda?</a>
+							<%= javascript_tag do %>
+								$(function () {
+							   		$('#help0').popover({
+							       		title: 'Descripción del campo',
+							       		content: 'Nombre del nodo a ser configurado por este flujo.',
+							       		placement: 'right'
+							   		});
+								});
+							<% end %>
+							<br>
+						</div>
+						<%= hidden_field_tag "current_step", "1" %>
+						<%= submit_tag "Siguiente", :data => { :confirm => "¿Estas seguro? "}, :class => "btn btn-primary" %>
 					</div>
-					<%= hidden_field_tag "current_step", "1" %>
-					<%= submit_tag "Siguiente", :data => { :confirm => "¿Estas seguro? "}, :class => "btn btn-primary" %>
+					
+
+					<% if !flow.nil? && flow.errors.any? %>
+		  				<div id="error_explanation", class="span4 alert alert-error alert-block">
+			    			<h2><b><%= pluralize(flow.errors.count, "error", "errores") %></b> <%= flow.errors.count > 1 ? "prohibieron" : "prohibio" %> la creación de este Flujo:</h2>
+			 
+			    			<ul>
+				    			<% flow.errors.each do |attr, msg| %>
+					      			<li><%= msg %></li>
+					    		<% end %>
+				    		</ul>
+		  				</div>
+					<% end %>
 				<% end %>						
 
 			<% when 2 %>

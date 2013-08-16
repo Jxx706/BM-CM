@@ -102,3 +102,17 @@ function switchConfigTool(text_id, field_id) {
 	}
 
 }
+
+///// User validations ///////
+
+function validateUserForm() {
+
+	//Validate presence of Name
+	if (document.getElementById("user_name").value == "x") {
+		alert("El NOMBRE es obligatorio");
+		document.getElementById("user_name").focus();
+		return false;
+	}
+
+	if (document.getElementById)
+}

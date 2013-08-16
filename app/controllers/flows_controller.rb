@@ -47,14 +47,14 @@ class FlowsController < ApplicationController
           end
         end
 
-        if @flow.save! then      
+        if @flow.save then      
           @args[:current_step] = 2 #This is the next step.
           @args[:flow_id] = @flow.id
         else 
           @args[:current_step] = 1
         end
 
-        render :new
+        render :action => :new, :locals => { :flow => @flow }
       #Flow kind
       when "2"
         @flow = current_user.flows.find(params[:flow_id]) #Let's keep adding info to this flow
@@ -88,7 +88,7 @@ class FlowsController < ApplicationController
           @args[:current_step] = 2
         end
 
-        render :new
+        render :action => :new, :locals => { :flow => @flow }
       else
         @flow = current_user.flows.find(params[:flow_id])
 
@@ -133,7 +133,9 @@ class FlowsController < ApplicationController
             if @flow.update_attributes(params[:flow]) then
               redirect_to @flow
             else
-              render :new
+              @args[:flow_id] = @flow.id
+              @args[:current_step] = 3
+              render :action => :new, :locals => { :flow => @flow }
             end
           #Install - Couchbase
           when "4"
@@ -153,7 +155,9 @@ class FlowsController < ApplicationController
             if @flow.update_attributes(params[:flow]) then
               redirect_to @flow
             else
-              render :new
+              @args[:flow_id] = @flow.id
+              @args[:current_step] = 4
+              render :action => :new, :locals => { :flow => @flow }
             end
           #Install - Tomcat
           when "5"
@@ -168,7 +172,9 @@ class FlowsController < ApplicationController
             if @flow.update_attributes(params[:flow]) then
               redirect_to @flow
             else
-              render :new
+              @args[:flow_id] = @flow.id
+              @args[:current_step] = 5
+              render :action => :new, :locals => { :flow => @flow }
             end
           #Maintenance
           when "6"
@@ -270,7 +276,7 @@ class FlowsController < ApplicationController
             if @flow.update_attributes(params[:flow]) then #On success
               redirect_to @flow
             else #On failure
-              render :new
+              render :action => :new, :locals => { :flow => @flow }
             end
         end
     end
@@ -282,6 +288,7 @@ class FlowsController < ApplicationController
   def new #(new_flow -- GET /flows/new)
     @title = 'Nuevo flujo'
     @args = {:current_step => 1, :flow_id => nil}
+    render :action => :new, :locals => { :flow => nil }
   end
 
 ######################################################################

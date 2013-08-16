@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130812183905) do
+ActiveRecord::Schema.define(:version => 20130815203619) do
 
   create_table "configurations", :force => true do |t|
     t.integer  "node_id"
@@ -30,6 +30,7 @@ ActiveRecord::Schema.define(:version => 20130812183905) do
     t.string   "kind"
   end
 
+  add_index "flows", ["name"], :name => "index_flows_on_name", :unique => true
   add_index "flows", ["user_id", "created_at"], :name => "index_flows_on_user_id_and_created_at"
 
   create_table "nodes", :force => true do |t|
