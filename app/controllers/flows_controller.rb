@@ -276,6 +276,8 @@ class FlowsController < ApplicationController
             if @flow.update_attributes(params[:flow]) then #On success
               redirect_to @flow
             else #On failure
+              @args[:current_step] = 6
+              @args[:flow_id] = @flow.id
               render :action => :new, :locals => { :flow => @flow }
             end
         end

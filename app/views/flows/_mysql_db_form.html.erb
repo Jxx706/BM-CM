@@ -34,7 +34,7 @@
 
 
 	<%= label_tag "checkbox_db_backup", "¿Desea crear un respaldo?" %>
-	<%= check_box_tag "backup", (edit && hash_attributes.has_key?(:db_backup) ? "yes" : "no"), @flow.hash_attributes.has_key?(:db_backup), :id => "checkbox_db_backup", :onchange => 'changeIfChecked(this); $("#backup_options").toggle()' %>
+	<%= check_box_tag "backup", (edit && hash_attributes.has_key?(:db_backup) ? "yes" : "no"), @flow.hash_attributes.has_key?(:db_backup), :id => "checkbox_db_backup", :onchange => 'if (document.getElementById("checkbox_db_backup").checked) { $("#checkbox_db_backup").val("yes"); } else { $("#check_box_db:backup").val("no"); }; $("#backup_options").toggle()' %>
 	
 	<div id="backup_options">
 		<p>

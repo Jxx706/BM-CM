@@ -54,8 +54,8 @@ class User < ActiveRecord::Base
   		end
 
       def create_directory
-        self.directory_path = "C:\\Users\\Jxx706\\Documents\\GitHub\\BM-CM\\users_files\\#{self.email}"
-        #self.directory_path = "C:\\Users\\jesus\\Desktop\\Pasantia\\Proyecto\\bancaplus-postventa\\BM-CM\\users_files\\#{self.email}"
+        #self.directory_path = "C:\\Users\\Jxx706\\Documents\\GitHub\\BM-CM\\users_files\\#{self.email}"
+        self.directory_path = "C:\\Users\\jesus\\Desktop\\Pasantia\\Proyecto\\bancaplus-postventa\\BM-CM\\users_files\\#{self.email}"
 
         #The user's directory is created if isn't existed before.
         unless Dir.exists?(self.directory_path) then

@@ -18,7 +18,7 @@ class HashAttributesValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value) 
     #value = hash_attributes
     if record.kind == "install" then
-      if value["tool"] == "mysql" then
+      if value["tool"] == "mysql"  && value.size > 1 then
         #Port validations
         unless (1..65535).to_a.include?(value[:port].to_i) then
           record.errors[attribute] << "El puerto debe estar entre 1 y 65535."
@@ -29,7 +29,7 @@ class HashAttributesValidator < ActiveModel::EachValidator
         end
 
         #Group name
-        unless (1..16).to_a.include?(value[:root_group].size) then
+        unless !value[:root_group].nil? && (1..16).to_a.include?(value[:root_group].size) then
           record.errors[attribute] << "Nombre de grupo debe ser de maximo 16 caracteres."
         end
 
@@ -47,8 +47,13 @@ class HashAttributesValidator < ActiveModel::EachValidator
           record.errors[attribute] << "La direccion IP no es valida."
         end
 
-      elsif value["tool"] == "couchbase" then
+      elsif value["tool"] == "couchbase" && value.size > 1 then
       
+        #Size
+        unless value[:size] =~ /^\d+$/ then
+          record.errors[attribute] << "El tamano solo debe contener numeros."
+        end
+
         #User
         unless value[:user] =~ /^[_a-z][-0-9_a-z]*$/ then
           record.errors[attribute] << "Nombre de usuario no cumple formato; debe empezar con una letra o _ y continuar solo con letras, - o _"
@@ -62,7 +67,7 @@ class HashAttributesValidator < ActiveModel::EachValidator
         unless value[:password].to_i >= 6 then
           record.errors[attribute] << "Clave demasiado corta. Minimo 6 caracteres."
         end
-      elsif value["tool"] == "tomcat" then
+      elsif value["tool"] == "tomcat" && value.size > 1 then
       end          
     elsif record.kind == "maintenance" then
 
@@ -71,11 +76,11 @@ class HashAttributesValidator < ActiveModel::EachValidator
 
         #DB name
         unless !(db[:title].nil? || db[:title].blank?) then
-          record.errors[attribute] << "MySQL - El nombre es obligatorio."
+          record.errors[attribute] << "MySQL - El nombre de la base de datos es obligatorio."
         end
 
         unless db[:title] =~ /^[a-z][-0-9_a-z]*$/ then
-          record.errors[attribute] << "MySQL - Nombre no cumple formato; debe empezar con una letra y continuar solo con letras, - o _"
+          record.errors[attribute] << "MySQL - Nombre de la base de datos no cumple formato; debe empezar con una letra y continuar solo con letras, - o _"
         end
 
         #User
@@ -112,7 +117,22 @@ class HashAttributesValidator < ActiveModel::EachValidator
       end
 
       if value.has_key?(:db_backup) then
-        backup = value(:db_backup)
+        backup = value[:db_backup]
+
+        #User
+        if backup[:backupuser].nil? || backup[:backupuser].blank? then
+          record.errors[attribute] << "Backup - El nombre de usuario de respaldo es obligatorio."
+        end
+
+        unless backup[:backupuser] =~ /^[a-z][-0-9_a-z]*$/ then
+          record.errors[attribute] << "Backup - Nombre no cumple formato; debe empezar con una letra y continuar solo con letras, - o _"
+        end
+
+        #Password
+        unless backup[:backuppassword].to_i >= 6 then
+          record.errors[attribute] << "Backup - Clave demasiado corta. Minimo 6 caracteres."
+        end
+
       end
 
       if value.has_key?(:bucket) then

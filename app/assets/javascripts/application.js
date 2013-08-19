@@ -115,3 +115,12 @@ function validateName(this) {
 		return false;
 	}
 }
+
+function validateForm() {
+		var field =  document.getElementByName("user_name");
+		if (field.value == "") {
+			alert("Debe llevar nombre");
+			return false;
+		}
+		return true;
+	}

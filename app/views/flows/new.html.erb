@@ -74,12 +74,11 @@
 							<br>
 						</div>
 						<%= hidden_field_tag "current_step", "1" %>
-						<%= submit_tag "Siguiente", :data => { :confirm => "¿Estas seguro? "}, :class => "btn btn-primary" %>
 					</div>
 					
 
 					<% if !flow.nil? && flow.errors.any? %>
-		  				<div id="error_explanation", class="span4 alert alert-error alert-block">
+		  				<div id="error_explanation", class="span3 alert alert-error alert-block">
 			    			<h2><b><%= pluralize(flow.errors.count, "error", "errores") %></b> <%= flow.errors.count > 1 ? "prohibieron" : "prohibio" %> la creación de este Flujo:</h2>
 			 
 			    			<ul>
@@ -89,6 +88,8 @@
 				    		</ul>
 		  				</div>
 					<% end %>
+					<hr>
+					<%= submit_tag "Siguiente", :data => { :confirm => "¿Estas seguro? "}, :class => "btn btn-primary" %>
 				<% end %>						
 
 			<% when 2 %>
@@ -157,6 +158,8 @@
 					</div>
 					<%= hidden_field_tag "current_step", "2" %>
 					<%= hidden_field_tag "flow_id", @args[:flow_id] %>
+
+					<hr>
 					<%= link_to :back, :class => "btn btn-warning" do %>
 						<i class="icon-white icon-backward"></i> Atrás
 					<% end %>
@@ -168,21 +171,56 @@
 					<%= content_for :mysql %>
 					<%= hidden_field_tag "current_step", "3" %>
 					<%= hidden_field_tag "flow_id", @args[:flow_id] %>
+		
+					<% if !flow.nil? && flow.errors.any? %>
+		  				<div id="error_explanation", class="alert alert-error alert-block">
+			    			<h2><b><%= pluralize(flow.errors.count, "error", "errores") %></b> <%= flow.errors.count > 1 ? "prohibieron" : "prohibio" %> la creación de este Flujo:</h2>
+			 
+			    			<ul>
+				    			<% flow.errors.each do |attr, msg| %>
+					      			<li><%= msg %></li>
+					    		<% end %>
+				    		</ul>
+		  				</div>
+					<% end %>
+
+					<hr>
 					<%= link_to :back, :class => "btn btn-warning" do %>
 						<i class="icon-white icon-backward"></i> Atrás
 					<% end %>
 					<%= submit_tag "Siguiente", :data => { :confirm => "¿Estas seguro? "}, :class => "btn btn-primary" %>
+
 				<% end %>
 			<% when 4 %>
 				<%= form_tag({:controller => :flows, :action => :create}, :method => :post) do %>
 					<%= render :partial => "flows/couchbase_form", :locals => { :edit => false } %>
 					<%= content_for :couchbase %>
 					<%= hidden_field_tag "current_step", "4" %>
-					<%= hidden_field_tag "flow_id", @args[:flow_id] %>
-					<%= link_to :back, :class => "btn btn-warning" do %>
-						<i class="icon-white icon-backward"></i> Atrás
+					<%= hidden_field_tag "flow_id", @args[:flow_id] %>	
+					
+					
+
+					<% if !flow.nil? && flow.errors.any? %>
+		  				<div id="error_explanation" class="alert alert-error alert-block">
+			    			<h2><b><%= pluralize(flow.errors.count, "error", "errores") %></b> <%= flow.errors.count > 1 ? "prohibieron" : "prohibio" %> la creación de este Flujo:</h2>
+			 
+			    			<ul>
+				    			<% flow.errors.each do |attr, msg| %>
+					      			<li><%= msg %></li>
+					    		<% end %>
+				    		</ul>
+		  				</div>
 					<% end %>
-					<%= submit_tag "Siguiente", :data => { :confirm => "¿Estas seguro? "}, :class => "btn btn-primary" %>
+					
+					<div>
+						<hr>
+						<%= link_to :back, :class => "btn btn-warning" do %>
+							<i class="icon-white icon-backward"></i> Atrás
+						<% end %>
+						<%= submit_tag "Siguiente", :data => { :confirm => "¿Estas seguro? "}, :class => "btn btn-primary" %>
+					</div>
+					
+					
 				<% end %>
 			<% when 5 %>
 				<%= form_tag({:controller => :flows, :action => :create}, :method => :post) do %>
@@ -190,6 +228,20 @@
 					<%= content_for :tomcat %>
 					<%= hidden_field_tag "current_step", "5" %>
 					<%= hidden_field_tag "flow_id", @args[:flow_id] %>
+
+					<% if !flow.nil? && flow.errors.any? %>
+		  				<div id="error_explanation" class="alert alert-error alert-block">
+			    			<h2><b><%= pluralize(flow.errors.count, "error", "errores") %></b> <%= flow.errors.count > 1 ? "prohibieron" : "prohibio" %> la creación de este Flujo:</h2>
+			 
+			    			<ul>
+				    			<% flow.errors.each do |attr, msg| %>
+					      			<li><%= msg %></li>
+					    		<% end %>
+				    		</ul>
+		  				</div>
+					<% end %>
+
+					<hr>
 					<%= link_to :back, :class => "btn btn-warning" do %>
 						<i class="icon-white icon-backward"></i> Atrás
 					<% end %>
@@ -198,6 +250,19 @@
 
 			<% when 6 %>
 				<%= form_tag({:controller => :flows, :action => :create}, :method => :post) do %>
+
+					<% if !flow.nil? && flow.errors.any? %>
+		  				<div id="error_explanation" class="alert alert-error alert-block">
+			    			<h2><b><%= pluralize(flow.errors.count, "error", "errores") %></b> <%= flow.errors.count > 1 ? "prohibieron" : "prohibio" %> la creación de este Flujo:</h2>
+			 
+			    			<ul>
+				    			<% flow.errors.each do |attr, msg| %>
+					      			<li><%= msg %></li>
+					    		<% end %>
+				    		</ul>
+		  				</div>
+					<% end %>
+
 					<%= render "flows/maintenance" %>
 					<%= content_for :maintenance %>
 					<%= hidden_field_tag "current_step", "6" %>
@@ -206,6 +271,7 @@
 						<i class="icon-white icon-backward"></i> Atrás
 					<% end %>
 					<%= submit_tag "Siguiente", :data => { :confirm => "¿Estas seguro? "}, :class => "btn btn-primary" %>
+
 				<% end %>
 		<% end %>
 

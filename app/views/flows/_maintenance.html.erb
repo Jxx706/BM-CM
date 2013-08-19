@@ -45,22 +45,6 @@
 				onclick='$("#mysql-config").toggle(); if ($("#mysql_active").val() == "no") { $("#mysql_active").val("yes"); } else { $("#mysql_active").val("no"); };'>
 
 			<div id="mysql-config">
-				<div>
-					<!-- Explanation button -->
-					<a href="#explanation6_1" role="button" class="btn btn-small btn-inverse" data-toggle="modal">
-						Explicación
-					</a>
-					<%= render "flows/help_partials/explanation6_1" %>
-
-					<!-- Fields help button -->
-					<a href="#help6_1" role="button" class="btn btn-small btn-info" data-toggle="modal">
-						Ayuda
-					</a>
-					<%= render "flows/help_partials/help6_1" %>
-				</div>
-				<br>
-				<br>
-	
 				<%= render :partial => "flows/mysql_db_form", :locals => { :edit => false } %>
 				<%= content_for :mysql_db %>
 			</div>
@@ -82,22 +66,6 @@
 				 onclick='$("#couchbase-config").toggle(); if ($("#couchbase_active").val() == "no") { $("#couchbase_active").val("yes"); } else { $("#couchbase_active").val("no"); };' >
 
 			<div id="couchbase-config">
-				<div>
-					<!-- Explanation button -->
-					<a href="#explanation6_2" role="button" class="btn btn-small btn-inverse" data-toggle="modal">
-						Explicación
-					</a>
-					<%= render "flows/help_partials/explanation6_1" %>
-
-					<!-- Fields help button -->
-					<a href="#help6_2" role="button" class="btn btn-small btn-info" data-toggle="modal">
-						Ayuda
-					</a>
-					<%= render "flows/help_partials/help6_2" %>
-				</div>
-				<br>
-				<br>
-					
 				<%= render :partial => "flows/couchbase_bucket_form", :locals => { :edit => false } %>
 				<%= content_for :couchbase_bucket %>
 			</div>
@@ -120,22 +88,6 @@
 				 onclick='$("#tomcat-config").toggle(); if ($("#tomcat_active").val() == "no") { $("#tomcat_active").val("yes"); } else { $("#tomcat_active").val("no"); };'>
 
 			<div id="tomcat-config">
-				<div>
-					<!-- Explanation button -->
-					<a href="#explanation6_3" role="button" class="btn btn-small btn-inverse" data-toggle="modal">
-						Explicación
-					</a>
-					<%= render "flows/help_partials/explanation6_3" %>
-
-					<!-- Fields help button -->
-					<a href="#help6_3" role="button" class="btn btn-small btn-info" data-toggle="modal">
-						Ayuda
-					</a>
-					<%= render "flows/help_partials/help6_3" %>
-				</div>
-				<br>
-				<br>
-
 				<%= render :partial => "flows/tomcat_instance_form", :locals => { :edit => false } %>
 				<%= content_for :tomcat_instance %>
 			</div>
