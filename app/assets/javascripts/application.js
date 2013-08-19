@@ -13,6 +13,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require bootstrap
+//= require_self
 //= require_tree .
 //
 
@@ -103,16 +104,14 @@ function switchConfigTool(text_id, field_id) {
 
 }
 
-///// User validations ///////
+/* User validations */
 
-function validateUserForm() {
+function validateName(this) {
 
 	//Validate presence of Name
-	if (document.getElementById("user_name").value == "x") {
+	if (this.value == "x") {
 		alert("El NOMBRE es obligatorio");
-		document.getElementById("user_name").focus();
+		this.focus();
 		return false;
 	}
-
-	if (document.getElementById)
 }

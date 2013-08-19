@@ -71,7 +71,7 @@ class HashAttributesValidator < ActiveModel::EachValidator
 
         #DB name
         unless !(db[:title].nil? || db[:title].blank?) then
-          report.errors[attribute] << "MySQL - El nombre es obligatorio."
+          record.errors[attribute] << "MySQL - El nombre es obligatorio."
         end
 
         unless db[:title] =~ /^[a-z][-0-9_a-z]*$/ then
@@ -80,7 +80,7 @@ class HashAttributesValidator < ActiveModel::EachValidator
 
         #User
         unless !(db[:user].nil? || db[:title].blank?) then
-          report.errors[attribute] << "MySQL - El nombre de usuario es obligatorio."
+          record.errors[attribute] << "MySQL - El nombre de usuario es obligatorio."
         end
 
         unless db[:user] =~ /^[a-z][-0-9_a-z]*$/ then
@@ -102,7 +102,11 @@ class HashAttributesValidator < ActiveModel::EachValidator
         end
 
         #Grant
-        if db[:grant].include?('all') && db[:grant].size > 1 then 
+        if db[:grant].nil? then
+          record.errors[attribute] << "MySQL - Debe especificar los permisos."
+        end
+
+        if !db[:grant].nil? && db[:grant].include?('all') && db[:grant].size > 1 then 
           record.errors[attribute] << "MySQL - Si especifica TODOS, no puede escoger mas opciones."
         end
       end
@@ -116,7 +120,7 @@ class HashAttributesValidator < ActiveModel::EachValidator
 
         #Bucket name
         unless !(bucket[:title].nil? || bucket[:title].blank?) then
-          report.errors[attribute] << "Couchbase - El nombre es obligatorio."
+          record.errors[attribute] << "Couchbase - El nombre es obligatorio."
         end
 
         unless bucket[:title] =~ /^[a-z][-0-9_a-z]*$/ then
@@ -148,7 +152,7 @@ class HashAttributesValidator < ActiveModel::EachValidator
 
         #Bucket name
         unless !(instance[:name].nil? || instance[:name].blank?) then
-          report.errors[attribute] << "Tomcat - El nombre es obligatorio."
+          record.errors[attribute] << "Tomcat - El nombre es obligatorio."
         end
 
         unless instance[:name] =~ /^[a-z][-0-9_a-z]*$/ then
@@ -190,9 +194,9 @@ class HashAttributesValidator < ActiveModel::EachValidator
           record.errors[attribute] << "Tomcat - El puerto AJP debe ser un entero."
         end
 
-        if instance[:server_port].to_i == instance[:http_port].to_i 
-          || instance[:server_port].to_i == instance[:ajp_port].to_i 
-          || instance[:http_port].to_i ==  instance[:ajp_port].to_i then
+        if (instance[:server_port].to_i == instance[:http_port].to_i) || 
+          (instance[:server_port].to_i == instance[:ajp_port].to_i) || 
+          (instance[:http_port].to_i == instance[:ajp_port].to_i) then
           record.errors[attribute] << "Tomcat - Los puertos deben ser diferentes."
         end
       end
@@ -289,9 +293,9 @@ class Flow < ActiveRecord::Base
     serialize :hash_attributes, Hash 
 
     validates :name, :presence => { :message => "El flujo debe llevar un nombre."},
-                     :uniqueness => { :case_sensitive => true, :message => "Nombre de flujo ya en uso." }
+                     :uniqueness => { :case_sensitive => true, :message => "Nombre de flujo ya en uso." }, :on => :create
 
-    validates :hash_attributes, :hash_attributes => true                    
+    validates :hash_attributes, :hash_attributes => true, :on => :update                    
 
   	belongs_to :user
     has_many :configurations

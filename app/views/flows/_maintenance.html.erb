@@ -42,7 +42,7 @@
 
 			<%= hidden_field_tag "mysql_active", "no" %>
 			<img src="/assets/mysql1.png" height="275" width="275" 
-				onclick='$("#mysql-config").toggle();  toggleValue("mysql_active", "yes", "no")'>
+				onclick='$("#mysql-config").toggle(); if ($("#mysql_active").val() == "no") { $("#mysql_active").val("yes"); } else { $("#mysql_active").val("no"); };'>
 
 			<div id="mysql-config">
 				<div>
@@ -79,7 +79,7 @@
 
 			<%= hidden_field_tag "couchbase_active", "no" %>
 			<img src="/assets/couchbase-logo.png" height="275" width="275"
-				 onclick='$("#couchbase-config").toggle();  toggleValue("couchbase_active", "yes", "no")' >
+				 onclick='$("#couchbase-config").toggle(); if ($("#couchbase_active").val() == "no") { $("#couchbase_active").val("yes"); } else { $("#couchbase_active").val("no"); };' >
 
 			<div id="couchbase-config">
 				<div>
@@ -117,7 +117,7 @@
 
 			<%= hidden_field_tag "tomcat_active", "no" %>
 			<img src="/assets/tomcat-logo.png" height="275" width="275"
-				 onclick='$("#tomcat-config").toggle();  toggleValue("tomcat_active", "yes", "no")'>
+				 onclick='$("#tomcat-config").toggle(); if ($("#tomcat_active").val() == "no") { $("#tomcat_active").val("yes"); } else { $("#tomcat_active").val("no"); };'>
 
 			<div id="tomcat-config">
 				<div>
