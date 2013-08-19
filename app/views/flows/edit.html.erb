@@ -46,7 +46,7 @@
 
 
 
-			<div>
+			<div class="container">
 				<% case @flow.kind %>
 					<% when "install" %>
 						<% case @flow.hash_attributes["tool"] %>
@@ -75,9 +75,11 @@
 								<%= @flow.hash_attributes.has_key?('db') ? "Configurar" : "No configurar (eliminar configuracion)" %>
 							</p>
 							<%= button_to_function "Cambiar", 'switchConfigTool("#db-text", "#mysql_active")', :class => "btn btn-link" %>
+
 							<%= hidden_field_tag "mysql_active", (@flow.hash_attributes.has_key?("db") ? "yes" : "no") %>
 
 							<br>
+
 							<br>
 
 							<% if @flow.hash_attributes.has_key?("db") then %>
@@ -145,8 +147,44 @@
 			</div>
 			<br>
 			<br>
+
+			<% if !flow.nil? && flow.errors.any? %>
+		  		<div id="error_explanation" class="alert alert-error alert-block">
+					<h2><b><%= pluralize(flow.errors.count, "error", "errores") %></b> <%= flow.errors.count > 1 ? "prohibieron" : "prohibio" %> la creación de este Flujo:</h2>
+			 
+			    	<ul>
+						<% flow.errors.each do |attr, msg| %>
+							<li><%= msg %></li>
+					    <% end %>
+				    </ul>
+		  		</div>
+			<% end %>
+
 			<%= submit_tag "Guardar cambios", :data => { :confirm => "¿Estas seguro?"}, :class => "btn btn-primary" %>
 			<%= link_to "Descartar", flow_path(@flow), :class => "btn btn-danger" %>
 		<% end %>
 	</div>
 </div>
+
+<%= javascript_tag do %>
+	function switchConfigTool(text_id, field_id) {
+		var text = $(text_id);
+		var field = $(field_id);
+
+		if (field.val() == "yes") {
+			field.val("no")
+		} else {
+			field.val("yes")
+		};
+
+		if (text.hasClass("text-error")) {
+			text.removeClass("text-error");
+			text.addClass("text-success");
+			text.text("Configurar");
+		} else {
+			text.removeClass("text-success");
+			text.addClass("text-error");
+			text.text("No configurar (eliminar configuracion)");
+		}
+	}
+<% end %>

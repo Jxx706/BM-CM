@@ -515,7 +515,7 @@ class FlowsController < ApplicationController
       redirect_to @flow
     else
       @title = "Editar flujo."
-      render 'edit' #Comes back to the edit page 
+      render :action => :edit, :locals => { :flow => @flow } #Comes back to the edit page 
     end
   end
 
@@ -524,6 +524,7 @@ class FlowsController < ApplicationController
   def edit #(edit_flow -- GET /flows/:id/edit)
     @title = "Editar flujo"
     @flow = current_user.flows.find(params[:id]) #Retrieves the info of the flow instance with id = :id
+    render :action => :edit, :locals => { :flow => nil }
   end
 
 ######################################################################

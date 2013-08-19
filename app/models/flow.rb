@@ -38,7 +38,7 @@ class HashAttributesValidator < ActiveModel::EachValidator
         end
           
         #Root password
-        unless value[:root_password].to_i >= 6 then
+        unless value[:root_password].size >= 6 then
           record.errors[attribute] << "Clave demasiado corta. Minimo 6 caracteres."
         end
 
@@ -64,7 +64,7 @@ class HashAttributesValidator < ActiveModel::EachValidator
         end
 
         #Password
-        unless value[:password].to_i >= 6 then
+        unless value[:password].size >= 6 then
           record.errors[attribute] << "Clave demasiado corta. Minimo 6 caracteres."
         end
       elsif value["tool"] == "tomcat" && value.size > 1 then
@@ -98,7 +98,7 @@ class HashAttributesValidator < ActiveModel::EachValidator
         end
 
          #Password
-        unless db[:password].to_i >= 6 then
+        unless db[:password].size >= 6 then
           record.errors[attribute] << "MySQL - Clave demasiado corta. Minimo 6 caracteres."
         end
 
@@ -129,7 +129,7 @@ class HashAttributesValidator < ActiveModel::EachValidator
         end
 
         #Password
-        unless backup[:backuppassword].to_i >= 6 then
+        unless backup[:backuppassword].size >= 6 then
           record.errors[attribute] << "Backup - Clave demasiado corta. Minimo 6 caracteres."
         end
 
@@ -162,7 +162,7 @@ class HashAttributesValidator < ActiveModel::EachValidator
         end   
 
         #Password
-        unless bucket[:password].to_i >= 6 then
+        unless bucket[:password].size >= 6 then
           record.errors[attribute] << "Couchbase - Clave demasiado corta. Minimo 6 caracteres."
         end
       end
