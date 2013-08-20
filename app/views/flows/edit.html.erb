@@ -37,7 +37,7 @@
 				<%= 
 					options_array = (current_user.nodes.map { |n| n.fqdn }).reject { |n| (@flow.nodes.map { |n2| n2.fqdn }).include?(n) }
 
-					select_tag "nodes_to_vinculate", options_for_select(options_array), :multiple => true 
+					select_tag "nodes_to_attach", options_for_select(options_array), :multiple => true 
 				%>
 				<br>
 			</div>

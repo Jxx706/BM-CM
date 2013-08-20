@@ -1,6 +1,6 @@
 class FlowsController < ApplicationController
 
-  skip_before_filter :verify_authenticity_token, :only => [:create, :vinculate]
+  skip_before_filter :verify_authenticity_token, :only => [:create, :handle_nodes]
 
 ######################################################################
   def home #(flows_home_path)
@@ -37,7 +37,10 @@ class FlowsController < ApplicationController
         #params[:flow][:file_path] =  current_user.directory_path << (params[:flow][:node_name].empty? ? "\\#{params[:flow][:name]}.pp" : "\\#{params[:flow][:node_name]}\\#{params[:flow][:name]}.pp")
         params[:flow][:hash_attributes] = Hash.new
         params[:flow][:body] = String.new
-        nodes = params[:flow][:nodes].nil? ? nil : params[:flow][:nodes].delete_if { |e| e.blank? || e.nil? } 
+
+        #Remove the array of nodes from params, and take those elements which are empty and asign them
+        #to the variable 'nodes'.
+        nodes = params[:flow][:nodes].nil? ? nil : (params[:flow].delete(:nodes)).delete_if { |e| e.blank? || e.nil? } 
         @flow = current_user.flows.build(params[:flow])
 
         #If the nodes names have been provided, then create the corresponding association.
@@ -135,6 +138,7 @@ class FlowsController < ApplicationController
             else
               @args[:flow_id] = @flow.id
               @args[:current_step] = 3
+              @flow.hash_attributes.clear
               render :action => :new, :locals => { :flow => @flow }
             end
           #Install - Couchbase
@@ -157,6 +161,7 @@ class FlowsController < ApplicationController
             else
               @args[:flow_id] = @flow.id
               @args[:current_step] = 4
+              @flow.hash_attributes.clear
               render :action => :new, :locals => { :flow => @flow }
             end
           #Install - Tomcat
@@ -174,6 +179,7 @@ class FlowsController < ApplicationController
             else
               @args[:flow_id] = @flow.id
               @args[:current_step] = 5
+              @flow.hash_attributes.clear
               render :action => :new, :locals => { :flow => @flow }
             end
           #Maintenance
@@ -278,6 +284,7 @@ class FlowsController < ApplicationController
             else #On failure
               @args[:current_step] = 6
               @args[:flow_id] = @flow.id
+              @flow.hash_attributes.clear
               render :action => :new, :locals => { :flow => @flow }
             end
         end
@@ -503,18 +510,21 @@ class FlowsController < ApplicationController
     end
 
       #Associate with the specified nodes
-    unless params[:nodes_to_vinculate].nil? || params[:nodes_to_vinculate].empty?  then
-      params[:nodes_to_vinculate].each do |node_fqdn|
+    unless params[:nodes_to_attach].nil? || params[:nodes_to_attach].empty?  then
+      params[:nodes_to_attach].each do |node_fqdn|
         n = current_user.nodes.find_by_fqdn(node_fqdn)
         @flow.nodes << n
       end
     end
+
+    old_hash = @flow.hash_attributes #Just in case the record doesn't save 
 
     if @flow.update_attributes(params[:flow])
       flash[:success] = "Flujo actualizado con exito."
       redirect_to @flow
     else
       @title = "Editar flujo."
+      @flow.hash_attributes = old_hash #Since it diden't save, then retake the old values
       render :action => :edit, :locals => { :flow => @flow } #Comes back to the edit page 
     end
   end
@@ -529,14 +539,18 @@ class FlowsController < ApplicationController
 
 ######################################################################
 
-  def vinculate 
+  def handle_flows
     @flow = current_user.flows.find(params[:flow_id])
 
-    unless params[:nodes_to_vinculate].nil? || params[:nodes_to_vinculate].empty? then
-      params[:nodes_to_vinculate].each do |node_fqdn|
+    unless params[:nodes_to_attach].nil? || params[:nodes_to_attach].empty? then
+      params[:nodes_to_attach].each do |node_fqdn|
         n = current_user.nodes.find_by_fqdn(node_fqdn)
         @flow.nodes << n
       end
+    end
+
+    unless params[:nodes_to_deattach].nil? || params[:nodes_to_deattach].empty? then
+      @flow.nodes.reject { |n| params[:nodes_to_deattach].include?(n.node_fqdn) }
     end
 
     if @flow.save! then

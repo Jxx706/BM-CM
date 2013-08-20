@@ -1,7 +1,7 @@
 class NodesController < ApplicationController
 
 	
-  skip_before_filter :verify_authenticity_token, :only => [:create, :vinculate]	
+  skip_before_filter :verify_authenticity_token, :only => [:create, :handle_flows]	
   def new
   	@title = "Nuevo nodo"
   	@node = Node.new
@@ -37,14 +37,18 @@ class NodesController < ApplicationController
   	@title = "Nodos"
   end
 
-  def vinculate 
+  def handle_flows 
     @node = current_user.nodes.find(params[:node_id])
 
-    unless params[:flows_to_vinculate].nil? || params[:flows_to_vinculate].empty? then
-      params[:flows_to_vinculate].each do |flow_name|
+    unless params[:flows_to_attach].nil? || params[:flows_to_attach].empty? then
+      params[:flows_to_attach].each do |flow_name|
         f = current_user.flows.find_by_name(flow_name)
         @node.flows << f
       end
+    end
+
+    unless params[:flows_to_deattach].nil? || params[:flows_to_deattach].empty? then
+      @node.flows.reject { |f| params[:flows_to_deattach].include?(f.name) }
     end
 
     if @node.save! then

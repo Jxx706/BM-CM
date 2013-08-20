@@ -56,5 +56,5 @@
 		<%= label_tag "attr_db_backup_dir", "Directorio de respaldo" %>
 		<%= text_field_tag "attr[db_backup][backupdir]", nil, :id => "attr_db_backup_dir", :placeholder => edit && hash_attributes.has_key?("db_backup") ? hash_attributes["db_backup"]["backupdir"] : "" %>
 	</div>
-	<%= javascript_tag "$('#backup_options').hide();" %>
+	<%= javascript_tag "$(function () {if ($('#backup').val() == 'no') { $('#backup_options').hide()}}" %>
 <% end %>

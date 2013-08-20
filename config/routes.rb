@@ -22,8 +22,8 @@ BmCm::Application.routes.draw do
   match '/installers/destroy', :to =>  'installers#destroy', :as => "destroy_installer", :via => :delete
   match '/nodes/:id/download_conf', :to => "nodes#download_conf", :via => :get, :as => "download_conf_node"
   match '/node_flows/:id', :to => "nodes#index_flows", :via => :get, :as => "node_flows"
-  match '/node_vinculate', :to => "nodes#vinculate", :via => :post
-  match '/flow_vinculate', :to => "flows#vinculate", :via => :post
+  match '/node_handle_flows', :to => "nodes#node_handle_flows", :via => :post
+  match '/flow_handle_nodes', :to => "flows#handle_nodes", :via => :post
   match '/nodes/:node_id/reports/:id/download', :to => "reports#download", :via => :get, :as => "download_report"
   match '/nodes_and_reports', :to => 'nodes#index_nodes_and_reports', :via => :get, :as => 'nodes_and_reports'
   # The priority is based upon order of creation:

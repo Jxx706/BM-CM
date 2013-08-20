@@ -30,12 +30,12 @@ class Node < ActiveRecord::Base
 
   private
   	def create_fqdn
-  		self.fqdn = "#{self.hostname}.#{self.domain}"
+  		self.fqdn = "#{self.hostname}.#{self.domain}" unless self.domain.nil? || self.domain.blank?
   	end
 
     def create_directory
-      #self.directory_path = "C:\\Users\\Jxx706\\Documents\\GitHub\\BM-CM\\node_reports\\#{self.fqdn}"
-      self.directory_path = "C:\\Users\\jesus\\Desktop\\Pasantia\\Proyecto\\bancaplus-postventa\\BM-CM\\nodes_reports\\#{self.fqdn}"
+      self.directory_path = "C:\\Users\\Jxx706\\Documents\\GitHub\\BM-CM\\node_reports\\#{self.fqdn}"
+      #self.directory_path = "C:\\Users\\jesus\\Desktop\\Pasantia\\Proyecto\\bancaplus-postventa\\BM-CM\\nodes_reports\\#{self.fqdn}"
 
       #The node's directory is created if isn't existed before.
       unless Dir.exists?(self.directory_path) then

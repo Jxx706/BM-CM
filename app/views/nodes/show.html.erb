@@ -32,25 +32,42 @@
 
 	<div class="span4">
 		<div class="alert alert-info">
-			Hasta el momento tienes <%= pluralize(current_user.nodes.count, 'nodo', 'nodos') %>.
-			<br>
-			<br>
+			<% if current_user.nodes.size < 10 %>
+				Hasta el momento tienes <%= pluralize(current_user.nodes.count, 'nodo', 'nodos') %>.
+				<br>
+				<br>
 
-			<%= link_to new_node_path, :class => "btn btn-small btn-primary" do %>
-				<b><big>¿Deseas añadir otro?</big></b>
+				<%= link_to new_node_path, :class => "btn btn-small btn-primary" do %>
+					<b><big>¿Deseas añadir otro?</big></b>
+				<% end %>
+			<% else %>
+				Has alcanzado tu límite de nodos (10).
 			<% end %>
 		</div>
 
-		<div class="alert ">
-			<%= form_tag({:controller => :nodes, :action => :vinculate}, :method => :post) do %>
-				¿Deseas vincular flujos a este nodo? Escógelos aquí:
+		<div class="alert alert-success">
+			<%= form_tag({:controller => :nodes, :action => :handle_flows}, :method => :post) do %>
+				Gestión de flujos:
 				<br>
 				<br>
 
 				<%= hidden_field_tag "node_id", @node.id %>
-				<%= select_tag "flows_to_vinculate", options_for_select(current_user.flows.map { |f| f.name }), :multiple => true %>
+				<%= label_tag 'flows_to_attach', "Flujos a vincular" %>
+				<%= 
+					options = (current_user.flows.map { |f| f.name } ).reject { |f| @node.flows.include?(f) }
+					select_tag "flows_to_attach", options_for_select(options), :multiple => true 
+				%>
+				<%= label_tag 'flows_to_deattach', 'Flujos a desvincular' %>
+				<%= 
+					options = @node.flows.empty? ? [] : @node.flows.map { |f| f.name }
+					select_tag "flows_to_deattach", options_for_select(options), :multiple => true 
+				%>
 				<%= submit_tag "Aceptar", :data => { :confirm => "¿Estas seguro?" }, :class => "btn btn-small btn-primary" %>
 			<% end %>
+		</div>
+
+		<div class="alert">
+			
 		</div>
 	</div>
 </div>

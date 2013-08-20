@@ -138,20 +138,26 @@
 			<% end %>
 
 			<hr>
-			<%= form_tag({:controller => :flows, :action => :vinculate}, :method => :post) do %>
+			<%= form_tag({:controller => :flows, :action => :handle_nodes}, :method => :post) do %>
 				<p>
 					<big>
-						¿Deseas vincular este flujo a otros nodos?
-						Escoge a cuales aquí:
+						Gestión de nodos
 					</big>
 				</p>
 
 				<%= hidden_field_tag "flow_id", @flow.id %>
+				<%= label_tag 'nodes_to_attach', "Nodos a vincular" %>
 				<%= 
 					options_array = (current_user.nodes.map { |n| n.fqdn }).reject { |n| (@flow.nodes.map { |n2| n2.fqdn }).include?(n) }
 
-					select_tag "nodes_to_vinculate", options_for_select(options_array), :multiple => true 
+					select_tag "nodes_to_attach", options_for_select(options_array), :multiple => true 
 				%>
+				<%= label_tag 'nodes_to_deattach', "Nodos a desvincular" %>
+				<%=
+					options_array =  @flow.nodes.empty? ? [] : @flow.nodes.map { |n| n.fqdn }
+					select_tag 'nodes_to_deattach', options_for_select(options_array), :multiple => true 
+				%>
+				
 				<br>
 				<%= submit_tag "Aceptar", :data => { :confirm => "¿Estas seguro?"}, :class => "btn btn-primary" %>
 
