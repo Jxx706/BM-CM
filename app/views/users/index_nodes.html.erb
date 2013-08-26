@@ -1,0 +1,37 @@
+<div class="row-fluid">
+	<!-- sidebar -->
+	<div class="span3">
+		<%= render "users/sidebar" %>
+	</div>
+
+	<div class="span9">
+		<div class="page-header">
+			<h1>Nodos de <%= @nodes[0] %></h1>
+		</div>
+
+		<% @nodes[1].each do |n| %>
+			<div class="well">
+				<address>
+					<strong><%= "#{n.hostname}" %></strong><br>
+					<abbr title="Direccion IP">IP:</abbr> <%= n.ip %><br>
+					Creado: <%= n.created_at.strftime("%B %d, %Y") %><br>
+					Última vez modificado: <%= n.updated_at.strftime("%B, %d, %Y") %><br>
+				</address>
+
+				<address>
+					<strong>Flujos asociados</strong>
+					<% if n.flows.any? %>
+						<ul>
+							<% (n.flows.map { |f| f.name }).each do |flow_name| %>
+								<li><%= flow_name %></li>
+							<% end %>
+						</ul>
+					<% else %>
+						<p class="text-error">Ninguno</p>
+					<% end %>
+				</address>
+			</div>
+		<% end%>
+
+	</div>
+</div>

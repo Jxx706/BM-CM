@@ -96,6 +96,18 @@ class NodesController < ApplicationController
   def destroy
   	@node = current_user.nodes.find(params[:id])
 
+    #Remove this node's directory.
+    if Dir.exists?(@node.directory_path) then
+      entries = Dir.entries(@node.directory_path)
+      entries.delete(".")
+      entries.delete("..")
+      entries.each do |e|
+        File.delete(e)
+      end
+
+      Dir.rmdir(@node.directory_path)
+    end
+
   	if @node.destroy then
       @nodes = current_user.nodes
   		render :index

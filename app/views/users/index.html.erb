@@ -1,0 +1,86 @@
+<div class="row-fluid">
+	<div class="span3">
+		<%= render "users/sidebar" %>
+	</div>
+
+	<div class="span9">
+		<% if @users.size > 1 then %>
+
+			<% if (@users.select { |u| u.super_admin?}).any? %>
+				<div class="page-header">
+					<h2>Súper-Administradores <i class="icon-star"></i><h2>
+				</div>
+
+				<% (@users.select { |u| u.super_admin? }).each do |s_adm| 
+					%>
+					<div class="well">
+						<address>
+							<strong><%= "#{s_adm.name} #{s_adm.last_name}"%></strong><br>
+							<abbr title="E-mail">M:</abbr> <%= s_adm.email %><br>
+							Activo desde: <%= s_adm.created_at.strftime("%B, %d, %Y") %><br>
+							Última vez modificado: <%= s_adm.updated_at.strftime("%B, %d, %Y") %><br>
+						</address>
+					</div>
+				<% end %>
+			<% end %>
+
+			<% if (@users.reject { |u| u.super_admin? }).any? %>
+				<div class="page-header">
+					<h2>Administradores<h2>
+				</div>
+
+				<% (@users.reject { |u| u.super_admin? }).each do |adm| %>
+					<div class="well">
+						<address>
+							<strong><%= "#{adm.name} #{adm.last_name}"%></strong><br>
+							<abbr title="E-mail">M:</abbr> <%= adm.email %><br>
+							Activo desde: <%= adm.created_at %><br>
+							Última vez modificado: <%= adm.updated_at %><br>
+						</address>
+
+						<address>
+							<strong>Número de flujos</strong><br>
+								<%= adm.flows.count %>
+						</address>
+
+						<address>
+							<strong>Número de nodos</strong><br>
+								<%= adm.nodes.count %>
+						</address>
+						<hr>
+
+						<% if adm.nodes.any? %>
+							<%= link_to user_nodes_path(adm), :class => "btn btn-info" do %>
+								<i class="icon-white icon-hdd"></i> Ver nodos
+							<% end %>
+						<% else %>
+							<%= link_to '#this', :class => "btn btn-info", :onclick => 'alert("Este usuario no tiene ningun nodo.")', :disabled => "disabled" do %>
+								<i class="icon-white icon-hdd"></i> Ver nodos
+							<% end %>
+						<% end %>
+
+						<% if adm.flows.any? %>
+							<%= link_to user_flows_path(adm), :class => "btn btn-warning" do %>
+								<i class="icon-white icon-tasks"></i> Ver flujos
+							<% end %>
+						<% else %>
+							<%= link_to '#this', :class => "btn btn-warning", :onclick => 'alert("Este usuario no tiene ningun flujo.")', :disabled => "disabled" do %>
+								<i class="icon-white icon-tasks"></i> Ver flujos
+							<% end %>
+						<% end %>
+
+						<% if adm.marked_as_deletable? then %>
+							<%= link_to user_path(adm), :class => "btn btn-danger", :data => { :confirm => '¿Estas seguro?' } do %>
+								<i class="icon-white icon-remove"></i>Eliminar
+							<% end %>
+						<% else %>
+							<%= link_to '#this', :class => "btn btn-danger", :onclick => 'alert("Este usuario no ha sido marado como \'Eliminable\'")', :disabled => "disabled" do %>
+								<i class="icon-white icon-remove"></i>Eliminar
+							<% end %>
+						<% end %>
+					</div>
+				<% end %>
+			<% end %>
+		<% end %>
+	</div>
+</div>

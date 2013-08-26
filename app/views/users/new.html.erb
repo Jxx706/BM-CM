@@ -19,6 +19,9 @@
 				<%= f.label :password_confirmation, "Repita su contraseña" %>
 				<%= f.password_field :password_confirmation %>
 
+				<%= label_tag "user[super_admin]", "¿Super-Administrador?" %>
+				<%= check_box_tag "user[super_admin]", "0", false, :onchange => 'if ($("#user_super_admin").is(":checked")) { $("#user_super_admin").val("1"); } else {$("#user_super_admin").val("0"); }' %>
+
 				<p> 
 					<%= f.submit "Crear Usuario", :class => "btn btn-large btn-primary" %>
 				</p>	

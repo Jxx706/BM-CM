@@ -1,0 +1,41 @@
+<div class="row-fluid">
+	<!-- sidebar -->
+	<div class="span3">
+		<%= render "users/sidebar" %>
+	</div>
+
+	<div class="span9">
+		<div class="page-header">
+			<h1>Flujos de <%= @flows[0] %></h1>
+		</div>
+
+		<% @flows[1].each do |f| %>
+			<div class="well">
+				<address>
+					<strong><%= f.name %></strong><br>
+					Creado: <%= f.created_at.strftime("%B, %d, %Y") %><br>
+					Última vez modificado: <%= f.updated_at.strftime("%B, %d, %Y") %><br>
+				</address>
+
+				<address>
+					<strong>Nodos asociados</strong>
+					<% if f.nodes.any? %>
+						<ul>
+							<% (f.nodes.map { |n| n.hostname }).each do |node_hostname| %>
+								<li><%= node_hostname %></li>
+							<% end %>
+						</ul>
+					<% else %>
+						<p class="text-error">Ninguno</p>
+					<% end %>
+				</address>
+
+				<strong>Cuerpo del flujo</strong>
+				<pre>
+					<%= f.body %>
+				</pre>
+			</div>
+			<br>
+		<% end %>
+	</div>
+</div>

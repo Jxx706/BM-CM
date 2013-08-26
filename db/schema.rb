@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130815203619) do
+ActiveRecord::Schema.define(:version => 20130826003117) do
 
   create_table "configurations", :force => true do |t|
     t.integer  "node_id"
@@ -56,12 +56,13 @@ ActiveRecord::Schema.define(:version => 20130815203619) do
     t.string   "name"
     t.string   "last_name"
     t.string   "email"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
+    t.boolean  "super_admin"
+    t.datetime "created_at",          :null => false
+    t.datetime "updated_at",          :null => false
     t.string   "password_digest"
     t.string   "remember_token"
-    t.boolean  "super_admin"
     t.string   "directory_path"
+    t.boolean  "marked_as_deletable"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true

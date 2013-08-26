@@ -1,18 +1,28 @@
+<!-- If there are no user, then must create a new one with 
+Super-Admin privileges -->
+<% unless User.any? %>
+	<div class="hero-unit">
+		<h2>No hay ningún usuario registrado en la aplicación</h2>
 
-<div class="row">
-	<div class="span3">
-		<div class="page-header">
-			<h2>¿No tienes cuenta?</h2>
+		<p class="lead">
+			Deberás crear un usuario con poderes de Súper-Administrador.
+		</p>
 
-			<p class="lead">
-				Simple: Llena los campos requeridos y empieza a beneficiarte de las 
-				facilidades ofrecidas por <b>BM+CM</b>
+		<h3> ¿Por qué? <h3>
+		<hr>
+		<p>
+			Los Súper-Administradores son los únicos capaces de añadir usuarios al sistema.
+		</p>
 
-				<%= button_to "Nuevo Usuario", "/signup", :class => "btn btn-large btn-info" %>
-			</p>
+		<div class="alert alert-danger">
+			<h4>ATENCIÓN.</h4> Debes marcar la opción "¿Super-Administrador?" cuando crees el usuario.
 		</div>
+		<hr>
+		<%= button_to "Nuevo Usuario", "/signup", :class => "btn btn-large btn-info" %>
 	</div>
-	<div class="span6">
+<!-- Otherwise, just a regular login form -->
+<% else %>
+	<div class="hero-unit">
 		<h1>Inicio de sesión</h1>
 		<%= form_for(:session, :url => sessions_path) do |f| %>
 			<%= f.label :email %>
@@ -27,5 +37,4 @@
 			
 		<% end %>
 	</div>
-</div>
-
+<% end %>

@@ -2,16 +2,17 @@
 #
 # Table name: users
 #
-#  id              :integer          not null, primary key
-#  name            :string(255)
-#  last_name       :string(255)
-#  email           :string(255)
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
-#  password_digest :string(255)
-#  remember_token  :string(255)
-#  super_admin     :boolean
-#  directory_path  :string(255)
+#  id                  :integer          not null, primary key
+#  name                :string(255)
+#  last_name           :string(255)
+#  email               :string(255)
+#  super_admin         :boolean
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  password_digest     :string(255)
+#  remember_token      :string(255)
+#  directory_path      :string(255)
+#  marked_as_deletable :boolean
 #
 
 #ATTENTION: In the model only the password_digest is saved. Password and password_confirmation are virtual attributes;
@@ -19,10 +20,10 @@
 
 class User < ActiveRecord::Base
 	attr_accessible :email, #For login purposes
-   				        :last_name, :name, #Self explanatory 
-   				        :password, :password_confirmation #Virtual
-   		     		    :super_admin #True if he is; false otherwise.
-                  :directory_path
+   				    :last_name, :name, #Self explanatory 
+   				    :password, :password_confirmation, #Virtual
+   		     		:super_admin, #True if he is; false otherwise.
+              :directory_path
 
     #Downcase the email so we can check uniqueness without worrying 
     #about case sensitive validations
@@ -31,7 +32,7 @@ class User < ActiveRecord::Base
    	before_save :create_remember_token
     before_save :create_directory
 
-	  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
+	VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 
    	validates :name, :presence => { :message => "El nombre es obligatorio" },
                      :length => { :maximum => 50, :message => "Nombre muy largo." }
@@ -48,6 +49,14 @@ class User < ActiveRecord::Base
     has_many :nodes, :dependent => :destroy,
                      :order => 'hostname'
 
+    def super_admin?
+    	self.super_admin
+    end
+
+    def marked_as_deletable?
+      self.marked_as_deletable
+    end
+    
   	private
   		def create_remember_token
   			self.remember_token = SecureRandom.urlsafe_base64

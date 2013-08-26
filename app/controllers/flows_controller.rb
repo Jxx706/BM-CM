@@ -539,18 +539,17 @@ class FlowsController < ApplicationController
 
 ######################################################################
 
-  def handle_flows
+  def handle_nodes
     @flow = current_user.flows.find(params[:flow_id])
 
     unless params[:nodes_to_attach].nil? || params[:nodes_to_attach].empty? then
-      params[:nodes_to_attach].each do |node_fqdn|
-        n = current_user.nodes.find_by_fqdn(node_fqdn)
-        @flow.nodes << n
-      end
+      nodes_to_attach = current_user.nodes.select { |n| params[:nodes_to_attach].include?(n.fqdn) }
+        @flow.nodes << nodes_to_attach
     end
 
     unless params[:nodes_to_deattach].nil? || params[:nodes_to_deattach].empty? then
-      @flow.nodes.reject { |n| params[:nodes_to_deattach].include?(n.node_fqdn) }
+        nodes_to_deattach = current_user.nodes.select { |n| params[:nodes_to_deattach].include?(n.fqdn) }
+        @flow.nodes.destroy(nodes_to_deattach)
     end
 
     if @flow.save! then

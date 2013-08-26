@@ -15,6 +15,7 @@ BmCm::Application.routes.draw do
   match '/get_started', :to => 'pages#get_started'
   match '/flows_home', :to => 'flows#home', :as => "flows_home"
   match '/nodes_home', :to => 'nodes#home', :as => "nodes_home"
+  match '/users_home', :to => 'users#home', :as => 'users_home'
   match '/signup', :to => 'users#new'
   match '/signin', :to => 'sessions#new'
   match '/signout', :to => 'sessions#destroy', :via => :delete #DELETE HTTP
@@ -22,10 +23,13 @@ BmCm::Application.routes.draw do
   match '/installers/destroy', :to =>  'installers#destroy', :as => "destroy_installer", :via => :delete
   match '/nodes/:id/download_conf', :to => "nodes#download_conf", :via => :get, :as => "download_conf_node"
   match '/node_flows/:id', :to => "nodes#index_flows", :via => :get, :as => "node_flows"
-  match '/node_handle_flows', :to => "nodes#node_handle_flows", :via => :post
+  match '/handle_deletion_mark/:id', :to => "users#handle_deletion_mark", :via => :put, :as => "handle_deletion_mark"
+  match '/node_handle_flows', :to => "nodes#handle_flows", :via => :post
   match '/flow_handle_nodes', :to => "flows#handle_nodes", :via => :post
   match '/nodes/:node_id/reports/:id/download', :to => "reports#download", :via => :get, :as => "download_report"
   match '/nodes_and_reports', :to => 'nodes#index_nodes_and_reports', :via => :get, :as => 'nodes_and_reports'
+  match '/users/:user_id/flows', :to => 'users#index_flows', :via => :get, :as => "user_flows"
+  match '/users/:user_id/nodes', :to => 'users#index_nodes', :via => :get, :as => "user_nodes"
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

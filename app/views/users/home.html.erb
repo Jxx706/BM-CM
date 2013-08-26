@@ -1,0 +1,92 @@
+<div class="row-fluid">
+	<!-- sidebar -->
+	<div class="span3">
+		<%= render "users/sidebar" %>
+	</div>
+
+	<div class="span9">
+		<div class="hero-unit">
+			<h1 class="text-center">
+				Usuarios
+			</h1>
+		</div>
+	
+		<br>
+		<!-- section 1 -->
+		<div class="page-header">
+			<h1>Agrega</h1>
+		</div>
+
+		<div class="row-fluid">
+			<div class="span4">
+				<h2>Administradores</h2>
+
+				<p>
+					Los Administradores son los usuarios comunes de la aplicación. Estos son los únicos capaces de gestionar la configuración de sus aplicaciones (esto es, añadir nodos, crear flujos, editar flujos, entre otros.)<br><br>
+
+					Las cuentas de Administradores deben ser creadas por un Súper-Administrador.
+				</p>
+			</div>
+
+			<div class="span5">
+				<%= link_to '#this' do %>
+					<img src="/assets/adm.png", height="275" width="275">
+				<% end %>
+			</div>
+		</div>
+
+		<div class="row-fluid">
+			<div class="span5">
+				<%= link_to '#this' do %>
+					<img src="/assets/s-adm.png", height="275" width="275">
+				<% end %>
+			</div>
+
+			<div class="span4">
+				<h2>Súper-Administradores</h2>
+
+				<p>
+					Lo Súper-Administradores son los encargados de prestar mantenimiento a la aplicación. Entre sus principales funciones resalta la creación, inspección y destrucción de usuarios.
+				</p>
+			</div>
+		</div>
+
+		<br>
+
+		<!-- section 2 -->
+		<div class="page-header">
+			<h1>Elimina</h1>
+		</div>
+
+		<div class="row-fluid">
+			<div class="span4">
+				<p class="lead">
+					Elimina aquellas cuentas que hayan sido marcadas como "suspendida" por su poseedor.
+				</p>
+			</div>
+
+			<div class="span5">
+				<img src="/assets/delete.png" width="275" height="275">
+			</div>
+		</div>
+
+		<br>
+
+		<!-- section 3 -->
+		<div class="page-header">
+			<h1>Inspecciona</h1>
+		</div>
+
+		<div class="row-fluid">
+			<div class="span5">
+				<img src="/assets/inspect.png" width="275" height="275">
+			</div>
+
+			<div class="span4">
+				<p class="lead">
+					Consulta los datos y estadísticas asociadas a cada usuario (con rol de Administrador) del sistema.
+				</p>
+			</div>
+		</div>
+	</div>
+</div>

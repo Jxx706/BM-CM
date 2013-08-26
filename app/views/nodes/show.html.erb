@@ -6,7 +6,7 @@
 			<strong><%= "#{@node.fqdn}"%></strong><br>
 			<abbr title="Direccion IP">IP:</abbr> <%= @node.ip %><br>
 			Creado: <%= @node.created_at.strftime("%B %d, %Y") %><br>
-			Última vez modificado: <%= @node.updated_at %><br>
+			Última vez modificado: <%= n.updated_at.strftime("%B, %d, %Y") %><br>
 		</address>
 
 		<address>
@@ -45,9 +45,9 @@
 			<% end %>
 		</div>
 
-		<div class="alert alert-success">
+		<div class="alert">
 			<%= form_tag({:controller => :nodes, :action => :handle_flows}, :method => :post) do %>
-				Gestión de flujos:
+				<h3>Gestión de flujos:</h3>
 				<br>
 				<br>
 
@@ -60,14 +60,11 @@
 				<%= label_tag 'flows_to_deattach', 'Flujos a desvincular' %>
 				<%= 
 					options = @node.flows.empty? ? [] : @node.flows.map { |f| f.name }
-					select_tag "flows_to_deattach", options_for_select(options), :multiple => true 
+					select_tag "flows_to_deattach", options_for_select(options), :multiple => true
 				%>
 				<%= submit_tag "Aceptar", :data => { :confirm => "¿Estas seguro?" }, :class => "btn btn-small btn-primary" %>
 			<% end %>
 		</div>
 
-		<div class="alert">
-			
-		</div>
 	</div>
 </div>

@@ -15,10 +15,11 @@
 			<%= f.password_field :password_confirmation %>
 
 			<p> 
-				<%= f.submit "Gurdar cambios", :class => "btn btn-large btn-success" %>
+				<%= f.submit "Gurdar cambios", :class => "btn btn-large btn-success", :data => { :confirm => "Para hacer efectivos los cambios, deberas iniciar sesion nuevamente.\n\n¿Deseas continuar?"} %>
 			</p>
 		</div>
-
+			
+		</div>
 		<% if @user.errors.any? %>
 			<div id="error_explanation", class="span4 alert alert-error alert-block">
 		    	<h2>

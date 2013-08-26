@@ -6,24 +6,56 @@
 	<address>
 		<strong><%= "#{@user.name} #{@user.last_name}"%></strong><br>
 		<abbr title="E-mail">M:</abbr> <%= @user.email %><br>
-		Activo desde: <%= @user.created_at %><br>
-		Última vez modificado: <%= @user.updated_at %><br>
-	</address>
+		Activo desde: <%= @user.created_at.strftime("%B, %d, %Y") %><br>
+		Última vez modificado: <%= @user.updated_at.strftime("%B, %d, %Y") %><br>
+		<% if @user.super_admin? %>
+			<p class="text-success">
+				Súper-Administrador <i class="icon-star"></i>
+			</p>
+		<% end %>
 
-	<address>
-		<strong>Número de flujos</strong><br>
-		<%= link_to flows_path do %>
-			<%= @user.flows.count %>
+		<% unless @user.marked_as_deletable? then %>
+			<%= link_to handle_deletion_mark_path(@user), :method => :put, :data => { :confirm => "¿Estas seguro? Se enviara tu solicitud de eliminacion a uno de nuestros administradores. Mientras tanto, puedes seguir usando la aplicacion, o retirar tu solicitud.\n\nPara hacer efectivos los cambios, deberas iniciar sesion nuevamente" } do %>
+				<small><i class="icon-thumbs-down"></i> Marcar como "Eliminable"</small>
+			<% end %>
+		<% else %>
+			<%= link_to handle_deletion_mark_path(current_user), :method => :put, :data => { :confirm => "Para hacer efectivos los cambios, deberas iniciar sesion nuevamente\n\n¿Deseas continuar?"} do %>
+				<small><i class="icon-thumbs-up"></i>Desmarcar como "Eliminable" </small> 
+			<% end %>
 		<% end %>
 	</address>
 
-	<%= link_to :back, :class => "btn btn-warning" do %>
-		<i class="icon-white icon-backward"></i>Volver
+	<% unless @user.super_admin? %>
+		<address>
+			<strong>Número de flujos</strong><br>
+			<%= link_to flows_path do %>
+				<%= @user.flows.count %>
+			<% end %>
+		</address>
+
+		<address>
+			<strong>Número de nodos</strong><br>
+			<%= link_to nodes_path do %>
+				<%= @user.nodes.count %>
+			<% end %>
+		</address>
+		<hr>
+	<% end %>
+
+	<% if signed_in? then %>
+		<%= link_to :back, :class => "btn btn-warning" do %>
+			<i class="icon-white icon-backward"></i>Volver
+		<% end %>
 	<% end %>
 
 	<%= link_to edit_user_path(@user), :class => "btn btn-primary" do %>
 		<i class="icon-white icon-pencil"></i>Editar
 	<% end %>
 
+	<% if @user.super_admin? %>	
+		<%= link_to user_path(@user), :method => 'delete', :class => "btn btn-danger", :data => { :confirm => "¿Estas seguro?"} do %>
+			<i class="icon-remove icon-white"></i> Eliminar
+		<% end %>
+	<% end %>
 </div>
 

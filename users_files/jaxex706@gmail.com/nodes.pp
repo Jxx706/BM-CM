@@ -1,5 +1,9 @@
-node 'jesus-desktop.synergy' {
+node 'champagne.pug.net' {
 
-class {'couchbase':
-	version => 2.1.0,}
+mysql::db {'mysql':
+	user => usuario,
+	password => 1234567,
+	grant => ["all"],}
+
+
 }
