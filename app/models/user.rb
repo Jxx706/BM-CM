@@ -30,7 +30,7 @@ class User < ActiveRecord::Base
     has_secure_password #Adds methods to set and authenticate against a BCrypt password. This mechanism requires you to have a password_digest attribute.
    	before_save { |user| user.email = email.downcase }
    	before_save :create_remember_token
-    before_save :create_directory
+    before_create :create_directory
 
 	VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 
@@ -40,8 +40,8 @@ class User < ActiveRecord::Base
                       :format => { :with => VALID_EMAIL_REGEX, :message => "El email no es valido."},
                       :uniqueness => { :case_sensitive => false, :message => "E-mail ya existente." }
     validates :password, :presence => { :message => "La contrasena es obligatoria." }, 
-    					 :length => { :minimum => 6, :message => "Clave muy corta. Por lo menos 6 caracteres."},
-    					 :confirmation => true
+    					           :length => { :minimum => 6, :message => "Clave muy corta. Por lo menos 6 caracteres."},
+    					           :confirmation => true
     validates :password_confirmation, :presence => { :message => "Hace falta confirmacion de contrasena." }
 
     has_many :flows, :dependent => :destroy, #If the user is destroyed, all his flows are gone too.
@@ -63,8 +63,8 @@ class User < ActiveRecord::Base
   		end
 
       def create_directory
-        self.directory_path = "C:\\Users\\Jxx706\\Documents\\GitHub\\BM-CM\\users_files\\#{self.email}"
-        #self.directory_path = "C:\\Users\\jesus\\Desktop\\Pasantia\\Proyecto\\bancaplus-postventa\\BM-CM\\users_files\\#{self.email}"
+        #self.directory_path = "C:\\Users\\Jxx706\\Documents\\GitHub\\BM-CM\\users_files\\#{self.email}"
+        self.directory_path = "C:\\Users\\jesus\\Desktop\\Pasantia\\Proyecto\\bancaplus-postventa\\BM-CM\\users_files\\#{self.email}"
 
         #The user's directory is created if isn't existed before.
         unless Dir.exists?(self.directory_path) then
