@@ -3,7 +3,9 @@
 	<div class="navbar-inner">
 		<div class="container">
 			<!-- Logo/Brand name -->
-			<%= link_to "BM+CM", root_path, :class => "brand" %>
+			<%= link_to root_path, :class => "brand" do %>
+				<big><strong>BM<i class="icon-white icon-plus"></i> <em>CM</em></strong></big>
+			<% end %>
 			<div class="nav-collapse collapse" id="main-menu">
 
 				<!-- Sections -->

@@ -4,7 +4,7 @@
 		Bienvenido al <i><b>Configuration Manager</b></i> de la Banca Móvil.
 	</h1>
 	<p class="text-center">
-		En este sitio podrás configurar, mantener y respaldar los componentes necesarios para que tu aplicación móvil funcione a plenitud.
+		En este sitio podrás configurar, mantener y respaldar los componentes necesarios para que tu aplicación funcione a plenitud.
 	</p>
 </div>
 
@@ -26,11 +26,11 @@
 		<li class>
 			<a href="#flows">Flujos</a>
 		</li>
-		<li class>
-			<a href="#logs">Biácoras</a>
+		<li>
+			<a href="#nodes">Nodos</a>
 		</li>
 		<li class>
-			<a href="#previous_states">Estados previos</a>
+			<a href="#logs">Biácoras</a>
 		</li>
 	</ul>
 </div>
@@ -51,11 +51,11 @@
 			<div class="thumbnail">
 				<img src="/assets/digraph.png">
 			</div>
-			<h3>Representación gráfica de tu script.</h3>
+			<h3>Diferentes flujos, diferentes acciones</h3>
 			<p>
 				- Escoge las acciones que desees aplicar a un nodo en particular. <br>
 				- Proporciona los parámetros solicitados por el sistema. <br>
-				- Observa cómo se construye un flujo a partir de la información que suministras.
+				- Instala herramientas, presta mantenimiento, administra. Todo en un solo lugar.
 			</p>
 		</li>
 		<li class="span3">
@@ -87,59 +87,54 @@
 	</ul>
 </section>
 
+<!-- Nodes -->
+<section id="nodes">
+	<div class="page-header">
+		<h1>
+			Nodos
+		</h1>
+	</div>
+
+	<div class="row-fluid">
+		<div class="span5">
+			<img src="assets/server.png">
+		</div>
+		
+		<div class="span7">
+			<p class="lead">
+				Elabora los perfiles de los nodos a los cuales quieres prestarle servicio y almacénalos. Vincula uno más flujos a un nodo para hacer sus instrucciones inmediatamente aplicables a este.
+			</p>
+
+			<p class="lead">
+				Mantén el historial de las operaciones llevadas a cabo en cada nodo a través de los reportes emitidos y subidos de manera automática a <strong>BM+ CM</strong>.
+			</p>
+		</div>
+	</div>
+
+</section>
+
 <!-- Logs -->
 <section id="logs">
 	<div class="page-header">
 		<h1>
-			Bitácoras
+			Reportes
 		</h1>
 	</div>
 
 	<p class="lead">
-		Los scripts generados por <strong>BM+CM</strong> guardan la información concerniente a operaciones y errores en  <a href="#logs" data-toggle="tooltip" title="bitácoras"><em>logs</em></a>, disponibles para su posterior revisión. 
+		Los scripts generados por <strong>BM+ CM</strong> guardan la información concerniente a operaciones y errores en  <a href="#logs" data-toggle="tooltip" title="bitácoras"><em>logs</em></a>, disponibles para su posterior revisión. 
 	</p>
 
-	<p class="lead">
-		<strong>BM+CM</strong> te permite consultar, descargar e, incluso, subir automáticamente todas las bitácoras resultantes de ejecucione de scripts.
-	</p>
-
-</section>
-
-<!-- Prevoius states -->
-<section id="previous_states">
-	<div class="page-header">
-		<h1>
-			Estados previos
-		</h1>
-	</div>
-
-	<div class="row">
-		<div class="alert alert-error span3">
-			<h2>
-				<b><em>"¡Algo ha salido mal!"</em></b>
-			</h2>
-
-			<p>
-				¡No hay problema! <b>BM+CM</b> te permite devolver nodos a estados previos estables.
+	<div class="row-fluid">
+		<div class="span7">
+			<p class="lead">
+				<strong>BM+ CM</strong> sube de manera automática reportes con el contenido de los <em>logs</em>, permitiéndote consultarlos e incluso  descargarlos.
 			</p>
 		</div>
-		<div class="alert alert-warning span3">
-			<h2>
-				<b><em>"No ha habido inconvenientes, pero quiero devolver mi sistema a su estado previo."</em></b>
-			</h2>
 
-			<p>
-				Con <b>BM+CM</b> estás en posibilidad de re-aplicar configuraciones anteriores cuando lo sientas necesario. Solo es cuestión de descargar y ejecutar el script apropiado. 
-			</p>
-		</div>
-		<div class="alert alert-success span4">
-			<h2>
-				<b><em>¿Y si deseo ver mis configuraciones anteriores?</em></b>
-			</h2>
-
-			<p>
-				<b>BM+CM</b> se encarga de guardar, automáticamente, el estado de un nodo antes de aplicar un script de configuración. Asímismo, puedes indicarle que almacene la configuración actual. De esta manera, puedes revisar el historial de cambios (<em>states</em>) de un determinado nodo cada vez que lo requieras.
-			</p>
+		<div class="span4">
+			<img src="assets/report_2.jpeg" width="275" height="275">
 		</div>
 	</div>
+
 </section>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130826003117) do
+ActiveRecord::Schema.define(:version => 20130906032418) do
 
   create_table "configurations", :force => true do |t|
     t.integer  "node_id"
@@ -50,17 +50,18 @@ ActiveRecord::Schema.define(:version => 20130826003117) do
     t.datetime "updated_at", :null => false
     t.integer  "node_id"
     t.string   "name"
+    t.string   "body"
   end
 
   create_table "users", :force => true do |t|
     t.string   "name"
     t.string   "last_name"
     t.string   "email"
+    t.boolean  "super_admin"
     t.datetime "created_at",          :null => false
     t.datetime "updated_at",          :null => false
     t.string   "password_digest"
     t.string   "remember_token"
-    t.boolean  "super_admin"
     t.string   "directory_path"
     t.boolean  "marked_as_deletable"
   end
