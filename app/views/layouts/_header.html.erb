@@ -64,23 +64,23 @@
 									</li>
 									<li>
 										<% if current_user.super_admin? then %>
-											<%= link_to user_path(current_user), :method => 'delete', :data => { :confirm => "¿Estas seguro?"} do %>
+											<%= link_to user_path(current_user), :method => 'delete', :data => { :confirm => "¿Estás seguro?"} do %>
 												<i class="icon-remove"></i> Eliminar
 											<% end %>
 										<% else %>
 											<% unless current_user.marked_as_deletable? then %>
-												<%= link_to handle_deletion_mark_path(current_user), :method => :put, :data => { :confirm => "¿Estas seguro? Se enviara tu solicitud de eliminacion a uno de nuestros administradores. Mientras tanto, puedes seguir usando la aplicacion, o retirar tu solicitud.\n\nPara hacer efectivos los cambios, deberas iniciar sesion nuevamente" } do %>
+												<%= link_to handle_deletion_mark_path(current_user), :method => :put, :data => { :confirm => "¿Estás seguro? Se enviará tu solicitud de eliminación a uno de nuestros administradores. Mientras tanto, puedes seguir usando la aplicación, o retirar tu solicitud.\n\nPara hacer efectivos los cambios, deberas iniciar sesión nuevamente" } do %>
 													<i class="icon-thumbs-down"></i> Marcar como "Eliminable"
 												<% end %>
 											<% else %>
-												<%= link_to handle_deletion_mark_path(current_user), :method => :put, :data => { :confirm => "Para hacer efectivos los cambios, deberas iniciar sesion nuevamente\n\n¿Deseas continuar?"} do %>
+												<%= link_to handle_deletion_mark_path(current_user), :method => :put, :data => { :confirm => "Para hacer efectivos los cambios, deberas iniciar sesión nuevamente\n\n¿Deseas continuar?"} do %>
 													<i class="icon-thumbs-up"></i>Desmarcar como "Eliminable" 
 												<% end %>
 											<% end %>
 										<% end %>
 									</li>
 									<li class="divider"></li>
-									<li><%= link_to "Cerrar Sesión", signout_path, :method => :delete %></li>
+									<li><%= link_to "Cerrar Sesión", signout_path, :method => :delete, :data => { :confirm => "Se cerrará la sesión. Todos los cambios no guardados se perderán. ¿Continuar?" } %></li>
 								</ul>
 							</div>
 						<% #Si no hay sesión iniciada

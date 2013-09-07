@@ -6,7 +6,7 @@
 			<strong><%= "#{@node.fqdn}"%></strong><br>
 			<abbr title="Direccion IP">IP:</abbr> <%= @node.ip %><br>
 			Creado: <%= @node.created_at.strftime("%B %d, %Y") %><br>
-			Última vez modificado: <%= n.updated_at.strftime("%B, %d, %Y") %><br>
+			Última vez modificado: <%= @node.updated_at.strftime("%B, %d, %Y") %><br>
 		</address>
 
 		<address>
