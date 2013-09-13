@@ -25,10 +25,14 @@ Super-Admin privileges -->
 	<div class="hero-unit">
 		<h1>Inicio de sesión</h1>
 		<%= form_for(:session, :url => sessions_path) do |f| %>
-			<%= f.label :email %>
+			<%= f.label :email do %>
+				<strong>Correo electrónico</strong> <abbr title="CAMPO OBLIGATORIO"><i class="icon-exclamation-sign"></i></abbr>
+			<% end %>
 			<%= f.text_field :email %>
 
-			<%= f.label :password %>
+			<%= f.label :password do %>
+				<strong>Contraseña</strong> <abbr title="CAMPO OBLIGATORIO"><i class="icon-exclamation-sign"></i></abbr>
+			<% end %>
 			<%= f.password_field :password %>
 
 			<p>

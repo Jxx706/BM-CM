@@ -1,0 +1,221 @@
+--- !ruby/object:Puppet::Transaction::Report
+  configuration_version: 1378848824
+  host: jesus.master.com
+  kind: apply
+  logs: 
+    - !ruby/object:Puppet::Util::Log
+      level: !ruby/sym notice
+      message: Finished catalog run in 0.06 seconds
+      source: Puppet
+      tags: 
+        - notice
+      time: 2013-09-10 17:03:44.914198 -05:30
+  metrics: 
+    time: !ruby/object:Puppet::Util::Metric
+      label: Time
+      name: time
+      values: 
+        - - config_retrieval
+          - Config retrieval
+          - 0.293113
+        - - file
+          - File
+          - 0.000318
+        - - filebucket
+          - Filebucket
+          - 0.000147
+        - - total
+          - Total
+          - 0.293578
+    resources: !ruby/object:Puppet::Util::Metric
+      label: Resources
+      name: resources
+      values: 
+        - - restarted
+          - Restarted
+          - 0
+        - - scheduled
+          - Scheduled
+          - 0
+        - - skipped
+          - Skipped
+          - 6
+        - - out_of_sync
+          - Out of sync
+          - 0
+        - - failed_to_restart
+          - Failed to restart
+          - 0
+        - - failed
+          - Failed
+          - 0
+        - - changed
+          - Changed
+          - 0
+        - - total
+          - Total
+          - 8
+    events: !ruby/object:Puppet::Util::Metric
+      label: Events
+      name: events
+      values: 
+        - - failure
+          - Failure
+          - 0
+        - - success
+          - Success
+          - 0
+        - - total
+          - Total
+          - 0
+    changes: !ruby/object:Puppet::Util::Metric
+      label: Changes
+      name: changes
+      values: 
+        - - total
+          - Total
+          - 0
+  puppet_version: 2.7.11
+  report_format: 2
+  resource_statuses: 
+    "Schedule[weekly]": !ruby/object:Puppet::Resource::Status
+      change_count: 0
+      changed: false
+      events: []
+      failed: false
+      file: 
+      line: 
+      out_of_sync: false
+      out_of_sync_count: 0
+      resource: "Schedule[weekly]"
+      resource_type: Schedule
+      skipped: true
+      tags: 
+        - schedule
+        - weekly
+      time: 2013-09-10 17:03:44.903755 -05:30
+      title: weekly
+    "Filebucket[puppet]": !ruby/object:Puppet::Resource::Status
+      change_count: 0
+      changed: false
+      evaluation_time: 0.000147
+      events: []
+      failed: false
+      file: 
+      line: 
+      out_of_sync: false
+      out_of_sync_count: 0
+      resource: "Filebucket[puppet]"
+      resource_type: Filebucket
+      skipped: false
+      tags: 
+        - filebucket
+        - puppet
+      time: 2013-09-10 17:03:44.903443 -05:30
+      title: puppet
+    "Schedule[hourly]": !ruby/object:Puppet::Resource::Status
+      change_count: 0
+      changed: false
+      events: []
+      failed: false
+      file: 
+      line: 
+      out_of_sync: false
+      out_of_sync_count: 0
+      resource: "Schedule[hourly]"
+      resource_type: Schedule
+      skipped: true
+      tags: 
+        - schedule
+        - hourly
+      time: 2013-09-10 17:03:44.898243 -05:30
+      title: hourly
+    "Schedule[puppet]": !ruby/object:Puppet::Resource::Status
+      change_count: 0
+      changed: false
+      events: []
+      failed: false
+      file: 
+      line: 
+      out_of_sync: false
+      out_of_sync_count: 0
+      resource: "Schedule[puppet]"
+      resource_type: Schedule
+      skipped: true
+      tags: 
+        - schedule
+        - puppet
+      time: 2013-09-10 17:03:44.904037 -05:30
+      title: puppet
+    "File[olakase]": !ruby/object:Puppet::Resource::Status
+      change_count: 0
+      changed: false
+      evaluation_time: 0.000318
+      events: []
+      failed: false
+      file: /etc/puppet/manifests/whynot.pp
+      line: 4
+      out_of_sync: false
+      out_of_sync_count: 0
+      resource: "File[olakase]"
+      resource_type: File
+      skipped: false
+      tags: 
+        - file
+        - olakase
+        - class
+      time: 2013-09-10 17:03:44.902498 -05:30
+      title: olakase
+    "Schedule[never]": !ruby/object:Puppet::Resource::Status
+      change_count: 0
+      changed: false
+      events: []
+      failed: false
+      file: 
+      line: 
+      out_of_sync: false
+      out_of_sync_count: 0
+      resource: "Schedule[never]"
+      resource_type: Schedule
+      skipped: true
+      tags: 
+        - schedule
+        - never
+      time: 2013-09-10 17:03:44.903031 -05:30
+      title: never
+    "Schedule[monthly]": !ruby/object:Puppet::Resource::Status
+      change_count: 0
+      changed: false
+      events: []
+      failed: false
+      file: 
+      line: 
+      out_of_sync: false
+      out_of_sync_count: 0
+      resource: "Schedule[monthly]"
+      resource_type: Schedule
+      skipped: true
+      tags: 
+        - schedule
+        - monthly
+      time: 2013-09-10 17:03:44.897812 -05:30
+      title: monthly
+    "Schedule[daily]": !ruby/object:Puppet::Resource::Status
+      change_count: 0
+      changed: false
+      events: []
+      failed: false
+      file: 
+      line: 
+      out_of_sync: false
+      out_of_sync_count: 0
+      resource: "Schedule[daily]"
+      resource_type: Schedule
+      skipped: true
+      tags: 
+        - schedule
+        - daily
+      time: 2013-09-10 17:03:44.897206 -05:30
+      title: daily
+  status: unchanged
+  time: 2013-09-10 17:03:44.706175 -05:30

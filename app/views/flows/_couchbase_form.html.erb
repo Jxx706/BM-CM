@@ -59,7 +59,9 @@
 			<% end %>
 			<br>
 
-			<%= label_tag "couchbase_attr_password", "Contrasena" %>
+			<%= label_tag "couchbase_attr_password" do %>
+				Contraseña 
+			<% end %>
 			<%= password_field_tag "attr[password]", nil, :id => "couchbase_attr_password", :placeholder => edit ? hash_attributes["password"] : Flow.defaults("couchbase")["password"] %>
 			<a href="#this" id="help3" class="btn btn-small btn-info"><i class="icon-comment"></i>¿Ayuda?</a>
 			<%= javascript_tag do %>

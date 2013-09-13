@@ -1,0 +1,144 @@
+<%= content_for :miscellaneous do %>
+	<!-- If edit, don't show this -->
+	<% unless edit %>
+		<div class="page-header">
+			<h2>
+				<strong>Paso III:</strong> Operaciones con archivos
+			</h2>
+		</div>
+	<% end %>
+
+	<p class="lead">
+		Automatiza las operaciones con archivos desde acá.
+	</p>
+
+	<!-- first row of files ops -->
+	<div class="row-fluid">
+		<!-- Create/Delete file -->
+		<div class="span3">
+
+	
+			<h3><strong>Crear/Eliminar archivos</strong></h3>
+
+			<%= link_to '#this', :onclick => '$("#create_delete_file").toggle(); switchFileOp("#p-add-del-file", "#create_delete_file_active")' do %>
+				<p id="p-add-del-file" class='<%= if edit && hash_attributes.has_key?(:cdf) then "text-error" end %>'>
+					<small>
+						<em>
+							<%= edit && hash_attributes.has_key?(:cdf) ? "Desactiva" : "Activa" %> el formulario aquí
+						</em>
+					</small>
+				</p>
+			<% end %>
+
+			<%= hidden_field_tag "create_delete_file_active", edit && hash_attributes.has_key?(:cdf) ? "yes" : "no" %>
+			<div id="create_delete_file">
+				<%= render :partial => "flows/files_partials/create_delete_file", :locals => { :edit => edit, :hash_attributes => edit ? hash_attributes : nil } %>
+				<%= content_for :create_delete_file %>
+			</div>
+			<% unless edit && hash_attributes.has_key?(:cdf) %>
+				<%= javascript_tag '$("#create_delete_file").hide();' %>
+			<% end %>
+		</div>
+
+		<!-- Change file content -->
+		<div class="span3">
+			
+			<h3><strong>Cambiar contenido de archivos</strong></h3>
+			<%= link_to '#this', :onclick => '$("#change_content_of_file").toggle(); switchFileOp("#p-change-cont-file", "#change_content_of_file_active")' do %>
+				<p id="p-change-cont-file" class='<%= if edit && hash_attributes.has_key?(:ccof) then "text-error" end %>'>
+					<small>
+						<em>
+							<%= edit && hash_attributes.has_key?(:ccof) ? "Desactiva" : "Activa" %> el formulario aquí
+						</em>
+					</small>
+				</p>
+			<% end %>
+
+			<%= hidden_field_tag "change_content_of_file_active", edit && hash_attributes.has_key?(:ccof) ? "yes" : "no"%>
+			<div id="change_content_of_file">
+				<%= render :partial => "flows/files_partials/change_content_of_file", :locals => { :edit => edit, :hash_attributes => edit ? hash_attributes : nil } %>
+				<%= content_for :change_content_of_file %>
+			</div>
+			<% unless edit && hash_attributes.has_key?(:ccof) %>
+				<%= javascript_tag '$("#change_content_of_file").hide();' %>
+			<% end %>
+		</div>
+
+		<!-- Add/remove file line -->
+		<div class="span3">
+			
+			<h3><strong>Agregar/Eliminar línea de archivos</strong></h3>
+			<%= link_to '#this', :onclick => '$("#add_remove_line_from_file").toggle(); switchFileOp("#p-add-del-line", "#add_remove_line_from_file_active");' do %>
+				<p id="p-add-del-line" class='<%= if edit && hash_attributes.has_key?(:arlff) then "text-error" end %>'>
+					<small>
+						<em>
+							<%= edit && hash_attributes.has_key?(:arlff) ? "Desactiva" : "Activa" %> el formulario aquí
+						</em>
+					</small>
+				</p>
+			<% end %>
+
+			<%= hidden_field_tag "add_remove_line_from_file_active", edit && hash_attributes.has_key?(:arlff) ? "yes" : "no" %>
+			<div id="add_remove_line_from_file">
+				<%= render :partial => "flows/files_partials/add_remove_line_from_file", :locals => { :edit => edit, :hash_attributes => edit ? hash_attributes : nil } %>
+				<%= content_for :add_remove_line_from_file %>
+			</div>
+			<% unless edit && hash_attributes.has_key?(:arlff) %>
+				<%= javascript_tag '$("#add_remove_line_from_file").hide();' %>
+			<% end %>
+		</div>
+	</div>
+
+	<!-- second row of files ops -->
+	<div class="row-fluid">
+		<!-- Copy files -->
+		<div class="span4">
+			
+			<h3><strong>Copiar archivo </strong></h3>
+			<%= link_to '#this', :onclick => '$("#copy_file").toggle(); switchFileOp("#p-copy-file", "#copy_file_active")' do %>
+				<p id="p-copy-file" class='<%= if edit && hash_attributes.has_key?(:cf) then "text-error" end %>'>
+					<small>
+						<em>
+							<%= edit && hash_attributes.has_key?(:cf) ? "Desactiva" : "Activa" %> el formulario aquí
+						</em>
+					</small>
+				</p>
+			<% end %>
+
+			<%= hidden_field_tag "copy_file_active", edit && hash_attributes.has_key?(:cf) ? "yes" : "no" %>
+			<div id="copy_file">
+				<%= render :partial => "flows/files_partials/copy_file", :locals => { :edit => edit, :hash_attributes => edit ? hash_attributes : nil } %>
+				<%= content_for :copy_file %>
+			</div>
+			<% unless edit && hash_attributes.has_key?(:cf) %>
+				<%= javascript_tag '$("#copy_file").hide();' %>
+			<% end %>
+		</div>
+		
+		<!-- Merge files -->
+		<div class="span3">
+			
+		</div>
+	</div>
+
+	<%= javascript_tag do %>
+		function switchFileOp(text_id, field_id) {
+			var text = $(text_id);
+			var field = $(field_id);
+
+			if (field.val() == "yes") {
+				field.val("no")
+			} else {
+				field.val("yes")
+			};
+
+			if (!text.hasClass("text-error")) {
+				text.addClass("text-error");
+				$(text_id + " small").replaceWith("<small><em>Desctiva el formulario aqui</em></small>");
+			} else {
+				text.removeClass("text-error");
+				$(text_id + " small").replaceWith("<small><em>Activa el formulario aqui</em></small>");
+			}
+		}
+	<% end %>
+<% end %>

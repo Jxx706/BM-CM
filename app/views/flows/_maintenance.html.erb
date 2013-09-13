@@ -22,7 +22,7 @@
 	<br>
 	<br>
 
-	<div class="row">
+	<div class="row-fluid">
 
 		<p class="lead">
 			Acá podrás crear instancias, usuarios, otorgar privilegios y planificar respaldos para bases de datos en MySQL; construir buckets en couchbase, así como instancias para Apache Tomcat. 
@@ -31,7 +31,7 @@
 		</p>
 
 		<!-- MySQL maintenance settings -->
-		<div class="span3">
+		<div class="span4">
 			<div class="page-header">
 				<h3><strong>MySQL</strong></h3>
 			</div>
@@ -45,14 +45,14 @@
 				onclick='$("#mysql-config").toggle(); if ($("#mysql_active").val() == "no") { $("#mysql_active").val("yes"); } else { $("#mysql_active").val("no"); };'>
 
 			<div id="mysql-config">
-				<%= render :partial => "flows/mysql_db_form", :locals => { :edit => false } %>
+				<%= render :partial => "flows/maintenance_partials/mysql_db_form", :locals => { :edit => false } %>
 				<%= content_for :mysql_db %>
 			</div>
 			<%= javascript_tag '$("#mysql-config").hide();' %>
 		</div>
 
 		<!-- Couchbase maintenance settings -->
-		<div class="span3">
+		<div class="span4">
 			<div class="page-header">
 				<h3><strong>Couchbase</strong></h3>
 			</div>
@@ -66,7 +66,7 @@
 				 onclick='$("#couchbase-config").toggle(); if ($("#couchbase_active").val() == "no") { $("#couchbase_active").val("yes"); } else { $("#couchbase_active").val("no"); };' >
 
 			<div id="couchbase-config">
-				<%= render :partial => "flows/couchbase_bucket_form", :locals => { :edit => false } %>
+				<%= render :partial => "flows/maintenance_partials/couchbase_bucket_form", :locals => { :edit => false } %>
 				<%= content_for :couchbase_bucket %>
 			</div>
 			<%= javascript_tag '$("#couchbase-config").hide();' %>
@@ -74,7 +74,7 @@
 		</div>
 
 		<!-- Tomcat maintenance settings -->
-		<div class="span2">
+		<div class="span3">
 			<div class="page-header">
 				<h3><strong>Tomcat</strong></h3>
 			</div>
@@ -88,7 +88,7 @@
 				 onclick='$("#tomcat-config").toggle(); if ($("#tomcat_active").val() == "no") { $("#tomcat_active").val("yes"); } else { $("#tomcat_active").val("no"); };'>
 
 			<div id="tomcat-config">
-				<%= render :partial => "flows/tomcat_instance_form", :locals => { :edit => false } %>
+				<%= render :partial => "flows/maintenance_partials/tomcat_instance_form", :locals => { :edit => false } %>
 				<%= content_for :tomcat_instance %>
 			</div>
 			<%= javascript_tag '$("#tomcat-config").hide();' %>

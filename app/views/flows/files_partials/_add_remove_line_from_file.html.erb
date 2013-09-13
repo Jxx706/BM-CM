@@ -1,0 +1,12 @@
+<%= content_for :add_remove_line_from_file do %>
+	<!-- arlff = add/remove line from file -->
+	<%= label_tag "attr[arlff][path]", "Indique el nombre (incluyendo la ruta completa) del archivo" %>
+	<%= text_field_tag "attr[arlff][path]", nil, :placeholder => edit && hash_attributes.has_key?("arlff") ? hash_attributes["arlff"]["path"] : "Ejemplo: etc/hosts" %>
+	<br>
+
+	<%= label_tag "attr[arlff][ensure]", "Indique la accion" %>
+	<%= select_tag "attr[arlff][ensure]", options_for_select([["Agregar", "present"], ["Quitar", "absent"]]) %> 
+
+	<%= label_tag "attr[arlff][line]", "Indique la línea"%>
+	<%= text_field_tag "attr[arlff][line]", nil, :placeholder => edit && hash_attributes.has_key?("arlff") ? hash_attributes["arlff"]["line"] : "Ejemplo: 195.78.6.215 bmcm.app.syn" %>
+<% end %>

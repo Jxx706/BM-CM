@@ -1,0 +1,9 @@
+<%= content_for :change_content_of_file do %>
+	<!-- ccof = change content of file -->
+	<%= label_tag "attr[ccof][name]", "Indique el nombre (incluyendo la ruta completa) del archivo" %>
+	<%= text_field_tag "attr[ccof][name]", nil, :placeholder => edit && hash_attributes.has_key?("ccof") ? hash_attributes["ccof"]["name"] : "Ejemplo: usr/bmcm/home/file.ex" %>
+	<br>
+
+	<%= label_tag "attr[ccof][content]", "Coloque el nuevo contenido del archivo" %>
+	<%= text_area_tag "attr[ccof][content]", nil, :size => "10x5", :placeholder => edit && hash_attributes.has_key?("ccof") ? hash_attributes["ccof"]["content"] : "EJEMPLO: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ullamcorper tortor eu tortor bibendum porta. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Pellentesque eget scelerisque arcu, quis ornare urna. Nullam molestie libero dui, id viverra mauris consequat eu. Sed vel ornare mauris. Cras a tortor in enim mattis vestibulum et in urna. Maecenas mollis molestie sapien, ut scelerisque metus fringilla id. In mattis bibendum magna quis sodales. Phasellus viverra malesuada porta. In commodo, felis eget tempus scelerisque, tortor augue vulputate tortor, at fringilla nibh arcu in mi." %> 
+<% end %>

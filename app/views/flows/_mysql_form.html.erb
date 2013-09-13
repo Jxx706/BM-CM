@@ -106,7 +106,9 @@
 			<% end %>
 			<br>
 
-			<%= label_tag "mysql_max_allowed_packet", "Tamanio maximo de paquete" %>
+			<%= label_tag "mysql_max_allowed_packet" do %>
+				Tamaño máximo del paquete
+			<% end %>
 			<%= text_field_tag "attr[max_allowed_packet]", nil, :id => "mysql_max_allowed_packet", :placeholder => edit ? hash_attributes["max_allowed_packet"] : Flow.defaults("mysql")["max_allowed_packet"] %>
 			<a href="#this" id="help6" class="btn btn-small btn-info"><i class="icon-comment"></i>¿Ayuda?</a>
 			<%= javascript_tag do %>

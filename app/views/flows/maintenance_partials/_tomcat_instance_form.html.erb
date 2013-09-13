@@ -1,6 +1,8 @@
 <%= content_for :tomcat_instance do %>
 	<!-- Mandatory -->
-	<%= label_tag "attr_instance_name", "Nombre" %>
+	<%= label_tag "attr_instance_name" do %>
+		<strong>Nombre</strong> <abbr title="CAMPO OBLIGATORIO"><i class="icon-exclamation-sign"></i></abbr>
+	<% end %>
 	<%= text_field_tag "attr[instance][name]", nil, :id => "attr_instance_name", :placeholder => edit ? hash_attributes["instance"]["name"] : "" %>
 	<br>
 

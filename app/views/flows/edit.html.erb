@@ -72,7 +72,7 @@
 							</div>
 
 							<p id="db-text" class="text-<%= @flow.hash_attributes.has_key?('db') ? 'success' : 'error' %>">
-								<%= @flow.hash_attributes.has_key?('db') ? "Configurar" : "No configurar (eliminar configuracion)" %>
+								<%= @flow.hash_attributes.has_key?('db') ? "Configurar" : "No configurar/Eliminar configuración" %>
 							</p>
 							<%= button_to_function "Cambiar", 'switchConfigTool("#db-text", "#mysql_active")', :class => "btn btn-link" %>
 
@@ -83,13 +83,13 @@
 							<br>
 
 							<% if @flow.hash_attributes.has_key?("db") then %>
-								<%= render :partial => "/flows/mysql_db_form", :locals => { :edit => true, :hash_attributes => @flow.hash_attributes } %>
+								<%= render :partial => "/flows/maintenance_partials/mysql_db_form", :locals => { :edit => true, :hash_attributes => @flow.hash_attributes } %>
 								<%= content_for :mysql_db %>
 							<% else %>
 								<p>No existen configuraciones para esta herramienta.</p>
 								<br>
 								<br>
-								<%= render :partial => "flows/mysql_db_form", :locals => { :edit => false } %>
+								<%= render :partial => "flows/maintenance_partials/mysql_db_form", :locals => { :edit => false } %>
 								<%= content_for :mysql_db %>
 							<% end %>
 						</div>
@@ -100,7 +100,7 @@
 							</div>
 
 							<p id="bucket-text" class="text-<%= @flow.hash_attributes.has_key?('bucket') ? 'success' : 'error' %>">
-								<%= @flow.hash_attributes.has_key?('bucket') ? "Configurar" : "No configurar (eliminar configuracion)" %>
+								<%= @flow.hash_attributes.has_key?('bucket') ? "Configurar" : "No configurar/Eliminar configuración" %>
 							</p>
 							<%= button_to_function "Cambiar", 'switchConfigTool("#bucket-text", "#couchbase_active")', :class => "btn btn-link" %>
 							<%= hidden_field_tag "couchbase_active", (@flow.hash_attributes.has_key?("bucket") ? "yes" : "no") %>
@@ -108,24 +108,24 @@
 							<br>
 
 							<% if @flow.hash_attributes.has_key?("bucket") then %>
-								<%= render :partial => "/flows/couchbase_bucket_form", :locals => { :edit => true, :hash_attributes => @flow.hash_attributes } %>
+								<%= render :partial => "/flows/maintenance_partials/couchbase_bucket_form", :locals => { :edit => true, :hash_attributes => @flow.hash_attributes } %>
 								<%= content_for :couchbase_bucket %>
 							<% else %>
 								<p>No existen configuraciones para esta herramienta.</p>
 								<br>
 								<br>
-								<%= render :partial => "/flows/couchbase_bucket_form", :locals => { :edit => false } %>
+								<%= render :partial => "/flows/maintenance_partials/couchbase_bucket_form", :locals => { :edit => false } %>
 								<%= content_for :couchbase_bucket %>
 							<% end %>
 						</div>
 
-						<div class="span2">
+						<div class="span3">
 							<div class="page-header">
 								<h2>Tomcat</h2>
 							</div>
 
 							<p id="instance-text" class="text-<%= @flow.hash_attributes.has_key?('instance') ? 'success' : 'error' %>">
-								<%= @flow.hash_attributes.has_key?('instance') ? "Configurar" : "No configurar (eliminar configuracion)" %>
+								<%= @flow.hash_attributes.has_key?('instance') ? "Configurar" : "No configurar/Eliminar configuración" %>
 							</p>
 							<%= button_to_function "Cambiar", 'switchConfigTool("#instance-text", "#tomcat_active")', :class => "btn btn-link" %>
 							<%= hidden_field_tag "tomcat_active", (@flow.hash_attributes.has_key?("instance") ? "yes" : "no") %>
@@ -133,16 +133,19 @@
 							<br>
 							<br>
 							<% if @flow.hash_attributes.has_key?("instance") then %>
-								<%= render :partial => "/flows/tomcat_instance_form", :locals => { :edit => true, :hash_attributes => @flow.hash_attributes } %>
+								<%= render :partial => "/flows/maintenance_partials/tomcat_instance_form", :locals => { :edit => true, :hash_attributes => @flow.hash_attributes } %>
 								<%= content_for :tomcat_instance %>
 							<% else %>
 								<p>No existen configuraciones para esta herramienta.</p>
 								<br>
 								<br>
-								<%= render :partial => "/flows/tomcat_instance_form", :locals => { :edit => false } %>
+								<%= render :partial => "/flows/maintenance_partials/tomcat_instance_form", :locals => { :edit => false } %>
 								<%= content_for :tomcat_instance %>
 							<% end %>
 						</div>
+					<% when "miscellaneous" %>
+						<%= render :partial => "flows/miscellaneous", :locals => { :edit =>true, :hash_attributes => @flow.hash_attributes } %>
+						<%= content_for :miscellaneous %>
 				<% end %>	
 			</div>
 			<br>
@@ -184,7 +187,7 @@
 		} else {
 			text.removeClass("text-success");
 			text.addClass("text-error");
-			text.text("No configurar (eliminar configuracion)");
+			text.text("No configurar/Eliminar configuración");
 		}
 	}
 <% end %>

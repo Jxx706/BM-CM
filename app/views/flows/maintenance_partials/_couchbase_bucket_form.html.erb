@@ -4,7 +4,9 @@
 	</p>
 
 	<!-- Mandatory -->
-	<%= label_tag "attr_bucket_title", "Nombre" %>
+	<%= label_tag "attr_bucket_title" do  %> 
+		<b>Nombre</b> <abbr title="CAMPO OBLIGATORIO"><i class="icon-exclamation-sign"></i></abbr>
+	<% end %>
 	<%= text_field_tag "attr[bucket][title]", nil, :id => "attr_bucket_title", :placeholder => edit ? hash_attributes["bucket"]["title"] : "" %>
 	<br>
 
@@ -12,7 +14,9 @@
 	<%= text_field_tag "attr[bucket][port]", nil, :id => "attr_bucket_port", :placeholder => edit ? hash_attributes["bucket"]["port"] : Flow.defaults("couchbase")["bucket"]["port"] %>
 	<br>
 
-	<%= label_tag "attr_bucket_size", "Tamano" %>
+	<%= label_tag "attr_bucket_size" do %>
+		Tamaño
+	<% end %>
 	<%= text_field_tag "attr[bucket][size]", nil, :id => "attr_bucket_size", :placeholder => edit ? hash_attributes["bucket"]["size"] : Flow.defaults("couchbase")["bucket"]["size"] %>
 	<br>
 
@@ -20,7 +24,9 @@
 	<%= text_field_tag "attr[bucket][user]", nil, :id => "attr_bucket_user", :placeholder => edit ? hash_attributes["bucket"]["user"] : Flow.defaults("couchbase")["bucket"]["user"] %>
 	<br>
 
-	<%= label_tag "attr_bucket_password", "Contrasena" %>
+	<%= label_tag "attr_bucket_password" do %>
+		Contraseña
+	<% end %>
 	<%= password_field_tag "attr[bucket][password]", nil, :id => "attr_bucket_password", :placeholder => edit ? hash_attributes["bucket"]["password"] : Flow.defaults("couchbase")["bucket"]["password"] %>
 	<br>
 

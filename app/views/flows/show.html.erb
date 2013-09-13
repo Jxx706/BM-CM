@@ -114,7 +114,54 @@
 					</tbody>
 				</table>
 			<% end %>
-		<% end%>
+		<% elsif @flow.kind == "miscellaneous" then %>
+			<!-- Create/Delete file -->
+			<% if @flow.hash_attributes.has_key?(:cdf) then %>
+				<div class="well">
+					<strong><big>Archivo: </big></strong><%= @flow.hash_attributes[:cdf]["name"] %><br>
+					<strong>Acción: </strong><%= @flow.hash_attributes[:cdf]["ensure"] == "present" ? "Crear" : "Eliminar" %><br>
+
+					<% if @flow.hash_attributes[:cdf]["ensure"] == "present" then %>
+						<strong>Contenido: </strong><br>
+						<pre>
+							<%= @flow.hash_attributes[:cdf]["content"] %>
+						</pre>
+					<% end %>
+				</div>
+				<hr>
+			<% end %>
+
+			<!-- Change content of file -->
+			<% if @flow.hash_attributes.has_key?(:ccof) then %>
+				<div class="well">
+					<strong><big>Archivo: </big></strong><%= @flow.hash_attributes[:ccof]["name"] %><br>
+					<strong>Contenido: </strong><br>
+					<pre>
+						<%= @flow.hash_attributes[:ccof]["content"] %>
+					</pre>
+				</div>
+				<hr>
+			<% end %>
+
+			<!-- Add/Remove line from file -->
+			<% if @flow.hash_attributes.has_key?(:arlff) then %>
+				<div class="well">
+					<strong><big>Archivo: </big></strong><%= @flow.hash_attributes[:arlff]["path"] %><br>
+					<strong>Línea: </strong> <pre><%= @flow.hash_attributes[:arlff]["line"] %></pre><br>
+					<strong>Acción: </strong><%= @flow.hash_attributes[:cdf]["ensure"] == "present" ? "Crear" : "Eliminar" %>
+				</div>
+				<hr>
+			<% end %>
+
+			<!-- Copy file -->
+			<% if @flow.hash_attributes.has_key?(:cf) then %>
+				<div class="well">
+					<strong><big>Archivo origen: </big></strong><%= @flow.hash_attributes[:cf]["source"] %><br>
+					<strong>Archivo destino: </strong><%= @flow.hash_attributes[:cf]["name"] %>
+				</div>
+				<hr>
+			<% end %>			
+		<% end %>
 			
 		<br>
 

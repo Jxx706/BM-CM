@@ -12,6 +12,7 @@
 #  kind            :string(255)
 #
 
+#encoding: utf-8
 class HashAttributesValidator < ActiveModel::EachValidator
   VALID_IP_ADDRESS = /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/
 
@@ -218,6 +219,55 @@ class HashAttributesValidator < ActiveModel::EachValidator
           (instance[:server_port].to_i == instance[:ajp_port].to_i) || 
           (instance[:http_port].to_i == instance[:ajp_port].to_i) then
           record.errors[attribute] << "Tomcat - Los puertos deben ser diferentes."
+        end
+      end
+    elsif record.kind == "miscellaneous"
+      if value.has_key?(:cdf)
+        cdf = value[:cdf]
+
+        unless !(cdf[:name].nil? || cdf[:name].blank?) then
+          record.errors[attribute] << "Crear/Eliminar - La ruta es obligatoria."
+        end
+
+        if (cdf[:ensure] == "present") && (cdf[:content].nil? || cdf[:content].blank?) then
+          record.errors[attribute] << "Crear/Eliminar - El archivo no puede estar vacio. Ingrese contenido."
+        end
+
+      end
+
+      if value.has_key?(:ccof)
+        ccof = value[:ccof]
+
+        if ccof[:name].nil? || ccof[:name].blank? then
+          record.errors[attribute] << "Cambio de contenido - La ruta es obligatoria."
+        end
+
+        if ccof[:content].nil? || ccof[:content].blank? then
+          record.errors[attribute] << "Cambio de contenido - Ingrese contenido, es obligtorio."
+        end
+      end
+
+      if value.has_key?(:arlff)
+        arlff = value[:arlff]
+
+        unless !(arlff[:path].nil? || arlff[:path].blank?) then
+          record.errors[attribute] << "Agregar/Eliminar linea - La ruta es obligatoria."
+        end
+
+        if arlff[:line].nil? || arlff[:line].blank? then
+          record.errors[attribute] << "Agregar/Eliminar linea - La lidea debe ser especificada."
+        end
+      end
+
+      if value.has_key?(:cf)
+        cf = value[:cf]
+
+        unless !(cf[:name].nil? || cf[:name].blank?) then
+          record.errors[attribute] << "Copia de archivos - La ruta del archivo destino es obligatoria."
+        end
+
+        unless !(cf[:source].nil? || cf[:source].blank?) then
+          record.errors[attribute] << "Copia de archivos - La ruta del archivo fuente es obligatoria."
         end
       end
     end

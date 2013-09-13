@@ -2,16 +2,22 @@
 <div class="row-fluid">
 	<%= form_for(@user) do |f| %>
 		<div class="span5">
-			<%= f.label :name, "Nombre" %>
+			<%= f.label :name do %>
+				<strong>Nombre</strong> <abbr title="CAMPO OBLIGATORIO"><i class="icon-exclamation-sign"></i></abbr>
+			<% end %>
 			<%= f.text_field :name %>
 
 			<%= f.label :last_name, "Apellido" %>
 			<%= f.text_field :last_name %>
 
-			<%= f.label :password, "Contraseña" %>
+			<%= f.label :password do %>
+				<strong>Contraseña</strong> <abbr title="CAMPO OBLIGATORIO"><i class="icon-exclamation-sign"></i></abbr>
+			<% end %>
 			<%= f.password_field :password %>
 
-			<%= f.label :password_confirmation, "Repita su contraseña" %>
+			<%= f.label :password_confirmation do %>
+				<strong>Repita contraseña</strong> <abbr title="CAMPO OBLIGATORIO"><i class="icon-exclamation-sign"></i></abbr>
+			<% end %>
 			<%= f.password_field :password_confirmation %>
 
 			<p> 

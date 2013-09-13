@@ -30,7 +30,7 @@ class Node < ActiveRecord::Base
 
   private
   	def create_fqdn
-  		self.fqdn = "#{self.hostname}.#{self.domain}" unless self.domain.nil? || self.domain.blank?
+  		self.fqdn = self.domain.nil? || self.domain.blank? ? self.hostname : "#{self.hostname}.#{self.domain}" 
   	end
 
     def create_directory

@@ -45,7 +45,10 @@
 						<%= render "flows/help_partials/help1" %>
 
 						<div class="container">
-							<%= label_tag "flow_name", "Nombre del flujo" %>
+							<%= label_tag "flow_name" do %>
+								<strong>Nombre del flujo</strong> 
+								<abbr title="CAMPO OBLIGATORIO"><i class="icon-exclamation-sign"></i></abbr>
+							<% end %>
 							<%= text_field_tag "flow[name]", nil, :id => "flow_name", :placeholder => "Ejemplo: mysql-installer" %>
 							<a href="#this" id="help-1" class="btn btn-small btn-info"><i class="icon-comment"></i>¿Ayuda?</a>
 							<%= javascript_tag do %>
@@ -146,7 +149,7 @@
 								</div>
 							</li>
 
-							<!-- Empty -->
+							<!-- Miscellaneous -->
 							<li class="span4">
 								<div class="thumbnail">
 									<img src="/assets/misc.png">
@@ -157,6 +160,7 @@
 										<%= radio_button_tag "flow_kind", "miscellaneous", :onclick => "" %>
 										¡Crear un flujo <strong><em>misceláneo</em></strong>!
 									</label>
+									<%= select_tag "misc", options_for_select([["Operaciones con archivos", "archives"]]) %>
 								</div>
 							</li>
 						</ul>
@@ -277,6 +281,32 @@
 					<% end %>
 					<%= submit_tag "Siguiente", :data => { :confirm => "¿Estas seguro? "}, :class => "btn btn-primary" %>
 
+				<% end %>
+
+			<% when 7 %>
+				<%= form_tag({:controller => :flows, :action => :create}, :method => :post) do %>
+					<% if !flow.nil? && flow.errors.any? %>
+						<div id="error_explanation" class="alert alert-error alert-block">
+							<h2>
+								<b><%= pluralize(flow.errors.count, "error", "errores") %></b> <%= flow.errors.count > 1 ? "prohibieron" : "prohibió" %> la creación de este Flujo:
+							</h2>
+
+							<ul>
+								<% flow.errors.each do |attr, msg| %>
+									<li><%= msg %></li>
+								<% end %>
+							</ul>
+						</div>
+					<% end %>
+
+					<%= render :partial => "flows/miscellaneous", :locals => { :edit => false } %>
+					<%= content_for :miscellaneous %>
+					<%= hidden_field_tag "current_step", "7" %>
+					<%= hidden_field_tag "flow_id", @args[:flow_id] %>
+					<%= link_to :back, :class => "btn btn-warning" do %>
+						<i class="icon-white icon-backward"></i> Atrás
+					<% end %>
+					<%= submit_tag "Siguiente", :data => { :confirm => "¿Estás seguro?"}, :class => "btn btn-primary" %>
 				<% end %>
 		<% end %>
 

@@ -5,7 +5,9 @@
 	</p>
 
 	<!-- Mandatory -->
-	<%= label_tag "attr_db_title", "Nombre" %>
+	<%= label_tag "attr_db_title" do %>
+		<b>Nombre</b> <abbr title="CAMPO OBLIGATORIO"><i class="icon-exclamation-sign"></i></abbr>
+	<% end %>
 	<%= text_field_tag "attr[db][title]", nil, :id => "attr_db_title", :placeholder => edit ? hash_attributes["db"]["title"] : "" %>
 	<br>
 
@@ -18,12 +20,16 @@
 	<br>
 
 	<!-- Mandatory -->
-	<%= label_tag "attr_db_user", "Usuario" %>
+	<%= label_tag "attr_db_user" do %>
+		<b>Usuario</b> <abbr title="CAMPO OBLIGATORIO"><i class="icon-exclamation-sign"></i></abbr>
+	<% end %>
 	<%= text_field_tag "attr[db][user]", nil, :id => "attr_db_user", :placeholder => edit ? hash_attributes["db"]["user"] : "" %>
 	<br>
 
 	<!-- Mandatory -->
-	<%= label_tag "attr_db_password", "Contrasena" %>
+	<%= label_tag "attr_db_password" do %>
+		<strong>Contraseña</strong> <abbr title="CAMPO OBLIGATORIO"><i class="icon-exclamation-sign"></i></abbr>
+	<% end %>
 	<%= password_field_tag "attr[db][password]", nil, :id => "attr_db_password", :placeholder => edit ? hash_attributes["db"]["password"] : "" %>
 	<br>
 
@@ -34,7 +40,7 @@
 
 
 	<%= label_tag "checkbox_db_backup", "¿Desea crear un respaldo?" %>
-	<%= check_box_tag "backup", (edit && hash_attributes.has_key?(:db_backup) ? "yes" : "no"), @flow.hash_attributes.has_key?(:db_backup), :id => "checkbox_db_backup", :onchange => 'if (document.getElementById("checkbox_db_backup").checked) { $("#checkbox_db_backup").val("yes"); } else { $("#check_box_db:backup").val("no"); }; $("#backup_options").toggle()' %>
+	<%= check_box_tag "backup", (edit && hash_attributes.has_key?(:db_backup) ? "yes" : "no"), @flow.hash_attributes.has_key?(:db_backup), :id => "checkbox_db_backup", :onchange => 'if (document.getElementById("checkbox_db_backup").checked) { $("#checkbox_db_backup").val("yes"); } else { $("#checkbox_db_backup").val("no"); }; $("#backup_options").toggle()' %>
 	
 	<div id="backup_options">
 		<p>
@@ -43,18 +49,24 @@
 		</p>
 
 		<!-- Mandatory -->
-		<%= label_tag "attr_db_backup_user", "Usuario de respaldo" %>
+		<%= label_tag "attr_db_backup_user" do %>
+			<strong>Usuario de respaldo</strong> <abbr title="CAMPO OBLIGATORIO"><i class="icon-exclamation-sign"></i></abbr>
+		<% end %>
 		<%= text_field_tag "attr[db_backup][backupuser]", nil, :id => "attr_db_backup_user", :placeholder => edit && hash_attributes.has_key?("db_backup") ? hash_attributes["db_backup"]["backupuser"] : "" %>
 		<br>
 
 		<!-- Mandatory -->
-		<%= label_tag "attr_db_backup_password", "Contrasena" %>
+		<%= label_tag "attr_db_backup_password" do %>
+			<strong>Contraseña</strong> <abbr title="CAMPO OBLIGATORIO"><i class="icon-exclamation-sign"></i></abbr>
+		<% end %>
 		<%= password_field_tag "attr[db_backup][backuppassword]", nil, :id => "attr_db_backup_password", :placeholder => edit && hash_attributes.has_key?("db_backup") ? hash_attributes["db_backup"]["backuppassword"] : "" %>
 		<br>
 
 		<!-- Mandatory -->
-		<%= label_tag "attr_db_backup_dir", "Directorio de respaldo" %>
+		<%= label_tag "attr_db_backup_dir" do %>
+			<strong>Directorio de respaldo</strong> <abbr title="CAMPO OBLIGATORIO"><i class="icon-exclamation-sign"></i></abbr>
+		<% end %>
 		<%= text_field_tag "attr[db_backup][backupdir]", nil, :id => "attr_db_backup_dir", :placeholder => edit && hash_attributes.has_key?("db_backup") ? hash_attributes["db_backup"]["backupdir"] : "" %>
 	</div>
-	<%= javascript_tag "$(function () {if ($('#backup').val() == 'no') { $('#backup_options').hide()}}" %>
+	<%= javascript_tag "if ($('#checkbox_db_backup').val() == 'no') { $('#backup_options').hide(); }" %>
 <% end %>

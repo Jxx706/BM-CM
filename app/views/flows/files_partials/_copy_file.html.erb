@@ -1,0 +1,11 @@
+<%= content_for :copy_file do %>
+	<!-- cf = copy file -->
+	<%= label_tag "attr[cf][source]", "Indique el nombre (incluyendo la ruta completa) del archivo fuente" %>
+	<%= text_field_tag "attr[cf][source]", nil, :placeholder => edit && hash_attributes.has_key?("cf") ? hash_attributes["cf"]["source"] : "Ejemplo: usr/bmcm/home/source.ex" %>
+	<br>
+
+	<%= label_tag "attr[cf][name]", "Indique el nombre (incluyendo la ruta completa) del archivo destino" %>
+	<%= text_field_tag "attr[cf][name]", nil, :placeholder => edit && hash_attributes.has_key?("cf") ? hash_attributes["cf"]["name"] : "Ejemplo: usr/bmcm/home/newfile.ex" %>
+
+	<%= hidden_field_tag "attr[cf][ensure]", "present" %>
+<% end %>

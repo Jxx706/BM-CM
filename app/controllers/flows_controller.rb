@@ -1,3 +1,5 @@
+#encoding: utf-8
+
 class FlowsController < ApplicationController
 
   skip_before_filter :verify_authenticity_token, :only => [:create, :handle_nodes]
@@ -83,6 +85,8 @@ class FlowsController < ApplicationController
           when "maintenance"
             #params[:flow][:hash_attributes][:kind] = "maintenance"
             @args[:current_step] = 6
+          when "miscellaneous"
+            @args[:current_step] = 7
         end
         
         if @flow.update_attributes(params[:flow]) then
@@ -287,6 +291,66 @@ class FlowsController < ApplicationController
               @flow.hash_attributes.clear
               render :action => :new, :locals => { :flow => @flow }
             end
+
+          #Miscellaneous 
+          when "7"
+            #Retrieve the current user
+            @flow = current_user.flows.find(params[:flow_id])
+
+            #Create the hash that will contain the updated info.
+            params[:flow] = Hash.new
+            params[:flow][:hash_attributes] = Hash.new
+            params[:flow][:body] = "\n\n"
+
+            #Check if there's a file to be created or deleted
+            #Params:
+            #   - All mandatory
+            if params[:create_delete_file_active] == "yes" then
+              params[:flow][:hash_attributes][:cdf] = params[:attr][:cdf].clone
+              quote_hash(params[:attr][:cdf]) #Quote it so it will work with Puppet
+              params[:flow][:body] << write_resource("file", params[:attr][:cdf]["name"], params[:attr][:cdf].except("name")) << "\n\n"
+              params[:flow][:hash_attributes] = @flow.hash_attributes.merge(params[:flow][:hash_attributes])
+            end
+
+            #Check if there is new content for a specific file
+            #Params:
+            #   - All mandatory
+            if params[:change_content_of_file_active] == "yes" then
+              params[:flow][:hash_attributes][:ccof] = params[:attr][:ccof].clone
+              quote_hash(params[:attr][:ccof])
+              params[:flow][:body] << write_resource("file", params[:attr][:ccof]["name"], params[:attr][:ccof].except("name")) << "\n\n"
+              params[:flow][:hash_attributes] = @flow.hash_attributes.merge(params[:flow][:hash_attributes])
+            end
+
+            #Check if there's a line to be appended or removed from a file
+            #Params:
+            #   - All mandatory
+            if params[:add_remove_line_from_file_active] == "yes" then
+              params[:flow][:hash_attributes][:arlff] = params[:attr][:arlff].clone
+              quote_hash(params[:attr][:arlff])
+              #Theres a dependency that has to be satisfied
+              params[:flow][:body] << write_resource("file", params[:attr][:arlff]["path"], {"ensure" => "present"}) << " -> "
+              params[:flow][:body] << "\n" << write_resource("file_line", "line_#{rand(99999).to_s}", params[:attr][:arlff]) << "\n\n"
+              params[:flow][:hash_attributes] = @flow.hash_attributes.merge(params[:flow][:hash_attributes])
+            end
+
+            #Check if there's a file to be copied
+            if params[:copy_file_active] == "yes" then
+              params[:flow][:hash_attributes][:cf] = params[:attr][:cf].clone
+              quote_hash(params[:attr][:cf])
+              params[:flow][:body] << write_resource("file", params[:attr][:cf]["name"], params[:attr][:cf].except("name")) << "\n\n"
+              params[:flow][:hash_attributes] = @flow.hash_attributes.merge(params[:flow][:hash_attributes])
+            end
+
+            #Finally, let's update this thing
+            if @flow.update_attributes(params[:flow]) then #On success
+              redirect_to @flow
+            else #On failure
+              @args[:current_step] = 7
+              @args[:flow_id] = @flow.id
+              @flow.hash_attributes.clear
+              render :action => :new, :locals => { :flow => @flow }
+            end
         end
     end
   end
@@ -407,13 +471,13 @@ class FlowsController < ApplicationController
           else
             #if there wasn't configurations for mysql, then handle like it's new
             params[:attr][:db].each do |k, v| #k stands for "key" and v for "value"
-                if v.empty? || v.blank? || v.nil? then #If there's no value, use default (and erase the key associated to it)
-                  params[:flow][:hash_attributes][:db][k] = Flow.defaults("mysql")["db"][k]
-                  params[:attr][:db].delete(k)
-                else #Otherwise, use the value provided.
-                  params[:flow][:hash_attributes][:db][k] = v
-                end
+              if v.empty? || v.blank? || v.nil? then #If there's no value, use default (and erase the key associated to it)
+                params[:flow][:hash_attributes][:db][k] = Flow.defaults("mysql")["db"][k]
+                params[:attr][:db].delete(k)
+              else #Otherwise, use the value provided.
+                params[:flow][:hash_attributes][:db][k] = v
               end
+            end
           end
 
           #This line is crucial: It mixes ALL the OLD parameters with the new
@@ -507,6 +571,123 @@ class FlowsController < ApplicationController
           #This line is crucial: It mixes ALL the OLD parameters with the new
           params[:flow][:hash_attributes] = @flow.hash_attributes.merge(params[:flow][:hash_attributes])
         end
+      when "miscellaneous"
+        params[:flow][:hash_attributes] = Hash.new
+        params[:flow][:body] = "\n\n"
+
+        #Remove unselected configurations
+        if params[:create_delete_file_active] == "no" then
+          @flow.hash_attributes.delete(:cdf)
+        end
+
+        if params[:change_content_of_file_active] == "no" then
+          @flow.hash_attributes.delete(:ccof)
+        end
+
+        if params[:add_remove_line_from_file_active] == "no" then
+          @flow.hash_attributes.delete(:arlff)
+        end
+
+        if params[:copy_file_active] == "no" then
+          @flow.hash_attributes.delete(:cf)
+        end
+
+
+        #Handle CREATE/DELETE updates
+        if params[:create_delete_file_active] == "yes" then
+          
+          params[:flow][:hash_attributes][:cdf] = Hash.new
+          #If there are previous values, then mix
+  
+          quote_hash(params[:attr][:cdf]) #Quote it so it will work with Puppet
+
+          if @flow.hash_attributes.has_key?(:cdf) then
+            params[:flow][:hash_attributes][:cdf] = @flow.hash_attributes[:cdf].merge(
+              params[:attr][:cdf].delete_if {
+                |key, value| value.blank? || value.nil?
+                }
+              )
+          end
+
+          params[:flow][:body] << write_resource("file", 
+            params[:flow][:hash_attributes][:cdf]["name"],
+            params[:flow][:hash_attributes][:cdf].except("name")) << "\n\n"
+          params[:flow][:hash_attributes] = @flow.hash_attributes.merge(params[:flow][:hash_attributes])
+        end
+
+        #Handle CHANGE CONTENT updates
+        if params[:change_content_of_file_active] == "yes" then
+          
+          params[:flow][:hash_attributes][:ccof] = Hash.new
+          quote_hash(params[:attr][:ccof])
+          #If there are previous values, then mix
+          if @flow.hash_attributes.has_key?(:ccof) then
+            params[:flow][:hash_attributes][:ccof] = @flow.hash_attributes[:ccof].merge(
+              params[:attr][:ccof].delete_if {
+                |key, value| value.blank? || value.nil?
+              }
+            )
+          else #Otherwise, handle like it's new
+            params[:flow][:hash_attributes][:ccof] = params[:attr][:ccof].clone
+          end
+
+          params[:flow][:body] << write_resource("file", 
+            params[:flow][:hash_attributes][:ccof]["name"], 
+            params[:flow][:hash_attributes][:ccof].except("name")) << "\n\n"
+          params[:flow][:hash_attributes] = @flow.hash_attributes.merge(params[:flow][:hash_attributes])
+        end
+
+        #Handle ADD/REMOVE LINE updates
+        if params[:add_remove_line_from_file_active] == "yes" then
+          
+          params[:flow][:hash_attributes][:arlff] = Hash.new
+
+          quote_hash(params[:attr][:arlff])
+
+          #If there are previous values, then mix
+          if @flow.hash_attributes.has_key?(:arlff) then
+            params[:flow][:hash_attributes][:arlff] = @flow.hash_attributes[:arlff].merge(
+              params[:attr][:arlff].delete_if {
+                |key, value| value.blank? || value.nil?
+              }
+            )
+          else #Otherwise, handle like it's new
+            params[:flow][:hash_attributes][:arlff] = params[:attr][:arlff].clone
+          end
+
+          #Theres a dependency that has to be satisfied
+          params[:flow][:body] << write_resource("file", 
+            params[:flow][:hash_attributes][:arlff]["path"], 
+            {"ensure" => "present"}) << " -> "
+          params[:flow][:body] << "\n" << write_resource("file_line", 
+            "line_#{rand(99999).to_s}", 
+            params[:flow][:hash_attributes][:arlff]) << "\n\n"
+          params[:flow][:hash_attributes] = @flow.hash_attributes.merge(params[:flow][:hash_attributes])
+        end
+
+        #Handle COPY updates
+        if params[:copy_file_active] == "yes" then
+          
+          params[:flow][:hash_attributes][:cf] = Hash.new
+
+          quote_hash(params[:attr][:cf])
+
+          #If there are previous values, then mix
+          if @flow.hash_attributes.has_key?(:cf) then
+            params[:flow][:hash_attributes][:cf] = @flow.hash_attributes[:cf].merge(
+              params[:attr][:cf].delete_if {
+                |key, value| value.blank? || value.nil?
+              }
+            )
+          else #Otherwise, handle like it's new
+            params[:flow][:hash_attributes][:cf] = params[:attr][:cf].clone
+          end
+
+          params[:flow][:body] << write_resource("file", 
+            params[:flow][:hash_attributes][:cf]["name"], 
+            params[:flow][:hash_attributes][:cf].except("name")) << "\n\n"
+          params[:flow][:hash_attributes] = @flow.hash_attributes.merge(params[:flow][:hash_attributes])
+        end
     end
 
       #Associate with the specified nodes
@@ -524,7 +705,7 @@ class FlowsController < ApplicationController
       redirect_to @flow
     else
       @title = "Editar flujo."
-      @flow.hash_attributes = old_hash #Since it diden't save, then retake the old values
+      @flow.hash_attributes = old_hash #Since it didn't save, then retake the old values
       render :action => :edit, :locals => { :flow => @flow } #Comes back to the edit page 
     end
   end
@@ -588,7 +769,8 @@ class FlowsController < ApplicationController
     #    ensure => installed,
     # }
     def write_resource(resource_name, title, attributes = {})
-      resource = "#{resource_name} {'#{title}':" 
+      title = "\"#{title}\"" unless (title[0] == '"' && title[-1] == '"')
+      resource = "#{resource_name} {#{title}:" 
       attributes.each do |key, value|
         resource += "\n\t#{key} => #{value},"
       end
@@ -610,5 +792,15 @@ class FlowsController < ApplicationController
         class_resource += "\n\t#{key} => #{value},"
       end
       class_resource += "}"
+    end
+
+    #Make it smart:
+    def quote_hash(hash)
+      out = Hash.new
+      hash.each do |k, v|
+        if !v.blank? && v.class == String then
+          hash[k] = "\"#{v}\""
+        end
+      end
     end
 end

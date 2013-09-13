@@ -13,11 +13,15 @@
 			<div class="row-fluid">
 				<%= form_for @node, :class => "form" do |f| %>
 					<div class="span5">
-						<%= label_tag "node_ip", "Direccion IP" %>
+						<%= label_tag "node_ip" do %>
+							<strong>Dirección IP</strong> <abbr title="CAMPO OBLIGATORIO"><i class="icon-exclamation-sign"></i></abbr>
+						<% end %>
 						<%= f.text_field :ip, :placeholder => "Ej: 192.15.6.255"%>
 						<br>
 
-						<%= label_tag "node_hostname", "Host" %>
+						<%= label_tag "node_hostname" do %>
+							<strong>Host</strong> <abbr title="CAMPO OBLIGATORIO"><i class="icon-exclamation-sign"></i></abbr>
+						<% end %>
 						<%= f.text_field :hostname, :placeholder => "Ej: mihost" %>
 						<br>
 

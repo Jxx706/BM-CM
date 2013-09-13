@@ -1,0 +1,14 @@
+<%= content_for :create_delete_file do %>
+	<!-- cdf = create/delete file -->
+	<%= label_tag "attr[cdf][name]", "Indique el nombre (incluyendo la ruta completa) del archivo" %>
+	<%= text_field_tag "attr[cdf][name]", nil, :placeholder => edit && hash_attributes.has_key?("cdf") ? hash_attributes["cdf"]["name"] : "Ejemplo: usr/bmcm/home/file.ex" %>
+	<br> 
+
+	<%= label_tag "attr[cdf][ensure]", "Indique la accion" %>
+	<%= select_tag "attr[cdf][ensure]", options_for_select([["Crear", "present"], ["Eliminar", "absent"]]) %> 
+
+	
+	<%= label_tag "attr[cdf][content]", "Coloque el contenido del archivo" %>
+	<%= text_area_tag "attr[cdf][content]", nil, :size => "10x5", :placeholder => edit && hash_attributes.has_key?("cdf") ? hash_attributes["cdf"]["content"] : "EJEMPLO: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ullamcorper tortor eu tortor bibendum porta. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Pellentesque eget scelerisque arcu, quis ornare urna. Nullam molestie libero dui, id viverra mauris consequat eu. Sed vel ornare mauris. Cras a tortor in enim mattis vestibulum et in urna. Maecenas mollis molestie sapien, ut scelerisque metus fringilla id. In mattis bibendum magna quis sodales. Phasellus viverra malesuada porta. In commodo, felis eget tempus scelerisque, tortor augue vulputate tortor, at fringilla nibh arcu in mi." %>
+
+<% end %>
