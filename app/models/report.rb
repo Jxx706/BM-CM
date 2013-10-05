@@ -8,11 +8,11 @@
 #  updated_at :datetime         not null
 #  node_id    :integer
 #  name       :string(255)
-#  body       :string(255)
+#  body       :text
 #
 
 class Report < ActiveRecord::Base
-  attr_accessible :file_path, :name, :body
-
-  belongs_to :node 
+	attr_accessible :file_path, :name, :body #This is what gets saved on the record
+	serialize :body, Hash
+	belongs_to :node
 end

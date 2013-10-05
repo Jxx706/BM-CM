@@ -16,6 +16,7 @@
 class Node < ActiveRecord::Base
   attr_accessible :domain, :fqdn, :hostname, :ip
   before_save :create_fqdn
+  before_save :create_directory
 
   VALID_IP_ADDRESS = /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/
   validates :hostname, :presence => { :message => "El hostname es obligatorio."}
@@ -34,7 +35,7 @@ class Node < ActiveRecord::Base
   	end
 
     def create_directory
-      #self.directory_path = "C:\\Users\\Jxx706\\Documents\\GitHub\\BM-CM\\node_reports\\#{self.fqdn}"
+      #self.directory_path = "C:\\Users\\Jxx706\\Documents\\GitHub\\BM-CM\\nodes_reports\\#{self.fqdn}"
       self.directory_path = "C:\\Users\\jesus\\Desktop\\Pasantia\\Proyecto\\bancaplus-postventa\\BM-CM\\nodes_reports\\#{self.fqdn}"
 
       #The node's directory is created if isn't existed before.

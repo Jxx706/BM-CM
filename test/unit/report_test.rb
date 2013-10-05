@@ -8,7 +8,7 @@
 #  updated_at :datetime         not null
 #  node_id    :integer
 #  name       :string(255)
-#  body       :string(255)
+#  body       :text
 #
 
 require 'test_helper'

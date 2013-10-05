@@ -2,6 +2,258 @@
 	<%= render 'nodes/sidebar' %>
 
 	<div class="span7">
-		<!-- something -->
+
+		<div class="page-header">
+			<h1>Datos de <b><%= @report.name.capitalize %></b></h1>
+		</div>
+
+		<table class="table table-stripped table-hover">
+			<caption>
+				<h2>
+					<b>Información básica</b>
+				</h2>
+			</caption>
+			<thead>
+				<tr>
+					<th>
+						Dato
+					</th>
+					<th>
+						<em>Valor</em>
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<% if @report.body.has_key?('host') then %>
+					<tr>
+						<td>Host</td>
+						<td><em><%= @report['host'] %></em></td>
+					</tr>
+				<% end %>
+
+				<% if @report.body.has_key?('kind') then %>
+					<tr>
+						<td>Tipo</td>
+						<td><em><%= @report.body['kind'] %></em></td>
+					</tr>
+				<% end %>
+
+				<% if @report.body.has_key?('configuration_version') then %>
+					<tr>
+						<td>Versión de configuración</td>
+						<td><em><%= @report.body['configuration_version'] %></em></td>
+					</tr>
+				<% end %>
+
+				<% if @report.body.has_key?('status') then %>
+					<tr>
+						<td>Estado</td>
+						<td><em><%= @report.body['status'] %></em></td>
+					</tr>
+				<% end %>
+
+				<% if @report.body.has_key?('environment') then %>
+					<tr>
+						<td>Ambiente de ejecución</td>
+						<td><em><%= @report.body['environment'] %></em></td>
+					</tr>
+				<% end %>
+
+				<% if @report.body.has_key?('puppet_version') then %>
+					<tr>
+						<td>Versión de Puppet</td>
+						<td><em><%= @report.body['puppet_version'] %></em></td>
+					</tr>
+				<% end %>
+
+				<% if @report.body.has_key?('time') then %>
+					<tr>
+						<td>Hora de ejecución</td>
+						<td><em><%= @report.body['time'] %></em></td>
+					</tr>
+				<% end %>
+			</tbody>
+		</table>
+
+		<div class="page-header">
+			<h2>Más información</h2>
+		</div>
+
+		<!-- NAV-TABS! -->
+		<ul class="nav nav-tabs">
+			<% if @report.body.has_key?('logs') then %>
+				<li>
+					<%= link_to '#this', :onclick => '$("#logs_body").show(); $("#metrics_body").hide(); $("#resource_statuses_body").hide();' do %>
+						Logs
+					<% end %>
+				</li>
+			<% end %>
+
+			<% if @report.body.has_key?('metrics') then %>
+				<li>
+					<%= link_to '#this', :onclick => '$("#logs_body").hide(); $("#metrics_body").show(); $("#resource_statuses_body").hide();' do %>
+						Métricas
+					<% end %>
+				</li>
+			<% end %>
+
+			<% if @report.body.has_key?('resource_statuses') then %>
+				<li>
+					<%= link_to '#this', :onclick => '$("#logs_body").hide(); $("#metrics_body").hide(); $("#resource_statuses_body").show();' do %>
+						Estado de los recursos
+					<% end %>
+				</li>
+			<% end %>
+
+			<! NAV-PILLS BODIES! -->
+			<% if @report.body.has_key?('logs') then %>
+				<div id="logs_body">
+					<% if @report.body['logs'].size == 0 then %>
+						<em>No hay logs para este reporte.</em>
+					<% else %>
+						<br> 
+						<div class="page-header">
+							<h2> Logs </h2>
+						</div>
+						<% @report.body['logs'].each do |l| %>
+							<div class="well">
+								Nivel: <em><%= l['level'] %></em> <br>
+								Mensaje: <em><%= l['message'] %></em><br>
+								Fuente: <em><%= l['source'] %></em><br>
+								Hora: <em><%= l['time'] %></em><br>
+								Etiquetas: <br>	<% l['tags'].each do |t| %>
+										   			<em><%= t %></em><br>
+												<% end %>
+								<% if l.has_key?('file') then %>
+									Archivo: <em><%= l['file'] %></em><br>
+								<% end %>
+
+								<% if l.has_key?('line') then %>
+									Línea: <em><%= l['line'] %></em><br>
+								<% end %>
+							</div>
+							<hr> 
+						<% end %>
+					<% end %>
+				</div>
+				<%= javascript_tag '$("#logs_body").hide()' %>
+			<% end %>
+
+			<% if @report.body.has_key?('metrics') then %>
+				<div id="metrics_body">
+					<% if @report.body['metrics'].empty? then %>
+						No hay métricas para este reporte.
+					<% else %>
+						<br> 
+						<div class="page-header">
+							<h2> Métricas </h2>
+						</div>
+						<% if @report.body['metrics'].has_key?('time') then %>
+							<div class="well">
+								<h2>Tiempos</h2>
+								<% @report.body['metrics']['time']['values'].each do |v| %>
+									<%= v[1] %>: <em><%= v[2] %></em><br>
+								<% end %>
+							</div>
+							<hr>
+						<% end %>
+
+						<% if @report.body['metrics'].has_key?('changes') then %>
+							<div class="well">
+								<h2>Cambios</h2>
+								<% @report.body['metrics']['changes']['values'].each do |v| %>
+									<%= v[1] %>: <em><%= v[2] %></em><br>
+								<% end %>
+							</div>
+							<hr>
+						<% end %>
+
+						<% if @report.body['metrics'].has_key?('resources') then %>
+							<div class="well">
+								<h2>Recursos</h2>
+								<% @report.body['metrics']['resources']['values'].each do |v| %>
+									<%= v[1] %>: <em><%= v[2] %></em><br>
+								<% end %>
+							</div>
+							<hr>
+						<% end %>
+
+						<% if @report.body['metrics'].has_key?('events') then %>
+							<div class="well">
+								<h2>Eventos</h2>
+								<% @report.body['metrics']['events']['values'].each do |v| %>
+									<%= v[1] %>: <em><%= v[2] %></em><br>
+								<% end %>
+							</div>
+							<hr>
+						<% end %>
+					<% end %>
+				</div>
+				<%= javascript_tag '$("#metrics_body").hide();' %>
+			<% end %>
+
+			<% if @report.body.has_key?('resource_statuses') then %>
+				<div id="resource_statuses_body">
+					<br> 
+					<div class="page-header">
+						<h2> Estado de recursos </h2>
+					</div>
+					<% @report.body['resource_statuses'].each_pair do |k, status| %>
+						<div class="well">
+							<h2><b>Recurso: <%= k %></b> </h2>
+
+							<% status.each_pair do |key, val| %>
+								<%= key.capitalize %>: 
+								<% case val %>
+								<% when 'event' %>
+									<% if val.empty? %>
+										No hay eventos.
+									<% else %>
+										<% val.each do |event| %>
+											<br>
+											<% event.each do |attr, value| %>
+
+												<% case attr %>
+												<% when 'previous_value', 'desired_value', 'historical_value' %>
+													<% if value.class == String then %>
+														<em><%= value %></em>
+													<% elsif value.class == Array then %>
+														<ul>
+															<% value.each do |i| %>
+																<li><em><%= i %></em></li>
+															<% end %>
+														</ul>
+													<% elsif value.class == Hash then %>
+														<ul>
+															<% value.each do |i, j| %>
+																<li><%= i.capitalize %>: <em><%= j %></em></li>
+															<% end %>
+														</ul>
+													<% end %>
+												<% else %>
+													<%= attr.capitalize %>: <em><%= value %></em><br>
+												<% end %>
+											<% end %>
+										<% end %>
+									<% end %>
+								<% when 'tags' %>
+									<% if val.empty? then %>
+										No hay etiquetas.
+									<% else %>
+										<% val.each do |e| %>
+											<em><%= e %></em><br>
+										<% end %>
+									<% end %>
+								<% else %>
+									<em><%= val %></em>
+								<% end %>
+								<br>
+							<% end %>
+						</div>
+					<% end %>
+				</div>
+				<%= javascript_tag '$("#resource_statuses_body").hide()' %>
+			<% end %>
+		</ul>
 	</div>
 </div>

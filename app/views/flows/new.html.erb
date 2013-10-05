@@ -127,8 +127,8 @@
 									<div class="caption">
 										<h3>Instalación</h3>
 									</div>
-									<label class="radio" onclick='$("#select_tool").show();'>
-										<%= radio_button_tag "flow_kind", "install", :onclick => '$("#select_tool").show();' %>
+									<label class="radio" onclick='$("#select_tool").show(); $("#misc").hide()'>
+										<%= radio_button_tag "flow_kind", "install", :onclick => '$("#select_tool").show(); $("#misc").hide()' %>
 											¡Crear un flujo de <strong><i>instalación</i></strong>!
 									</label>
 									<%= select_tag "select_tool", options_for_select([["MySQL", "mysql"], ["CouchBase", "couchbase"], ["Tomcat", "tomcat"]]), :onchange => "$('#tool').html($('#select_tool').val())" %>
@@ -156,11 +156,12 @@
 									<div class="caption">
 										<h3>Misceláneo</h3>
 									</div>
-									<label class="radio" onclick="">
-										<%= radio_button_tag "flow_kind", "miscellaneous", :onclick => "" %>
+									<label class="radio" onclick='$("#select_tool").hide(); $("#misc").show()'>
+										<%= radio_button_tag "flow_kind", "miscellaneous", :onclick => '$("#select_tool").hide(); $("#misc").show()' %>
 										¡Crear un flujo <strong><em>misceláneo</em></strong>!
 									</label>
 									<%= select_tag "misc", options_for_select([["Operaciones con archivos", "archives"]]) %>
+									<%= javascript_tag '$("#misc").hide()' %>
 								</div>
 							</li>
 						</ul>
