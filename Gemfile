@@ -6,9 +6,14 @@ gem 'rails', '3.2.13'
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 gem 'sqlite3'
+<<<<<<< HEAD
 gem 'librarian-puppet', '~> 0.9.10'
 
 
+=======
+#gem "puppet", '3.3.0'
+#gem 'facter', '~> 1.7.3'
+>>>>>>> x
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
